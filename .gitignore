@@ -1,0 +1,30 @@
+# Framework AIOX (nao pertence ao projeto)
+.aiox-core/
+.aiox/
+.claude/
+
+# Environment & Secrets
+.env
+.env.local
+.env.*.local
+*.key
+*.pem
+
+# Dependencies
+node_modules/
+
+# Build & Logs
+dist/
+build/
+*.log
+logs/
+
+# IDE & OS
+.DS_Store
+Thumbs.db
+desktop.ini
+.idea/
+*.swp
+
+# Vercel
+.vercel

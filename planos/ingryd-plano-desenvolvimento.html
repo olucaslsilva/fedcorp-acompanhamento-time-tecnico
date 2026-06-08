@@ -1,0 +1,1070 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Plano de Desenvolvimento - Ingryd Aylana Silva dos Santos</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap');
+
+    :root {
+      --primary: #1a365d;
+      --primary-light: #2b6cb0;
+      --accent: #38a169;
+      --accent-light: #c6f6d5;
+      --warning: #d69e2e;
+      --warning-light: #fefcbf;
+      --danger: #e53e3e;
+      --danger-light: #fed7d7;
+      --gray-50: #f7fafc;
+      --gray-100: #edf2f7;
+      --gray-200: #e2e8f0;
+      --gray-300: #cbd5e0;
+      --gray-500: #718096;
+      --gray-600: #4a5568;
+      --gray-700: #2d3748;
+      --gray-800: #1a202c;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      color: var(--gray-700);
+      line-height: 1.6;
+      background: #fff;
+    }
+
+    @media print {
+      body { font-size: 11pt; }
+      .page-break { page-break-before: always; }
+      .no-print { display: none; }
+      .page { padding: 32px; }
+      pre { font-size: 9pt; }
+    }
+
+    @media screen {
+      body { max-width: 850px; margin: 0 auto; padding: 20px; background: var(--gray-100); }
+      .page { background: #fff; padding: 48px; margin-bottom: 24px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,.1); }
+    }
+
+    .cover {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 80px 48px;
+    }
+
+    .cover-badge {
+      display: inline-block;
+      background: var(--primary);
+      color: white;
+      padding: 6px 20px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      margin-bottom: 32px;
+    }
+
+    .cover h1 {
+      font-size: 32px;
+      font-weight: 800;
+      color: var(--primary);
+      margin-bottom: 8px;
+    }
+
+    .cover .subtitle { font-size: 18px; color: var(--gray-500); margin-bottom: 40px; }
+    .cover .dev-name { font-size: 24px; font-weight: 700; color: var(--gray-800); margin-bottom: 4px; }
+    .cover .dev-info { font-size: 14px; color: var(--gray-500); }
+    .cover-footer { margin-top: 60px; font-size: 12px; color: var(--gray-300); }
+
+    .section-number {
+      display: inline-block;
+      background: var(--primary);
+      color: white;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      text-align: center;
+      line-height: 32px;
+      font-size: 14px;
+      font-weight: 700;
+      margin-right: 12px;
+    }
+
+    h2 {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid var(--gray-200);
+      display: flex;
+      align-items: center;
+    }
+
+    h3 {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--gray-700);
+      margin: 20px 0 10px;
+    }
+
+    p { margin-bottom: 12px; }
+
+    .card {
+      background: var(--gray-50);
+      border: 1px solid var(--gray-200);
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 16px;
+    }
+
+    .card-accent { border-left: 4px solid var(--primary-light); }
+    .card-green { background: var(--accent-light); border-left: 4px solid var(--accent); }
+    .card-yellow { background: var(--warning-light); border-left: 4px solid var(--warning); }
+
+    .score-row { display: flex; align-items: center; margin-bottom: 8px; }
+    .score-label { width: 140px; font-size: 13px; font-weight: 500; flex-shrink: 0; }
+    .score-bar-bg { flex: 1; height: 20px; background: var(--gray-200); border-radius: 10px; overflow: hidden; margin: 0 10px; }
+    .score-bar-fill { height: 100%; border-radius: 10px; }
+    .score-value { width: 30px; text-align: right; font-size: 13px; font-weight: 700; }
+
+    .fill-1 { width: 20%; background: var(--danger); }
+    .fill-2 { width: 40%; background: #ed8936; }
+    .fill-3 { width: 60%; background: var(--warning); }
+    .fill-4 { width: 80%; background: #48bb78; }
+    .fill-5 { width: 100%; background: var(--accent); }
+
+    .tag { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; margin: 2px; }
+    .tag-green { background: var(--accent-light); color: #276749; }
+    .tag-yellow { background: var(--warning-light); color: #975a16; }
+    .tag-red { background: var(--danger-light); color: #c53030; }
+
+    .phases { display: grid; grid-template-columns: 1fr; gap: 10px; }
+    .phase { padding: 12px 16px; border-radius: 6px; font-size: 13px; }
+    .phase-title { font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+    .phase-1 { background: #ebf8ff; border-left: 3px solid #3182ce; }
+    .phase-1 .phase-title { color: #2b6cb0; }
+    .phase-2 { background: #faf5ff; border-left: 3px solid #805ad5; }
+    .phase-2 .phase-title { color: #6b46c1; }
+    .phase-3 { background: #f0fff4; border-left: 3px solid #38a169; }
+    .phase-3 .phase-title { color: #276749; }
+
+    table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 13px; }
+    th { background: var(--primary); color: white; padding: 10px 14px; text-align: left; font-weight: 600; font-size: 12px; }
+    td { padding: 10px 14px; border-bottom: 1px solid var(--gray-200); }
+    tr:nth-child(even) { background: var(--gray-50); }
+
+    .quote {
+      background: var(--gray-50); border-left: 4px solid var(--primary-light);
+      padding: 16px 20px; margin: 16px 0; font-style: italic;
+      color: var(--gray-600); border-radius: 0 8px 8px 0;
+    }
+
+    .checklist { list-style: none; padding: 0; }
+    .checklist li { padding: 8px 0 8px 28px; position: relative; font-size: 14px; }
+    .checklist li::before {
+      content: ''; position: absolute; left: 0; top: 11px;
+      width: 16px; height: 16px; border: 2px solid var(--gray-300); border-radius: 3px;
+    }
+
+    .ai-level { display: flex; align-items: flex-start; gap: 16px; padding: 16px; margin-bottom: 12px; border-radius: 8px; }
+    .ai-level-num {
+      width: 40px; height: 40px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 800; font-size: 18px; flex-shrink: 0;
+    }
+    .level-1 { background: #ebf8ff; }
+    .level-1 .ai-level-num { background: #3182ce; color: white; }
+    .level-2 { background: #faf5ff; }
+    .level-2 .ai-level-num { background: #805ad5; color: white; }
+    .level-3 { background: #f0fff4; }
+    .level-3 .ai-level-num { background: #38a169; color: white; }
+
+    pre {
+      background: var(--gray-800);
+      color: #e2e8f0;
+      padding: 16px;
+      border-radius: 8px;
+      overflow-x: auto;
+      font-family: 'Fira Code', monospace;
+      font-size: 12px;
+      line-height: 1.5;
+      margin: 12px 0;
+    }
+
+    pre .comment { color: #718096; }
+    pre .keyword { color: #63b3ed; }
+    pre .string { color: #68d391; }
+    pre .function { color: #fbd38d; }
+    pre .bad { color: #fc8181; }
+    pre .good { color: #68d391; }
+
+    .task-box {
+      background: #fffaf0;
+      border: 2px solid #ed8936;
+      border-radius: 8px;
+      padding: 16px 20px;
+      margin: 12px 0;
+    }
+
+    .task-box-title {
+      font-weight: 700;
+      color: #c05621;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
+
+    .task-box ol { padding-left: 20px; font-size: 13px; }
+    .task-box ol li { margin-bottom: 6px; }
+
+    .small { font-size: 12px; color: var(--gray-500); }
+    .bold { font-weight: 700; }
+    .text-primary { color: var(--primary); }
+    .mt-8 { margin-top: 8px; }
+    .mb-4 { margin-bottom: 4px; }
+  </style>
+</head>
+<body>
+
+<!-- ==================== CAPA ==================== -->
+<div class="page cover">
+  <div class="cover-badge">FedCorp &mdash; Time de Tecnologia</div>
+  <h1>Plano de Desenvolvimento Individual</h1>
+  <p class="subtitle">Programa de Evolução Técnica &mdash; Maio a Novembro 2026</p>
+
+  <div style="margin: 40px 0;">
+    <div class="dev-name">Ingryd Aylana Silva dos Santos</div>
+    <div class="dev-info">Frontend Developer &bull; React / JavaScript / TypeScript</div>
+    <div class="dev-info" style="margin-top: 4px;">Curso Técnico &bull; 1 a 2 anos de experiência</div>
+  </div>
+
+  <div style="margin-top: 20px;">
+    <table style="width: auto; margin: 0 auto; font-size: 13px;">
+      <tr><td style="font-weight:600; padding-right:20px;">Elaborado por:</td><td>Lucas (Consultor Técnico)</td></tr>
+      <tr><td style="font-weight:600; padding-right:20px;">Data:</td><td>27 de Maio de 2026</td></tr>
+      <tr><td style="font-weight:600; padding-right:20px;">Reavaliação:</td><td>Agosto de 2026 (trimestral)</td></tr>
+    </table>
+  </div>
+
+  <div class="cover-footer">
+    Documento confidencial &mdash; uso interno FedCorp
+  </div>
+</div>
+
+<!-- ==================== FILOSOFIA ==================== -->
+<div class="page page-break">
+  <h2><span class="section-number">1</span> A Filosofia deste Plano</h2>
+
+  <div class="card card-accent">
+    <h3 style="margin-top:0;">IA é uma ferramenta. Você é a engenheira.</h3>
+    <p>Nos próximos meses, vamos implementar ferramentas de IA (Claude Code, ChatGPT) no dia a dia da equipe. Essas ferramentas vão acelerar muito o trabalho &mdash; mas <strong>só funcionam bem nas mãos de quem entende o que está fazendo.</strong></p>
+    <p>Uma dev que usa IA sem base técnica <strong>copia código sem entender</strong>, não consegue avaliar se a sugestão está correta, e cria problemas silenciosos no projeto. Uma dev com base técnica usa a IA para <strong>ir mais rápido na direção certa.</strong></p>
+    <p style="margin-bottom:0;"><strong>Este plano existe para construir essa base.</strong></p>
+  </div>
+
+  <h3>Como funciona o aprendizado aqui</h3>
+  <p>Cada tema segue 3 fases, baseadas no modelo de <strong>aprendizagem progressiva</strong>:</p>
+
+  <div class="phases">
+    <div class="phase phase-1">
+      <div class="phase-title">Fase 1 &mdash; Fundamento</div>
+      O que é esse conceito? Por que importa? Quais os princípios básicos?<br>
+      <span class="small">Você recebe uma explicação clara e acessível do tema.</span>
+    </div>
+    <div class="phase phase-2">
+      <div class="phase-title">Fase 2 &mdash; Exemplo Guiado</div>
+      Veja na prática: um código real sendo analisado e melhorado passo a passo.<br>
+      <span class="small">Você acompanha o raciocínio, não só o resultado.</span>
+    </div>
+    <div class="phase phase-3">
+      <div class="phase-title">Fase 3 &mdash; Exercício Solo</div>
+      Agora é sua vez: um cenário similar para resolver por conta própria.<br>
+      <span class="small">O critério de sucesso não é só "funcionar" &mdash; é você <strong>explicar o porquê</strong> da sua solução.</span>
+    </div>
+  </div>
+
+  <div class="quote">
+    "A melhor forma de provar que você entendeu algo é conseguir explicar para outra pessoa de forma simples."
+  </div>
+
+  <h3>Metodologia de estudo recomendada</h3>
+  <table>
+    <tr>
+      <th>Técnica</th>
+      <th>O que é</th>
+      <th>Como aplicar</th>
+    </tr>
+    <tr>
+      <td><strong>Prática Deliberada</strong></td>
+      <td>Focar nos pontos fracos, não nos fortes</td>
+      <td>As atividades deste plano já focam nos seus gaps</td>
+    </tr>
+    <tr>
+      <td><strong>Aprender Fazendo</strong></td>
+      <td>Praticar > assistir aula passivamente</td>
+      <td>Cada tema tem exercício prático obrigatório</td>
+    </tr>
+    <tr>
+      <td><strong>Explicar para Fixar</strong></td>
+      <td>Se você explica, você entende de verdade</td>
+      <td>No check-in semanal, você apresenta o que aprendeu</td>
+    </tr>
+    <tr>
+      <td><strong>Revisão Espaçada</strong></td>
+      <td>Revisar o tema dias depois para fixar na memória</td>
+      <td>Cada mês revisita temas anteriores em contextos novos</td>
+    </tr>
+  </table>
+</div>
+
+<!-- ==================== SEU PERFIL ==================== -->
+<div class="page page-break">
+  <h2><span class="section-number">2</span> Seu Perfil Atual</h2>
+
+  <p>Baseado no assessment que você respondeu em 22/05/2026. Esses scores são seu <strong>ponto de partida</strong>, não um julgamento.</p>
+
+  <h3>Skills Técnicas (destaques)</h3>
+
+  <div class="score-row">
+    <span class="score-label">HTML / CSS</span>
+    <div class="score-bar-bg"><div class="score-bar-fill fill-5"></div></div>
+    <span class="score-value">5.0</span>
+  </div>
+  <div class="score-row">
+    <span class="score-label">JavaScript</span>
+    <div class="score-bar-bg"><div class="score-bar-fill fill-5"></div></div>
+    <span class="score-value">5.0</span>
+  </div>
+  <div class="score-row">
+    <span class="score-label">React</span>
+    <div class="score-bar-bg"><div class="score-bar-fill fill-5"></div></div>
+    <span class="score-value">5.0</span>
+  </div>
+  <div class="score-row">
+    <span class="score-label">Git</span>
+    <div class="score-bar-bg"><div class="score-bar-fill fill-5"></div></div>
+    <span class="score-value">5.0</span>
+  </div>
+  <div class="score-row">
+    <span class="score-label">Node.js</span>
+    <div class="score-bar-bg"><div class="score-bar-fill fill-4"></div></div>
+    <span class="score-value">4.0</span>
+  </div>
+  <div class="score-row">
+    <span class="score-label">SQL / PostgreSQL</span>
+    <div class="score-bar-bg"><div class="score-bar-fill fill-4"></div></div>
+    <span class="score-value">4.0</span>
+  </div>
+  <div class="score-row">
+    <span class="score-label">Firebase / Supabase</span>
+    <div class="score-bar-bg"><div class="score-bar-fill fill-4"></div></div>
+    <span class="score-value">4.0</span>
+  </div>
+
+  <h3 style="margin-top: 24px;">Áreas para Desenvolvimento (foco deste plano)</h3>
+
+  <div class="score-row">
+    <span class="score-label">TypeScript</span>
+    <div class="score-bar-bg"><div class="score-bar-fill fill-3"></div></div>
+    <span class="score-value">3.0</span>
+  </div>
+  <div class="score-row">
+    <span class="score-label">APIs REST</span>
+    <div class="score-bar-bg"><div class="score-bar-fill fill-3"></div></div>
+    <span class="score-value">3.0</span>
+  </div>
+  <div class="score-row">
+    <span class="score-label">Testes</span>
+    <div class="score-bar-bg"><div class="score-bar-fill fill-3"></div></div>
+    <span class="score-value">3.0</span>
+  </div>
+  <div class="score-row">
+    <span class="score-label">CI/CD</span>
+    <div class="score-bar-bg"><div class="score-bar-fill fill-2"></div></div>
+    <span class="score-value">2.0</span>
+  </div>
+  <div class="score-row">
+    <span class="score-label">Linux / Terminal</span>
+    <div class="score-bar-bg"><div class="score-bar-fill fill-1"></div></div>
+    <span class="score-value">1.0</span>
+  </div>
+  <div class="score-row">
+    <span class="score-label">Cloud</span>
+    <div class="score-bar-bg"><div class="score-bar-fill fill-1"></div></div>
+    <span class="score-value">1.0</span>
+  </div>
+
+  <h3 style="margin-top: 24px;">Práticas de Engenharia</h3>
+  <table>
+    <tr><th>Prática</th><th>Nível Atual</th><th>Meta</th></tr>
+    <tr><td>Git</td><td><span class="tag tag-green">Usa branches (score 5)</span></td><td>Dominar fluxo de PR e code review</td></tr>
+    <tr><td>Testes</td><td><span class="tag tag-yellow">Conhece o conceito</span></td><td>Escreve testes de componentes como hábito</td></tr>
+    <tr><td>Code Review</td><td><span class="tag tag-yellow">Só recebeu reviews</span></td><td>Faz e recebe reviews ativamente</td></tr>
+    <tr><td>Documentação</td><td><span class="tag tag-yellow">README básico</span></td><td>README + documentação de componentes</td></tr>
+    <tr><td>Metodologia Ágil</td><td><span class="tag tag-red">Só ouviu falar</span></td><td>Pratica Kanban no dia a dia</td></tr>
+  </table>
+
+  <h3 style="margin-top: 24px;">O que você disse no assessment</h3>
+  <div class="card card-green">
+    <p class="bold mb-4">Sua maior dificuldade:</p>
+    <p style="margin-bottom:0;">"Não me dedicar 100% à rotina dev, processos interrompidos devido às demais funções."</p>
+    <p class="small mt-8">Isso não é uma fraqueza técnica &mdash; é uma questão de contexto. Este plano foi desenhado para ser seguido no seu ritmo, sem depender de blocos longos ininterruptos.</p>
+  </div>
+  <div class="card card-accent">
+    <p class="bold mb-4">Sua meta em 6 meses:</p>
+    <p style="margin-bottom:0;">"Atuando como pleno, utilizando novas tecnologias e dominando ainda mais aquilo que já utilizo."</p>
+  </div>
+
+  <div class="card card-accent">
+    <p class="bold mb-4">Sua definição de "pronto":</p>
+    <p style="margin-bottom:0;">"Testada, funcional e documentada."</p>
+    <p class="small mt-8">Direta e objetiva. Mostra que você já tem consciência de que "pronto" vai além de funcionar. Vamos aprofundar o que "testada" significa na prática nas próximas semanas.</p>
+  </div>
+
+  <div class="card card-green">
+    <p class="bold mb-4">Seu projeto mais complexo (força reconhecida):</p>
+    <p style="margin-bottom:0;">FedConnect &mdash; sistema de centralização de dados da empresa e recursos internos. Você construiu um sistema que a empresa inteira usa no dia a dia. Isso mostra que você já entrega valor real, não só projetos de estudo. Essa experiência com sistemas internos é uma <strong>base concreta</strong> para evoluir para fullstack.</p>
+  </div>
+
+  <div class="card card-yellow">
+    <p class="bold mb-4">Um ponto de atenção:</p>
+    <p style="margin-bottom:0;">Você disse que <strong>evita pedir ajuda</strong> e busca resolver sozinha fazendo tarefas mais simples primeiro. Isso mostra independência, mas também pode te travar em problemas que seriam resolvidos em 5 minutos com uma pergunta. <strong>Pedir ajuda não é fraqueza &mdash; é eficiência.</strong> Parte da evolução profissional é saber a hora certa de perguntar.</p>
+  </div>
+
+  <div class="quote">
+    Seu perfil é o oposto do típico junior: você tem frontend sólido e experiência real com produto. O que falta é expandir para o backend, processos de engenharia e infraestrutura &mdash; exatamente o que separa "sabe frontend" de "fullstack de verdade".
+  </div>
+</div>
+
+<!-- ==================== SEMANA 1 ==================== -->
+<div class="page page-break">
+  <h2><span class="section-number">3</span> Semana 1 &mdash; TypeScript: De "sei usar" para "domino"</h2>
+  <p class="small" style="margin-bottom:16px;">Solidificar a ferramenta que vai acompanhar toda sua evolução &bull; Tempo estimado: 4&ndash;6 horas</p>
+
+  <div class="phase phase-1" style="margin-bottom: 16px;">
+    <div class="phase-title">Fase 1 &mdash; Fundamento: Por que TypeScript importa tanto?</div>
+    <p style="margin: 8px 0 4px;">Você já sabe JavaScript nota 5 e já usa TypeScript (nota 3). Então não vou te explicar o que é TypeScript &mdash; você já sabe. O que vamos trabalhar aqui é o <strong>salto de "uso básico" para "domínio"</strong>. Quando você domina TypeScript de verdade, o editor vira seu melhor amigo: ele encontra bugs antes de você rodar o código, ele sugere autocomplete preciso, e ele impede que dados errados cheguem onde não deveriam.</p>
+    <p style="margin: 8px 0 4px;"><strong>Os 3 conceitos que separam uso básico de domínio:</strong></p>
+    <ul style="margin-left: 20px; font-size: 13px;">
+      <li><strong>Generics (tipos genéricos)</strong> &mdash; Imagine uma função que busca dados de uma API. Às vezes ela retorna um Usuário, às vezes um Produto, às vezes uma Lista de Pedidos. Em vez de escrever uma função diferente para cada tipo de dado, você escreve <strong>uma função só</strong> que aceita qualquer tipo. Generics são como um "espaço reservado" para o tipo &mdash; você define a função uma vez, e na hora de usar, diz qual tipo vai ser. É o equivalente a um molde de bolo: o molde é o mesmo, mas o sabor muda.</li>
+      <li><strong>Utility Types (tipos utilitários)</strong> &mdash; O TypeScript vem com "atalhos" prontos para transformar tipos que você já tem. Por exemplo: você tem uma interface <code>Usuario</code> com 5 campos obrigatórios. Mas no formulário de edição, todos os campos são opcionais (o usuário pode mudar só o nome). Em vez de criar uma segunda interface do zero, você usa <code>Partial&lt;Usuario&gt;</code> e todos os campos viram opcionais automaticamente. Existem vários desses atalhos: <code>Pick</code> (pega só alguns campos), <code>Omit</code> (remove campos), <code>Required</code> (torna tudo obrigatório).</li>
+      <li><strong>Discriminated Unions (uniões discriminadas)</strong> &mdash; Quando uma variável pode ser de tipos diferentes dependendo da situação. Por exemplo: uma resposta de API pode ser <code>{ status: "sucesso", dados: Usuario }</code> ou <code>{ status: "erro", mensagem: string }</code>. Com discriminated unions, o TypeScript <strong>sabe automaticamente</strong> quais campos existem com base no valor de <code>status</code>. Se <code>status</code> é "sucesso", ele sabe que <code>dados</code> existe. Se é "erro", ele sabe que <code>mensagem</code> existe. Sem isso, você teria que ficar fazendo <code>if</code> manual toda hora.</li>
+    </ul>
+  </div>
+
+  <div class="phase phase-2" style="margin-bottom: 16px;">
+    <div class="phase-title">Fase 2 &mdash; Exemplo Guiado: Generics e Utility Types na prática</div>
+    <p style="margin: 8px 0;">Vamos ver como esses conceitos funcionam em código real. Primeiro, uma função genérica que busca dados de API &mdash; repare que ela funciona com qualquer tipo de dado:</p>
+
+<pre><span class="comment">// Sem generics: uma função para cada tipo (ruim, muito código repetido)</span>
+<span class="keyword">async function</span> <span class="function">buscarUsuario</span>(id: <span class="string">number</span>): Promise&lt;Usuario&gt; {
+    <span class="keyword">const</span> res = <span class="keyword">await</span> fetch(<span class="string">`/api/usuarios/${id}`</span>);
+    <span class="keyword">return</span> res.json();
+}
+<span class="keyword">async function</span> <span class="function">buscarProduto</span>(id: <span class="string">number</span>): Promise&lt;Produto&gt; {
+    <span class="keyword">const</span> res = <span class="keyword">await</span> fetch(<span class="string">`/api/produtos/${id}`</span>);  <span class="bad">// &larr; código igual, só muda o tipo!</span>
+    <span class="keyword">return</span> res.json();
+}
+
+<span class="comment">// Com generics: uma função que serve para qualquer tipo</span>
+<span class="keyword">async function</span> <span class="function">buscar</span>&lt;T&gt;(url: <span class="string">string</span>): Promise&lt;T&gt; {  <span class="good">// &larr; T é o "espaço reservado"</span>
+    <span class="keyword">const</span> res = <span class="keyword">await</span> fetch(url);
+    <span class="keyword">return</span> res.json();
+}
+
+<span class="comment">// Na hora de usar, você diz qual é o tipo:</span>
+<span class="keyword">const</span> usuario = <span class="keyword">await</span> buscar&lt;Usuario&gt;(<span class="string">"/api/usuarios/1"</span>);  <span class="good">// retorna Usuario</span>
+<span class="keyword">const</span> produto = <span class="keyword">await</span> buscar&lt;Produto&gt;(<span class="string">"/api/produtos/5"</span>);  <span class="good">// retorna Produto</span></pre>
+
+    <p style="margin: 8px 0;">Agora, Utility Types &mdash; transformando tipos que você já tem sem reescrever do zero:</p>
+
+<pre><span class="keyword">interface</span> <span class="function">Usuario</span> {
+    id: <span class="string">number</span>;
+    nome: <span class="string">string</span>;
+    email: <span class="string">string</span>;
+    avatar: <span class="string">string</span>;
+    cargo: <span class="string">string</span>;
+}
+
+<span class="comment">// Formulário de edição: todos os campos são opcionais</span>
+<span class="keyword">type</span> <span class="function">UsuarioUpdate</span> = Partial&lt;Usuario&gt;;
+<span class="comment">// Resultado: { id?: number; nome?: string; email?: string; ... }</span>
+
+<span class="comment">// Card de preview: só precisa de nome e avatar</span>
+<span class="keyword">type</span> <span class="function">UsuarioCard</span> = Pick&lt;Usuario, <span class="string">"nome"</span> | <span class="string">"avatar"</span>&gt;;
+<span class="comment">// Resultado: { nome: string; avatar: string; }</span>
+
+<span class="comment">// Formulário de criação: tudo menos o id (o banco gera o id)</span>
+<span class="keyword">type</span> <span class="function">UsuarioCreate</span> = Omit&lt;Usuario, <span class="string">"id"</span>&gt;;
+<span class="comment">// Resultado: { nome: string; email: string; avatar: string; cargo: string; }</span></pre>
+
+    <p style="margin: 4px 0 0;"><strong>Perceba o ganho:</strong> você definiu a interface <code>Usuario</code> uma vez só, e derivou 3 variações sem repetir nenhum campo. Se amanhã adicionar um campo novo em <code>Usuario</code>, as variações se atualizam automaticamente.</p>
+  </div>
+
+  <div class="task-box">
+    <div class="task-box-title">Exercício Solo &mdash; Sua tarefa da semana</div>
+    <ol>
+      <li><strong>Crie um repositório</strong> no GitHub chamado <code>fedcorp-exercicios</code></li>
+      <li><strong>Crie a pasta</strong> <code>semana-01-typescript/</code></li>
+      <li>Crie o arquivo <code>api-types.ts</code> com:
+        <ul style="font-size: 12px; margin-top: 4px;">
+          <li>Uma interface <code>Produto</code> com: id, nome, preco, categoria, estoque (opcional), criadoEm (Date)</li>
+          <li>Derive: <code>ProdutoCreate</code> (sem id e sem criadoEm), <code>ProdutoCard</code> (só nome, preco, categoria), <code>ProdutoUpdate</code> (tudo opcional)</li>
+          <li>Uma função genérica <code>buscarLista&lt;T&gt;(endpoint: string): Promise&lt;T[]&gt;</code></li>
+        </ul>
+      </li>
+      <li>Crie o arquivo <code>api-response.ts</code> com:
+        <ul style="font-size: 12px; margin-top: 4px;">
+          <li>Um tipo <code>ApiResponse&lt;T&gt;</code> usando discriminated union: sucesso (com dados) OU erro (com mensagem e código)</li>
+          <li>Uma função <code>tratarResposta&lt;T&gt;(response: ApiResponse&lt;T&gt;)</code> que retorna os dados se sucesso, ou lança erro se falha</li>
+        </ul>
+      </li>
+      <li>Crie <code>decisoes.md</code> explicando: por que usar <code>Omit</code> em vez de criar uma interface nova? Quando usar <code>Partial</code> vs <code>Pick</code>?</li>
+    </ol>
+    <p class="small" style="margin: 8px 0 0;"><strong>Dica com IA:</strong> <em>"Sou dev React com JS avançado, aprendendo TypeScript. Explique generics como se eu nunca tivesse visto, com um exemplo usando fetch de API."</em></p>
+  </div>
+
+  <div class="card" style="margin-top: 16px;">
+    <p class="bold text-primary mb-4">Recursos complementares &mdash; Semana 1</p>
+    <ul style="font-size: 13px; padding-left: 20px;">
+      <li><strong>Vídeo:</strong> "TypeScript Generics Tutorial" &mdash; Matt Pocock (YouTube, ~15min, o melhor canal de TS)</li>
+      <li><strong>Leitura:</strong> TypeScript Handbook oficial &mdash; seção "Generics" e "Utility Types"</li>
+      <li><strong>Interativo:</strong> TypeScript Playground (typescriptlang.org/play) &mdash; teste código TS direto no navegador</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ==================== SEMANA 2 ==================== -->
+<div class="page page-break">
+  <h2><span class="section-number">4</span> Semana 2 &mdash; Testes de Componentes React</h2>
+  <p class="small" style="margin-bottom:16px;">Transformar "testada" de conceito em hábito real &bull; Tempo estimado: 4&ndash;6 horas</p>
+
+  <div class="phase phase-1" style="margin-bottom: 16px;">
+    <div class="phase-title">Fase 1 &mdash; Fundamento: Testar frontend é diferente de testar backend</div>
+    <p style="margin: 8px 0 4px;">Você disse no assessment que sua definição de pronto é "testada, funcional e documentada". Ótimo &mdash; mas no assessment você também marcou que seu nível de testes é "conhece o conceito". Isso significa que você sabe que testar é importante, mas ainda não transformou isso em prática do dia a dia. Esta semana é sobre fazer essa virada.</p>
+
+    <p style="margin: 8px 0 4px;">No frontend, testar é diferente do backend. No backend, você testa funções puras: "dou essa entrada, espero essa saída". No frontend, você testa <strong>comportamento</strong>: "quando o usuário clica nesse botão, o que acontece?", "quando a API retorna erro, o que o componente mostra?", "quando o formulário é enviado com campos vazios, o que aparece?".</p>
+
+    <p style="margin: 8px 0 4px;"><strong>As ferramentas que você vai usar:</strong></p>
+    <ul style="margin-left: 20px; font-size: 13px;">
+      <li><strong>Vitest</strong> &mdash; O framework de testes. Ele é quem roda os testes e diz se passaram ou falharam. É parecido com o Jest (que talvez você já tenha ouvido falar), mas é mais rápido e funciona melhor com projetos Vite/React modernos. Ele é o "motor" &mdash; quem executa tudo.</li>
+      <li><strong>React Testing Library</strong> &mdash; A biblioteca que permite "simular" o que o usuário faz. Com ela, você pode renderizar um componente, encontrar um botão pelo texto, clicar nele, e verificar se algo mudou na tela. A filosofia dela é: <strong>teste como o usuário usa, não como o código funciona internamente</strong>.</li>
+      <li><strong>O padrão AAA (Arrange, Act, Assert)</strong> &mdash; Todo teste segue 3 passos. Primeiro, você <strong>prepara</strong> o cenário (renderiza o componente com os dados que quer testar). Depois, você <strong>age</strong> (clica num botão, preenche um campo, dispara um evento). Por último, você <strong>verifica</strong> se o resultado é o esperado (o texto apareceu? o componente sumiu? a função foi chamada?).</li>
+    </ul>
+  </div>
+
+  <div class="phase phase-2" style="margin-bottom: 16px;">
+    <div class="phase-title">Fase 2 &mdash; Exemplo Guiado: Testando um componente React</div>
+    <p style="margin: 8px 0;">Vamos testar um componente simples de card de produto. Primeiro o componente, depois os testes:</p>
+
+<pre><span class="comment">// ProductCard.tsx &mdash; o componente que vamos testar</span>
+<span class="keyword">interface</span> <span class="function">ProductCardProps</span> {
+    nome: <span class="string">string</span>;
+    preco: <span class="string">number</span>;
+    emEstoque: <span class="string">boolean</span>;
+    onComprar: () =&gt; <span class="string">void</span>;
+}
+
+<span class="keyword">export function</span> <span class="function">ProductCard</span>({ nome, preco, emEstoque, onComprar }: ProductCardProps) {
+    <span class="keyword">return</span> (
+        &lt;div data-testid=<span class="string">"product-card"</span>&gt;
+            &lt;h3&gt;{nome}&lt;/h3&gt;
+            &lt;p&gt;R$ {preco.toFixed(2)}&lt;/p&gt;
+            {emEstoque ? (
+                &lt;button onClick={onComprar}&gt;Comprar&lt;/button&gt;
+            ) : (
+                &lt;span&gt;Fora de estoque&lt;/span&gt;
+            )}
+        &lt;/div&gt;
+    );
+}</pre>
+
+<pre><span class="comment">// ProductCard.test.tsx &mdash; os testes</span>
+<span class="keyword">import</span> { render, screen } <span class="keyword">from</span> <span class="string">"@testing-library/react"</span>;
+<span class="keyword">import</span> { userEvent } <span class="keyword">from</span> <span class="string">"@testing-library/user-event"</span>;
+<span class="keyword">import</span> { ProductCard } <span class="keyword">from</span> <span class="string">"./ProductCard"</span>;
+
+<span class="function">test</span>(<span class="string">"mostra nome e preço do produto"</span>, () =&gt; {
+    <span class="comment">// Arrange: renderiza o componente com dados de teste</span>
+    render(&lt;ProductCard nome=<span class="string">"Camiseta"</span> preco={59.9} emEstoque={<span class="keyword">true</span>} onComprar={() =&gt; {}} /&gt;);
+
+    <span class="comment">// Assert: verifica se o nome e preço aparecem na tela</span>
+    expect(screen.getByText(<span class="string">"Camiseta"</span>)).toBeInTheDocument();    <span class="good">// &larr; nome aparece?</span>
+    expect(screen.getByText(<span class="string">"R$ 59.90"</span>)).toBeInTheDocument();     <span class="good">// &larr; preço aparece?</span>
+});
+
+<span class="function">test</span>(<span class="string">"mostra botão de comprar quando tem estoque"</span>, () =&gt; {
+    render(&lt;ProductCard nome=<span class="string">"Camiseta"</span> preco={59.9} emEstoque={<span class="keyword">true</span>} onComprar={() =&gt; {}} /&gt;);
+
+    expect(screen.getByText(<span class="string">"Comprar"</span>)).toBeInTheDocument();       <span class="good">// &larr; botão existe?</span>
+    expect(screen.queryByText(<span class="string">"Fora de estoque"</span>)).not.toBeInTheDocument(); <span class="good">// &larr; aviso não aparece?</span>
+});
+
+<span class="function">test</span>(<span class="string">"mostra 'Fora de estoque' quando não tem estoque"</span>, () =&gt; {
+    render(&lt;ProductCard nome=<span class="string">"Camiseta"</span> preco={59.9} emEstoque={<span class="keyword">false</span>} onComprar={() =&gt; {}} /&gt;);
+
+    expect(screen.getByText(<span class="string">"Fora de estoque"</span>)).toBeInTheDocument(); <span class="good">// &larr; aviso aparece?</span>
+    expect(screen.queryByText(<span class="string">"Comprar"</span>)).not.toBeInTheDocument();   <span class="good">// &larr; botão sumiu?</span>
+});
+
+<span class="function">test</span>(<span class="string">"chama onComprar quando clica no botão"</span>, <span class="keyword">async</span> () =&gt; {
+    <span class="keyword">const</span> onComprar = vi.fn();  <span class="comment">// &larr; cria uma função "espiã" que registra se foi chamada</span>
+    render(&lt;ProductCard nome=<span class="string">"Camiseta"</span> preco={59.9} emEstoque={<span class="keyword">true</span>} onComprar={onComprar} /&gt;);
+
+    <span class="comment">// Act: simula o clique do usuário</span>
+    <span class="keyword">await</span> userEvent.click(screen.getByText(<span class="string">"Comprar"</span>));
+
+    <span class="comment">// Assert: a função foi chamada exatamente 1 vez?</span>
+    expect(onComprar).toHaveBeenCalledTimes(1);                     <span class="good">// &larr; clique funcionou?</span>
+});</pre>
+
+    <p style="margin: 4px 0 0;"><strong>Perceba o que cada teste verifica:</strong> o primeiro testa se os dados aparecem na tela corretamente. O segundo testa o cenário "com estoque". O terceiro testa o cenário "sem estoque". O quarto testa se clicar no botão realmente dispara a ação. São 4 testes e você tem 4 certezas sobre o componente.</p>
+  </div>
+
+  <div class="task-box">
+    <div class="task-box-title">Exercício Solo &mdash; Sua tarefa da semana</div>
+    <ol>
+      <li>Crie a pasta <code>semana-02-testes/</code> no seu repositório</li>
+      <li>Inicialize um projeto React com Vite + TypeScript: <code>npm create vite@latest . -- --template react-ts</code></li>
+      <li>Instale as dependências de teste: <code>npm install -D vitest @testing-library/react @testing-library/jest-dom @testing-library/user-event jsdom</code></li>
+      <li>Crie o componente <code>TaskItem.tsx</code>: um item de lista de tarefas com checkbox, título, botão de deletar, e indicação de prioridade (alta/média/baixa com cores diferentes)</li>
+      <li>Crie <code>TaskItem.test.tsx</code> com <strong>pelo menos 6 testes</strong> cobrindo:
+        <ul style="font-size: 12px; margin-top: 4px;">
+          <li>O título aparece corretamente?</li>
+          <li>A cor de prioridade muda conforme a prop?</li>
+          <li>Clicar no checkbox chama a função de toggle?</li>
+          <li>Clicar em deletar chama a função de deletar?</li>
+          <li>Tarefa concluída aparece com estilo diferente (riscada)?</li>
+          <li>O botão de deletar mostra confirmação antes de deletar?</li>
+        </ul>
+      </li>
+      <li>Rode com <code>npx vitest run</code> e tire um print da saída</li>
+      <li>Crie <code>decisoes.md</code>: como você decidiu quais cenários testar? Qual teste foi mais difícil de escrever e por quê?</li>
+    </ol>
+    <p class="small" style="margin: 8px 0 0;"><strong>Dica com IA:</strong> <em>"Tenho um componente React com checkbox e botão de deletar. Quais cenários de teste devo cobrir com React Testing Library?"</em></p>
+  </div>
+
+  <div class="card" style="margin-top: 16px;">
+    <p class="bold text-primary mb-4">Recursos complementares &mdash; Semana 2</p>
+    <ul style="font-size: 13px; padding-left: 20px;">
+      <li><strong>Vídeo:</strong> "React Testing Library Tutorial" &mdash; The Net Ninja (YouTube, playlist ~2h)</li>
+      <li><strong>Leitura:</strong> Documentação oficial da React Testing Library &mdash; "Introduction" e "Example"</li>
+      <li><strong>Referência rápida:</strong> testing-library.com/docs/react-testing-library/cheatsheet</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ==================== SEMANA 3 ==================== -->
+<div class="page page-break">
+  <h2><span class="section-number">5</span> Semana 3 &mdash; APIs REST: O Backend que seu Frontend Consome</h2>
+  <p class="small" style="margin-bottom:16px;">Entender o outro lado da comunicação &bull; Tempo estimado: 4&ndash;6 horas</p>
+
+  <div class="phase phase-1" style="margin-bottom: 16px;">
+    <div class="phase-title">Fase 1 &mdash; Fundamento: Você já consome APIs. Agora vai entender como elas funcionam por dentro.</div>
+    <p style="margin: 8px 0 4px;">No seu dia a dia como dev frontend, você faz <code>fetch("/api/usuarios")</code> e recebe os dados. Mas o que acontece do outro lado? Quem decide que esse endpoint existe, quais dados retorna, e como valida o que recebe? Isso é o backend. E se sua meta é ser <strong>fullstack</strong>, você precisa entender os dois lados.</p>
+
+    <p style="margin: 8px 0 4px;">Uma API REST é um <strong>contrato de comunicação</strong> entre o frontend e o backend. É como um cardápio de restaurante: o cardápio lista o que está disponível (os endpoints), explica o que cada prato contém (os dados de retorno), e tem regras (não pode pedir sobremesa antes do prato principal, não pode pedir um prato que não existe). Quando o frontend faz uma requisição, ele está "pedindo um prato" &mdash; e o backend é a cozinha que prepara e entrega.</p>
+
+    <p style="margin: 8px 0 4px;"><strong>Os conceitos que você precisa dominar:</strong></p>
+    <ul style="margin-left: 20px; font-size: 13px;">
+      <li><strong>Verbos HTTP</strong> &mdash; Cada verbo diz o que você quer fazer. <code>GET</code> significa "me dê essa informação" (listar, buscar). <code>POST</code> significa "crie algo novo" (criar um usuário, enviar um formulário). <code>PUT</code> significa "atualize isso por completo" (substitui todos os campos). <code>PATCH</code> significa "atualize só essa parte" (muda só o nome, por exemplo). <code>DELETE</code> significa "apague isso". Você já usa isso no frontend com <code>fetch</code> &mdash; agora vai construir o lado que <strong>recebe</strong> essas requisições.</li>
+      <li><strong>Status codes</strong> &mdash; São os "códigos de resposta" que o backend manda de volta. <code>200</code> significa "deu tudo certo". <code>201</code> significa "criado com sucesso". <code>400</code> significa "você mandou dados errados" (o frontend mandou algo inválido). <code>404</code> significa "não encontrei o que você pediu". <code>500</code> significa "erro no servidor" (o backend quebrou). Quando você sabe o que cada código significa, fica muito mais fácil debugar problemas de integração.</li>
+      <li><strong>Validação de entrada</strong> &mdash; Nunca confie nos dados que chegam do frontend. Mesmo que o formulário tenha validação no lado do cliente, alguém pode mandar uma requisição direto pelo Postman (que você já usa!) pulando todas as validações. O backend <strong>sempre</strong> valida de novo: o email tem formato correto? O preço é um número positivo? O campo obrigatório foi preenchido?</li>
+    </ul>
+  </div>
+
+  <div class="phase phase-2" style="margin-bottom: 16px;">
+    <div class="phase-title">Fase 2 &mdash; Exemplo Guiado: Criando uma API com Express + TypeScript</div>
+    <p style="margin: 8px 0;">Você já tem Node.js nota 4. Vamos usar Express (o framework mais popular do Node) com TypeScript para construir uma API que o frontend poderia consumir:</p>
+
+<pre><span class="comment">// types.ts &mdash; define a forma dos dados (como uma interface React, mas para o backend)</span>
+<span class="keyword">export interface</span> <span class="function">Tarefa</span> {
+    id: <span class="string">number</span>;
+    titulo: <span class="string">string</span>;
+    concluida: <span class="string">boolean</span>;
+    prioridade: <span class="string">"alta"</span> | <span class="string">"media"</span> | <span class="string">"baixa"</span>;
+}
+
+<span class="keyword">export type</span> <span class="function">TarefaCreate</span> = Omit&lt;Tarefa, <span class="string">"id"</span>&gt;;  <span class="good">// &larr; reusando Omit da semana 1!</span></pre>
+
+<pre><span class="comment">// routes/tarefas.ts &mdash; os endpoints da API</span>
+<span class="keyword">import</span> { Router } <span class="keyword">from</span> <span class="string">"express"</span>;
+
+<span class="keyword">const</span> router = Router();
+<span class="keyword">let</span> tarefas: Tarefa[] = [];   <span class="comment">// banco de dados em memória (só para aprender)</span>
+<span class="keyword">let</span> proximoId = 1;
+
+<span class="comment">// GET /tarefas &mdash; listar todas</span>
+router.get(<span class="string">"/tarefas"</span>, (req, res) =&gt; {
+    res.json(tarefas);                           <span class="good">// &larr; retorna 200 automaticamente</span>
+});
+
+<span class="comment">// POST /tarefas &mdash; criar nova</span>
+router.post(<span class="string">"/tarefas"</span>, (req, res) =&gt; {
+    <span class="keyword">const</span> { titulo, prioridade } = req.body;
+
+    <span class="comment">// Validação: nunca confie no que o frontend manda</span>
+    <span class="keyword">if</span> (!titulo || titulo.trim().length === 0) {
+        <span class="keyword">return</span> res.status(400).json({              <span class="bad">// &larr; 400 = dados inválidos</span>
+            erro: <span class="string">"O campo 'titulo' é obrigatório e não pode ser vazio"</span>
+        });
+    }
+
+    <span class="keyword">const</span> nova: Tarefa = {
+        id: proximoId++,
+        titulo: titulo.trim(),
+        concluida: <span class="keyword">false</span>,
+        prioridade: prioridade || <span class="string">"media"</span>,
+    };
+    tarefas.push(nova);
+    res.status(201).json(nova);                  <span class="good">// &larr; 201 = criado com sucesso</span>
+});
+
+<span class="comment">// PATCH /tarefas/:id &mdash; atualizar parcialmente</span>
+router.patch(<span class="string">"/tarefas/:id"</span>, (req, res) =&gt; {
+    <span class="keyword">const</span> tarefa = tarefas.find(t =&gt; t.id === Number(req.params.id));
+    <span class="keyword">if</span> (!tarefa) {
+        <span class="keyword">return</span> res.status(404).json({              <span class="bad">// &larr; 404 = não encontrado</span>
+            erro: <span class="string">"Tarefa não encontrada"</span>
+        });
+    }
+    Object.assign(tarefa, req.body);
+    res.json(tarefa);                            <span class="good">// &larr; 200 = atualizado</span>
+});</pre>
+
+    <p style="margin: 4px 0 0;"><strong>Perceba a conexão:</strong> a interface <code>Tarefa</code> usa os mesmos conceitos de TypeScript da semana 1. O PATCH usa <code>Omit</code> na prática. E os status codes (200, 201, 400, 404) são os mesmos que você já vê no DevTools do navegador quando debugga requisições no frontend.</p>
+  </div>
+
+  <div class="task-box">
+    <div class="task-box-title">Exercício Solo &mdash; Sua tarefa da semana</div>
+    <ol>
+      <li>Crie a pasta <code>semana-03-api/</code></li>
+      <li>Inicialize um projeto Node + TypeScript: <code>npm init -y && npm install express && npm install -D typescript @types/express @types/node ts-node</code></li>
+      <li>Construa uma API de <strong>gerenciamento de contatos</strong> com:
+        <ul style="font-size: 12px; margin-top: 4px;">
+          <li><code>GET /contatos</code> &mdash; listar todos (com filtro opcional por nome via query string)</li>
+          <li><code>GET /contatos/:id</code> &mdash; buscar um por id (retornar 404 se não existir)</li>
+          <li><code>POST /contatos</code> &mdash; criar novo (validar nome e email obrigatórios)</li>
+          <li><code>PATCH /contatos/:id</code> &mdash; atualizar parcialmente</li>
+          <li><code>DELETE /contatos/:id</code> &mdash; deletar (retornar 404 se não existir)</li>
+        </ul>
+      </li>
+      <li>Teste todos os endpoints com <strong>Postman</strong> (você já usa!) &mdash; tire prints de cada requisição e resposta</li>
+      <li>Crie <code>decisoes.md</code>: qual a diferença entre PUT e PATCH? Por que validar no backend se o frontend já valida? Qual status code usar em cada situação?</li>
+    </ol>
+    <p class="small" style="margin: 8px 0 0;"><strong>Dica com IA:</strong> <em>"Estou criando minha primeira API REST com Express e TypeScript. Quais validações devo fazer no endpoint POST de criação?"</em></p>
+  </div>
+
+  <div class="card" style="margin-top: 16px;">
+    <p class="bold text-primary mb-4">Recursos complementares &mdash; Semana 3</p>
+    <ul style="font-size: 13px; padding-left: 20px;">
+      <li><strong>Vídeo:</strong> "Build a REST API with Node.js, Express, and TypeScript" &mdash; TomDoesTech (YouTube, ~40min)</li>
+      <li><strong>Leitura:</strong> Express.js oficial &mdash; "Getting Started" e "Routing"</li>
+      <li><strong>Ferramenta:</strong> Postman (que você já usa!) &mdash; crie uma Collection "Semana 3" com todos os endpoints</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ==================== SEMANA 4 ==================== -->
+<div class="page page-break">
+  <h2><span class="section-number">6</span> Semana 4 &mdash; Code Review: Ler Código dos Outros (e Melhorar o Seu)</h2>
+  <p class="small" style="margin-bottom:16px;">A habilidade mais subestimada da engenharia de software &bull; Tempo estimado: 4&ndash;6 horas</p>
+
+  <div class="phase phase-1" style="margin-bottom: 16px;">
+    <div class="phase-title">Fase 1 &mdash; Fundamento: Por que ler código é tão importante quanto escrever?</div>
+    <p style="margin: 8px 0 4px;">No assessment, você disse que já <strong>recebeu</strong> code reviews, mas nunca <strong>fez</strong> um. Isso é normal no começo &mdash; geralmente alguém mais experiente revisa o seu código. Mas fazer code review é uma das formas mais rápidas de evoluir, porque te obriga a <strong>ler código que outra pessoa escreveu</strong> e pensar criticamente: "isso está claro?", "tem algum bug escondido aqui?", "tem uma forma mais simples de fazer isso?".</p>
+
+    <p style="margin: 8px 0 4px;">Pense assim: quando você só escreve código, você vê o mundo de um ângulo só &mdash; o seu. Quando você lê código de outra pessoa, você descobre formas diferentes de resolver o mesmo problema. Às vezes melhores que as suas, às vezes piores &mdash; e aprender a diferenciar é o que te torna uma profissional melhor.</p>
+
+    <p style="margin: 8px 0 4px;"><strong>O que olhar em um code review (checklist mental):</strong></p>
+    <ul style="margin-left: 20px; font-size: 13px;">
+      <li><strong>Funciona?</strong> &mdash; O código faz o que deveria fazer? Cobre os cenários normais e os edge cases? Se a API retornar erro, o componente trata isso ou quebra silenciosamente?</li>
+      <li><strong>Está claro?</strong> &mdash; Outro dev consegue entender o que esse código faz sem precisar perguntar pra quem escreveu? Os nomes de variáveis e funções explicam o que fazem? Tem algum trecho confuso que deveria ser simplificado ou comentado?</li>
+      <li><strong>Está seguro?</strong> &mdash; Os dados do usuário são validados antes de usar? Tem algum <code>dangerouslySetInnerHTML</code> sem sanitização? Informações sensíveis estão expostas no frontend?</li>
+      <li><strong>Está consistente?</strong> &mdash; O código segue os padrões do projeto? Usa os mesmos nomes, a mesma estrutura de pastas, o mesmo estilo de componente que o resto do código?</li>
+      <li><strong>Tem testes?</strong> &mdash; Se é uma feature nova, tem teste? Se é um bugfix, tem teste que impede o bug de voltar? (Conecta direto com a semana 2!)</li>
+    </ul>
+
+    <p style="margin: 8px 0 0;"><strong>Como dar feedback construtivo:</strong> Nunca diga só "isso está errado". Explique <strong>o que</strong> está errado, <strong>por que</strong> é um problema, e <strong>sugira</strong> uma alternativa. Em vez de "esse nome de variável está ruim", diga "o nome <code>data</code> não explica o que essa variável guarda &mdash; que tal <code>listaUsuarios</code> para ficar mais claro?".</p>
+  </div>
+
+  <div class="phase phase-2" style="margin-bottom: 16px;">
+    <div class="phase-title">Fase 2 &mdash; Exemplo Guiado: Revisando um componente React</div>
+    <p style="margin: 8px 0;">Imagine que um colega mandou este componente para review. Leia com calma e tente encontrar os problemas antes de ver as anotações:</p>
+
+<pre><span class="comment">// UserList.tsx &mdash; componente enviado para review</span>
+<span class="keyword">export function</span> <span class="function">UserList</span>() {
+    <span class="keyword">const</span> [data, setData] = useState([]);        <span class="bad">// &larr; sem tipagem, nome genérico</span>
+    <span class="keyword">const</span> [x, setX] = useState(<span class="keyword">false</span>);            <span class="bad">// &larr; "x" não diz nada</span>
+
+    useEffect(() =&gt; {
+        fetch(<span class="string">"/api/users"</span>)
+            .then(r =&gt; r.json())
+            .then(d =&gt; setData(d));                <span class="bad">// &larr; e se a API retornar erro?</span>
+    }, []);
+
+    <span class="keyword">return</span> (
+        &lt;div&gt;
+            {x && &lt;p&gt;Carregando...&lt;/p&gt;}           <span class="bad">// &larr; x nunca é setado para true!</span>
+            {data.map((u: <span class="keyword">any</span>) =&gt;                  <span class="bad">// &larr; "any" desativa o TypeScript</span>
+                &lt;div&gt;{u.name}&lt;/div&gt;               <span class="bad">// &larr; sem key no map!</span>
+            )}
+        &lt;/div&gt;
+    );
+}</pre>
+
+    <p style="margin: 8px 0;"><strong>Review que você faria (feedback construtivo):</strong></p>
+    <ol style="font-size: 13px; padding-left: 20px;">
+      <li><strong>Tipagem:</strong> <code>data</code> está como <code>any[]</code> e o map usa <code>any</code>. Sugestão: criar uma interface <code>User</code> e tipar o state como <code>useState&lt;User[]&gt;([])</code>.</li>
+      <li><strong>Nomes:</strong> <code>data</code> deveria ser <code>usuarios</code>. <code>x</code> deveria ser <code>carregando</code> ou <code>isLoading</code>. Nomes descritivos evitam que alguém precise ler o código inteiro pra entender o que cada variável faz.</li>
+      <li><strong>Tratamento de erro:</strong> Se a API retornar 500 ou a rede cair, nada acontece &mdash; o usuário fica numa tela vazia sem saber o que houve. Sugestão: adicionar um <code>.catch()</code> com estado de erro.</li>
+      <li><strong>Estado de loading:</strong> A variável <code>x</code> (que deveria ser <code>isLoading</code>) nunca muda de valor. Deveria ser <code>true</code> antes do fetch e <code>false</code> depois.</li>
+      <li><strong>Key no map:</strong> React precisa de uma prop <code>key</code> única em cada item de lista. Sem isso, a performance cai e podem acontecer bugs visuais quando a lista atualiza.</li>
+    </ol>
+  </div>
+
+  <div class="task-box">
+    <div class="task-box-title">Exercício Solo &mdash; Sua tarefa da semana</div>
+    <ol>
+      <li>Crie a pasta <code>semana-04-code-review/</code></li>
+      <li>Crie o arquivo <code>para-revisar.tsx</code> com um componente de <strong>formulário de cadastro</strong> propositalmente cheio de problemas: sem tipagem, nomes genéricos, sem validação, sem tratamento de erro, sem loading state, com <code>any</code> em tudo, sem acessibilidade</li>
+      <li>Crie o arquivo <code>review.md</code> onde você faz a review do seu próprio código:
+        <ul style="font-size: 12px; margin-top: 4px;">
+          <li>Liste cada problema que encontrou</li>
+          <li>Explique por que é um problema (não só "está errado", mas o que pode dar errado por causa disso)</li>
+          <li>Sugira a correção específica</li>
+        </ul>
+      </li>
+      <li>Crie o arquivo <code>corrigido.tsx</code> com o componente reescrito aplicando todas as correções da review</li>
+      <li>Crie <code>decisoes.md</code>: qual problema foi mais difícil de identificar? O que você aprendeu lendo seu próprio código com olhar crítico?</li>
+    </ol>
+    <p class="small" style="margin: 8px 0 0;"><strong>Dica com IA:</strong> <em>"Revise este componente React TypeScript e me diga quais problemas de tipagem, tratamento de erro e boas práticas você encontra."</em> &mdash; depois compare com a sua review.</p>
+  </div>
+
+  <div class="card" style="margin-top: 16px;">
+    <p class="bold text-primary mb-4">Recursos complementares &mdash; Semana 4</p>
+    <ul style="font-size: 13px; padding-left: 20px;">
+      <li><strong>Vídeo:</strong> "How to Do Code Reviews Like a Human" &mdash; Michaela Greiler (YouTube, ~20min)</li>
+      <li><strong>Leitura:</strong> Google Engineering Practices &mdash; "How to do a code review" (buscar no Google, é público)</li>
+      <li><strong>Prática:</strong> Depois desta semana, peça para fazer review de um PR real no trabalho</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ==================== IA NO DIA A DIA ==================== -->
+<div class="page page-break">
+  <h2><span class="section-number">7</span> IA no Dia a Dia &mdash; Como Usar de Forma Inteligente</h2>
+
+  <p>Vamos implementar <strong>Claude Code</strong> e <strong>ChatGPT</strong> como ferramentas do time. Mas existe uma progressão correta &mdash; não é "joga tudo pro AI e aceita o que vier".</p>
+
+  <div class="ai-level level-1">
+    <div class="ai-level-num">1</div>
+    <div>
+      <p class="bold mb-4">Consumidor (Mês 1&ndash;2)</p>
+      <p>Você aprende a fazer perguntas básicas e usar as respostas. Nas atividades, você encontra <strong>prompts prontos</strong> para usar quando travar. Objetivo: quebrar a barreira do "não sei o que perguntar".</p>
+      <p class="small">Exemplo: <em>"Estou testando um componente React com Testing Library. Como simulo um clique em um botão?"</em></p>
+    </div>
+  </div>
+
+  <div class="ai-level level-2">
+    <div class="ai-level-num">2</div>
+    <div>
+      <p class="bold mb-4">Colaborador (Mês 3&ndash;4)</p>
+      <p>Você formula seus próprios prompts com contexto: o que já tentou, qual o erro, o que espera. Exercícios incluem comparar prompts bons vs. ruins.</p>
+      <p class="small">Exemplo: <em>"Tenho um componente React que renderiza uma lista de 500 itens e está lento. Já tentei React.memo mas não resolveu. Quais outras otimizações posso tentar?"</em></p>
+    </div>
+  </div>
+
+  <div class="ai-level level-3">
+    <div class="ai-level-num">3</div>
+    <div>
+      <p class="bold mb-4">Diretor (Mês 5&ndash;6)</p>
+      <p>Você sabe quando <strong>não confiar</strong> no AI. Consegue identificar respostas subótimas, corrigir sugestões, e usar a IA para acelerar &mdash; não para substituir seu raciocínio.</p>
+      <p class="small">Exemplo: <em>"O ChatGPT sugeriu usar useEffect para derivar um valor de outro state, mas isso causa re-render desnecessário. Vou usar useMemo em vez disso."</em></p>
+    </div>
+  </div>
+
+  <div class="card card-yellow">
+    <p class="bold" style="margin-bottom:8px;">Regra de ouro:</p>
+    <p style="margin-bottom:0;">Se você não consegue explicar <strong>por que</strong> o código que a IA gerou funciona, você ainda não entendeu. Volte ao fundamento e tente de novo.</p>
+  </div>
+
+  <h3>Como usar IA nos exercícios deste plano</h3>
+  <table>
+    <tr><th>Situação</th><th>Pode usar IA?</th><th>Como</th></tr>
+    <tr>
+      <td>Travou no exercício</td>
+      <td><span class="tag tag-green">Sim</span></td>
+      <td>Use o prompt sugerido no final de cada exercício</td>
+    </tr>
+    <tr>
+      <td>Quer entender um conceito melhor</td>
+      <td><span class="tag tag-green">Sim</span></td>
+      <td>Pergunte com contexto: "Sou dev React aprendendo X..."</td>
+    </tr>
+    <tr>
+      <td>Quer que a IA faça o exercício por você</td>
+      <td><span class="tag tag-red">Não</span></td>
+      <td>O objetivo é <strong>você</strong> aprender, não a IA resolver</td>
+    </tr>
+    <tr>
+      <td>Quer comparar sua solução</td>
+      <td><span class="tag tag-green">Sim</span></td>
+      <td>Depois de fazer, peça: "Revise meu código e aponte melhorias"</td>
+    </tr>
+  </table>
+</div>
+
+<!-- ==================== CADÊNCIA ==================== -->
+<div class="page page-break">
+  <h2><span class="section-number">8</span> Como Funciona no Dia a Dia</h2>
+
+  <h3>Cadência Semanal</h3>
+  <p>Este plano é <strong>seu</strong>. Você tem o mapa completo nas mãos &mdash; as 4 semanas, os exercícios, os recursos. A responsabilidade de seguir o plano é sua. Lucas está disponível como consultor para tirar dúvidas e dar feedback, mas <strong>quem conduz é você</strong>.</p>
+  <table>
+    <tr><th>Dia</th><th>O que você faz</th></tr>
+    <tr>
+      <td><strong>Segunda</strong></td>
+      <td>Abrir o tema da semana neste documento e ler o Fundamento com calma</td>
+    </tr>
+    <tr>
+      <td><strong>Terça&ndash;Quinta</strong></td>
+      <td>Trabalhar nas atividades no seu ritmo (Exemplo Guiado + Exercício Solo)</td>
+    </tr>
+    <tr>
+      <td><strong>Terça&ndash;Quinta</strong></td>
+      <td>Se tiver dúvida, trazer pro check-in com Lucas (~30min) &mdash; preparada, com perguntas específicas</td>
+    </tr>
+    <tr>
+      <td><strong>Sexta</strong></td>
+      <td>Retrospectiva: <strong>você apresenta o que aprendeu, com suas palavras</strong></td>
+    </tr>
+  </table>
+
+  <h3>Cadência Mensal e Trimestral</h3>
+  <table>
+    <tr><th>Quando</th><th>O que acontece</th></tr>
+    <tr><td>Semanas 1&ndash;3 de cada mês</td><td>Atividades normais, progressão nos temas</td></tr>
+    <tr><td>Semana 4 de cada mês</td><td>Mini-avaliação: "O que você aprendeu? Me explica o conceito X."</td></tr>
+    <tr><td><strong>Maio/2026</strong></td><td>Assessment inicial (feito!) &rarr; baseline</td></tr>
+    <tr><td><strong>Agosto/2026</strong></td><td>Reaplicar assessment &rarr; comparar scores &rarr; ajustar trilha</td></tr>
+    <tr><td><strong>Novembro/2026</strong></td><td>Reaplicar assessment &rarr; meta: score médio 3.8+ nas áreas foco</td></tr>
+  </table>
+
+  <h3 style="margin-top: 24px;">Como entregar as atividades</h3>
+  <div class="card card-accent">
+    <p style="margin-bottom: 8px;"><strong>Você é responsável por organizar e entregar. Ninguém vai cobrar &mdash; o progresso é seu.</strong></p>
+    <ul class="checklist">
+      <li>Crie o repositório <code>fedcorp-exercicios</code> no seu GitHub pessoal</li>
+      <li>Cada semana = 1 pasta (<code>semana-01-typescript/</code>, <code>semana-02-testes/</code>...)</li>
+      <li>Cada pasta tem: código + <code>decisoes.md</code> explicando suas escolhas</li>
+      <li>Na retrospectiva de sexta, você traz o que fez e explica suas decisões</li>
+      <li>Se travou, anote onde travou e o que tentou &mdash; isso é tão valioso quanto resolver</li>
+    </ul>
+  </div>
+
+  <div class="card card-yellow">
+    <p class="bold mb-4">Sobre sua maior dificuldade (processos interrompidos):</p>
+    <p style="margin-bottom:0;">Cada atividade foi pensada para ser feita em <strong>blocos curtos</strong>. O Fundamento leva ~30 minutos de leitura. O Exemplo Guiado leva ~1 hora de estudo. O Exercício Solo leva ~2&ndash;3 horas espalhadas pela semana. Não precisa de 4 horas seguidas &mdash; pode dividir em pedaços.</p>
+  </div>
+</div>
+
+<!-- ==================== META ==================== -->
+<div class="page page-break">
+  <h2><span class="section-number">9</span> Sua Meta de Evolução</h2>
+
+  <div class="card card-green" style="text-align:center; padding: 32px;">
+    <p style="font-size: 14px; margin-bottom: 8px;">Em 6 meses, o objetivo é você ir de:</p>
+    <p style="font-size: 24px; font-weight: 800; color: var(--primary); margin-bottom: 8px;">
+      Frontend forte &rarr; Fullstack de verdade
+    </p>
+    <p class="small">Subir as áreas foco (TypeScript, testes, APIs, processos) de 2&ndash;3 para 4+</p>
+  </div>
+
+  <h3>O que "fullstack de verdade" significa na prática</h3>
+  <table>
+    <tr><th>Competência</th><th>Hoje</th><th>Em 6 meses</th></tr>
+    <tr>
+      <td>TypeScript</td>
+      <td>Usa o básico (types simples)</td>
+      <td>Domina generics, utility types, e escreve código 100% tipado</td>
+    </tr>
+    <tr>
+      <td>Testes</td>
+      <td>Conhece o conceito, não pratica</td>
+      <td>Escreve testes de componentes como parte natural do trabalho</td>
+    </tr>
+    <tr>
+      <td>APIs REST</td>
+      <td>Consome APIs no frontend</td>
+      <td>Constrói APIs no backend com validação e tratamento de erros</td>
+    </tr>
+    <tr>
+      <td>Code Review</td>
+      <td>Só recebeu reviews</td>
+      <td>Faz e recebe reviews com feedback técnico construtivo</td>
+    </tr>
+    <tr>
+      <td>Uso de IA</td>
+      <td>Usa ChatGPT para dúvidas pontuais</td>
+      <td>Direciona a IA com prompts específicos e avalia criticamente</td>
+    </tr>
+  </table>
+
+  <h3 style="margin-top: 24px;">Após consolidar a base &mdash; Temas avançados (Mês 5+)</h3>
+  <p style="font-size: 13px;">Você quer chegar a pleno. Esses temas entram <strong>após</strong> consolidar as 4 semanas iniciais:</p>
+  <table>
+    <tr><th>Tema</th><th>Por que</th><th>Quando</th></tr>
+    <tr>
+      <td><strong>Docker + Deploy</strong></td>
+      <td>CI/CD está em 2 e Cloud em 1 &mdash; fullstack precisa saber colocar código em produção</td>
+      <td>Mês 5&ndash;6</td>
+    </tr>
+    <tr>
+      <td><strong>Linux / Terminal</strong></td>
+      <td>Score 1 &mdash; é a base para deploy, containers, e qualquer operação de servidor</td>
+      <td>Mês 5&ndash;6</td>
+    </tr>
+    <tr>
+      <td><strong>Banco de Dados Avançado</strong></td>
+      <td>SQL está em 4, mas ORM, migrations, e modelagem precisam aprofundar para fullstack</td>
+      <td>Mês 7&ndash;8</td>
+    </tr>
+    <tr>
+      <td><strong>Autenticação e Segurança</strong></td>
+      <td>Você já usa Firebase/Supabase &mdash; agora entender JWT, OAuth, CORS de verdade</td>
+      <td>Mês 7&ndash;8</td>
+    </tr>
+  </table>
+
+  <h3 style="margin-top: 24px;">Seus Compromissos</h3>
+  <div class="card">
+    <ul class="checklist">
+      <li>Dedicar 4&ndash;6h/semana às atividades (você já estuda 10h+, então cabe)</li>
+      <li>Entregar os exercícios no GitHub pessoal</li>
+      <li>Participar dos check-ins preparada, com perguntas específicas</li>
+      <li>Explicar os conceitos, não só mostrar código</li>
+      <li>Pedir ajuda quando travar por mais de 30 minutos no mesmo problema</li>
+    </ul>
+  </div>
+
+  <div class="quote" style="margin-top: 24px;">
+    Você disse no assessment: "Espero conseguir absorver o máximo de aprendizado possível e ter um plano de desenvolvimento estruturado para aplicar na minha carreira." Este documento é exatamente isso. Você tem frontend sólido e experiência real com produto &mdash; agora é expandir para os dois lados: backend e processos de engenharia. O caminho para pleno passa por aqui.
+  </div>
+
+  <div style="text-align: center; margin-top: 40px; padding-top: 20px; border-top: 2px solid var(--gray-200);">
+    <p class="small">Próximo assessment: <strong>Agosto de 2026</strong></p>
+    <p class="small">Dúvidas? Traga no check-in preparada, com perguntas específicas.</p>
+  </div>
+</div>
+
+</body>
+</html>

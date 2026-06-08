@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Plano de Desenvolvimento - Daniel Mello de Carvalho de Faria</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap');
+
+    :root {
+      --primary: #1a365d;
+      --primary-light: #2b6cb0;
+      --accent: #38a169;
+      --accent-light: #c6f6d5;
+      --warning: #d69e2e;
+      --warning-light: #fefcbf;
+      --danger: #e53e3e;
+      --danger-light: #fed7d7;
+      --gray-50: #f7fafc;
+      --gray-100: #edf2f7;
+      --gray-200: #e2e8f0;
+      --gray-300: #cbd5e0;
+      --gray-500: #718096;
+      --gray-600: #4a5568;
+      --gray-700: #2d3748;
+      --gray-800: #1a202c;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      color: var(--gray-700);
+      line-height: 1.6;
+      background: #fff;
+    }
+
+    @media print {
+      body { font-size: 11pt; }
+      .page-break { page-break-before: always; }
+      .no-print { display: none; }
+      .page { padding: 32px; }
+      pre { font-size: 9pt; }
+    }
+
+    @media screen {
+      body { max-width: 850px; margin: 0 auto; padding: 20px; background: var(--gray-100); }
+      .page { background: #fff; padding: 48px; margin-bottom: 24px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,.1); }
+    }
+
+    .cover {
+      display: flex; flex-direction: column; justify-content: center;
+      align-items: center; text-align: center; padding: 80px 48px;
+    }
+
+    .cover-badge {
+      display: inline-block; background: var(--primary); color: white;
+      padding: 6px 20px; border-radius: 20px; font-size: 12px;
+      font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 32px;
+    }
+
+    .cover h1 { font-size: 32px; font-weight: 800; color: var(--primary); margin-bottom: 8px; }
+    .cover .subtitle { font-size: 18px; color: var(--gray-500); margin-bottom: 40px; }
+    .cover .dev-name { font-size: 24px; font-weight: 700; color: var(--gray-800); margin-bottom: 4px; }
+    .cover .dev-info { font-size: 14px; color: var(--gray-500); }
+    .cover-footer { margin-top: 60px; font-size: 12px; color: var(--gray-300); }
+
+    .section-number {
+      display: inline-block; background: var(--primary); color: white;
+      width: 32px; height: 32px; border-radius: 50%; text-align: center;
+      line-height: 32px; font-size: 14px; font-weight: 700; margin-right: 12px;
+    }
+
+    h2 { font-size: 22px; font-weight: 700; color: var(--primary); margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid var(--gray-200); display: flex; align-items: center; }
+    h3 { font-size: 16px; font-weight: 600; color: var(--gray-700); margin: 20px 0 10px; }
+    p { margin-bottom: 12px; }
+
+    .card { background: var(--gray-50); border: 1px solid var(--gray-200); border-radius: 8px; padding: 20px; margin-bottom: 16px; }
+    .card-accent { border-left: 4px solid var(--primary-light); }
+    .card-green { background: var(--accent-light); border-left: 4px solid var(--accent); }
+    .card-yellow { background: var(--warning-light); border-left: 4px solid var(--warning); }
+
+    .score-row { display: flex; align-items: center; margin-bottom: 8px; }
+    .score-label { width: 140px; font-size: 13px; font-weight: 500; flex-shrink: 0; }
+    .score-bar-bg { flex: 1; height: 20px; background: var(--gray-200); border-radius: 10px; overflow: hidden; margin: 0 10px; }
+    .score-bar-fill { height: 100%; border-radius: 10px; }
+    .score-value { width: 30px; text-align: right; font-size: 13px; font-weight: 700; }
+
+    .fill-1 { width: 20%; background: var(--danger); }
+    .fill-2 { width: 40%; background: #ed8936; }
+    .fill-3 { width: 60%; background: var(--warning); }
+    .fill-4 { width: 80%; background: #48bb78; }
+    .fill-5 { width: 100%; background: var(--accent); }
+
+    .tag { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; margin: 2px; }
+    .tag-green { background: var(--accent-light); color: #276749; }
+    .tag-yellow { background: var(--warning-light); color: #975a16; }
+    .tag-red { background: var(--danger-light); color: #c53030; }
+
+    .phases { display: grid; grid-template-columns: 1fr; gap: 10px; }
+    .phase { padding: 12px 16px; border-radius: 6px; font-size: 13px; }
+    .phase-title { font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+    .phase-1 { background: #ebf8ff; border-left: 3px solid #3182ce; }
+    .phase-1 .phase-title { color: #2b6cb0; }
+    .phase-2 { background: #faf5ff; border-left: 3px solid #805ad5; }
+    .phase-2 .phase-title { color: #6b46c1; }
+    .phase-3 { background: #f0fff4; border-left: 3px solid #38a169; }
+    .phase-3 .phase-title { color: #276749; }
+
+    table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 13px; }
+    th { background: var(--primary); color: white; padding: 10px 14px; text-align: left; font-weight: 600; font-size: 12px; }
+    td { padding: 10px 14px; border-bottom: 1px solid var(--gray-200); }
+    tr:nth-child(even) { background: var(--gray-50); }
+
+    .quote { background: var(--gray-50); border-left: 4px solid var(--primary-light); padding: 16px 20px; margin: 16px 0; font-style: italic; color: var(--gray-600); border-radius: 0 8px 8px 0; }
+
+    .checklist { list-style: none; padding: 0; }
+    .checklist li { padding: 8px 0 8px 28px; position: relative; font-size: 14px; }
+    .checklist li::before { content: ''; position: absolute; left: 0; top: 11px; width: 16px; height: 16px; border: 2px solid var(--gray-300); border-radius: 3px; }
+
+    .ai-level { display: flex; align-items: flex-start; gap: 16px; padding: 16px; margin-bottom: 12px; border-radius: 8px; }
+    .ai-level-num { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 18px; flex-shrink: 0; }
+    .level-1 { background: #ebf8ff; }
+    .level-1 .ai-level-num { background: #3182ce; color: white; }
+    .level-2 { background: #faf5ff; }
+    .level-2 .ai-level-num { background: #805ad5; color: white; }
+    .level-3 { background: #f0fff4; }
+    .level-3 .ai-level-num { background: #38a169; color: white; }
+
+    pre { background: var(--gray-800); color: #e2e8f0; padding: 16px; border-radius: 8px; overflow-x: auto; font-family: 'Fira Code', monospace; font-size: 12px; line-height: 1.5; margin: 12px 0; }
+    pre .comment { color: #718096; }
+    pre .keyword { color: #63b3ed; }
+    pre .string { color: #68d391; }
+    pre .function { color: #fbd38d; }
+    pre .bad { color: #fc8181; }
+    pre .good { color: #68d391; }
+
+    .task-box { background: #fffaf0; border: 2px solid #ed8936; border-radius: 8px; padding: 16px 20px; margin: 12px 0; }
+    .task-box-title { font-weight: 700; color: #c05621; font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+    .task-box ol { padding-left: 20px; font-size: 13px; }
+    .task-box ol li { margin-bottom: 6px; }
+
+    .small { font-size: 12px; color: var(--gray-500); }
+    .bold { font-weight: 700; }
+    .text-primary { color: var(--primary); }
+    .mt-8 { margin-top: 8px; }
+    .mb-4 { margin-bottom: 4px; }
+  </style>
+</head>
+<body>
+
+<!-- ==================== CAPA ==================== -->
+<div class="page cover">
+  <div class="cover-badge">FedCorp &mdash; Time de Tecnologia</div>
+  <h1>Plano de Desenvolvimento Individual</h1>
+  <p class="subtitle">Programa de Evolução Técnica &mdash; Maio a Novembro 2026</p>
+
+  <div style="margin: 40px 0;">
+    <div class="dev-name">Daniel Mello de Carvalho de Faria</div>
+    <div class="dev-info">Fullstack Developer &bull; Node.js / Python / React</div>
+    <div class="dev-info" style="margin-top: 4px;">Bootcamp &bull; 6 meses a 1 ano de experiência</div>
+  </div>
+
+  <div style="margin-top: 20px;">
+    <table style="width: auto; margin: 0 auto; font-size: 13px;">
+      <tr><td style="font-weight:600; padding-right:20px;">Elaborado por:</td><td>Lucas (Consultor Técnico)</td></tr>
+      <tr><td style="font-weight:600; padding-right:20px;">Data:</td><td>2 de Junho de 2026</td></tr>
+      <tr><td style="font-weight:600; padding-right:20px;">Reavaliação:</td><td>Setembro de 2026 (trimestral)</td></tr>
+    </table>
+  </div>
+
+  <div class="cover-footer">Documento confidencial &mdash; uso interno FedCorp</div>
+</div>
+
+<!-- ==================== FILOSOFIA ==================== -->
+<div class="page page-break">
+  <h2><span class="section-number">1</span> A Filosofia deste Plano</h2>
+
+  <div class="card card-accent">
+    <h3 style="margin-top:0;">IA é uma ferramenta. Você é o engenheiro.</h3>
+    <p>Nos próximos meses, vamos implementar ferramentas de IA (Claude Code, ChatGPT) no dia a dia da equipe. Essas ferramentas vão acelerar muito o trabalho &mdash; mas <strong>só funcionam bem nas mãos de quem entende o que está fazendo.</strong></p>
+    <p>Um dev que usa IA sem base técnica <strong>copia código sem entender</strong>, não consegue avaliar se a sugestão está correta, e cria problemas silenciosos no projeto. Um dev com base técnica usa a IA para <strong>ir mais rápido na direção certa.</strong></p>
+    <p style="margin-bottom:0;"><strong>Este plano existe para consolidar e formalizar essa base.</strong></p>
+  </div>
+
+  <h3>Como funciona o aprendizado aqui</h3>
+  <p>Cada tema segue 3 fases, baseadas no modelo de <strong>aprendizagem progressiva</strong>:</p>
+
+  <div class="phases">
+    <div class="phase phase-1">
+      <div class="phase-title">Fase 1 &mdash; Fundamento</div>
+      O que é esse conceito? Por que importa? Quais os princípios básicos?<br>
+      <span class="small">Você recebe uma explicação clara e acessível do tema.</span>
+    </div>
+    <div class="phase phase-2">
+      <div class="phase-title">Fase 2 &mdash; Exemplo Guiado</div>
+      Veja na prática: um código real sendo analisado e melhorado passo a passo.<br>
+      <span class="small">Você acompanha o raciocínio, não só o resultado.</span>
+    </div>
+    <div class="phase phase-3">
+      <div class="phase-title">Fase 3 &mdash; Exercício Solo</div>
+      Agora é sua vez: um cenário similar para resolver por conta própria.<br>
+      <span class="small">O critério de sucesso não é só "funcionar" &mdash; é você <strong>explicar o porquê</strong> da sua solução.</span>
+    </div>
+  </div>
+
+  <div class="quote">"A melhor forma de provar que você entendeu algo é conseguir explicar para outra pessoa de forma simples."</div>
+
+  <h3>Metodologia de estudo recomendada</h3>
+  <table>
+    <tr><th>Técnica</th><th>O que é</th><th>Como aplicar</th></tr>
+    <tr><td><strong>Prática Deliberada</strong></td><td>Focar nos pontos fracos, não nos fortes</td><td>As atividades focam nos seus gaps de processo</td></tr>
+    <tr><td><strong>Aprender Fazendo</strong></td><td>Praticar > assistir aula passivamente</td><td>Cada tema tem exercício prático obrigatório</td></tr>
+    <tr><td><strong>Explicar para Fixar</strong></td><td>Se você explica, você entende de verdade</td><td>No check-in semanal, você apresenta o que aprendeu</td></tr>
+    <tr><td><strong>Revisão Espaçada</strong></td><td>Revisar o tema dias depois para fixar na memória</td><td>Cada mês revisita temas anteriores em contextos novos</td></tr>
+  </table>
+</div>
+
+<!-- ==================== SEU PERFIL ==================== -->
+<div class="page page-break">
+  <h2><span class="section-number">2</span> Seu Perfil Atual</h2>
+
+  <p>Baseado no assessment que você respondeu em 25/05/2026. Esses scores são seu <strong>ponto de partida</strong>, não um julgamento.</p>
+
+  <h3>Skills Técnicas (destaques)</h3>
+
+  <div class="score-row"><span class="score-label">JavaScript</span><div class="score-bar-bg"><div class="score-bar-fill fill-5"></div></div><span class="score-value">5.0</span></div>
+  <div class="score-row"><span class="score-label">React</span><div class="score-bar-bg"><div class="score-bar-fill fill-5"></div></div><span class="score-value">5.0</span></div>
+  <div class="score-row"><span class="score-label">Node.js</span><div class="score-bar-bg"><div class="score-bar-fill fill-5"></div></div><span class="score-value">5.0</span></div>
+  <div class="score-row"><span class="score-label">Python</span><div class="score-bar-bg"><div class="score-bar-fill fill-5"></div></div><span class="score-value">5.0</span></div>
+  <div class="score-row"><span class="score-label">APIs REST</span><div class="score-bar-bg"><div class="score-bar-fill fill-5"></div></div><span class="score-value">5.0</span></div>
+  <div class="score-row"><span class="score-label">SQL / PostgreSQL</span><div class="score-bar-bg"><div class="score-bar-fill fill-5"></div></div><span class="score-value">5.0</span></div>
+  <div class="score-row"><span class="score-label">TypeScript</span><div class="score-bar-bg"><div class="score-bar-fill fill-4"></div></div><span class="score-value">4.0</span></div>
+  <div class="score-row"><span class="score-label">Linux / Terminal</span><div class="score-bar-bg"><div class="score-bar-fill fill-4"></div></div><span class="score-value">4.0</span></div>
+  <div class="score-row"><span class="score-label">Testes</span><div class="score-bar-bg"><div class="score-bar-fill fill-4"></div></div><span class="score-value">4.0</span></div>
+  <div class="score-row"><span class="score-label">Git</span><div class="score-bar-bg"><div class="score-bar-fill fill-4"></div></div><span class="score-value">4.0</span></div>
+
+  <h3 style="margin-top: 24px;">Áreas para Desenvolvimento (foco deste plano)</h3>
+
+  <div class="score-row"><span class="score-label">CI/CD</span><div class="score-bar-bg"><div class="score-bar-fill fill-2"></div></div><span class="score-value">2.0</span></div>
+  <div class="score-row"><span class="score-label">Docker</span><div class="score-bar-bg"><div class="score-bar-fill fill-3"></div></div><span class="score-value">3.0</span></div>
+  <div class="score-row"><span class="score-label">Cloud</span><div class="score-bar-bg"><div class="score-bar-fill fill-3"></div></div><span class="score-value">3.0</span></div>
+
+  <h3 style="margin-top: 24px;">Práticas de Engenharia (seu maior gap)</h3>
+  <table>
+    <tr><th>Prática</th><th>Nível Atual</th><th>Meta</th></tr>
+    <tr><td>Code Review</td><td><span class="tag tag-red">Nunca fez</span></td><td>Faz e recebe reviews ativamente</td></tr>
+    <tr><td>Testes</td><td><span class="tag tag-yellow">Às vezes</span></td><td>Sempre, com estratégia definida</td></tr>
+    <tr><td>Git</td><td><span class="tag tag-yellow">Usa branches (score 4)</span></td><td>Fluxo completo: PR, review, merge</td></tr>
+    <tr><td>Documentação</td><td><span class="tag tag-green">Completa</span></td><td>Manter &mdash; você já está acima da média aqui</td></tr>
+    <tr><td>Metodologia Ágil</td><td><span class="tag tag-red">Só ouviu falar</span></td><td>Pratica Kanban no dia a dia</td></tr>
+  </table>
+
+  <h3 style="margin-top: 24px;">O que você disse no assessment</h3>
+
+  <div class="card card-yellow">
+    <p class="bold mb-4">Sua maior dificuldade:</p>
+    <p style="margin-bottom:0;">"Ter responsabilidades muito além das capacidades de um Junior e ainda sim ser tido pela empresa como um funcionário ruim / não ser um bom dev."</p>
+    <p class="small mt-8">Isso não é uma fraqueza técnica &mdash; seus scores mostram exatamente o oposto. O que falta é o <strong>arcabouço profissional</strong> (processos, comunicação, visibilidade do trabalho) que transforma habilidade técnica em reconhecimento. Este plano endereça isso diretamente.</p>
+  </div>
+
+  <div class="card card-accent">
+    <p class="bold mb-4">Sua meta em 6 meses:</p>
+    <p style="margin-bottom:0;">"Espero continuar na FedCorp porém com uma experiência maior."</p>
+  </div>
+
+  <div class="card card-accent">
+    <p class="bold mb-4">Sua definição de "pronto" (ponto de atenção):</p>
+    <p style="margin-bottom:0;">"Significa que o que eu precisava ter feito, foi entregue conforme esperado pelos meus superiores."</p>
+    <p class="small mt-8">Essa definição depende 100% de validação externa &mdash; "os superiores acharam bom". O problema: e se eles não verificarem? E se aceitarem algo com bug que aparece depois? Um dev mais maduro define "pronto" com critérios <strong>próprios</strong>: "tem testes, foi revisado, trata erros, está documentado". Parte deste plano é construir esses critérios internos.</p>
+  </div>
+
+  <div class="card card-green">
+    <p class="bold mb-4">Seu projeto mais complexo (força reconhecida):</p>
+    <p style="margin-bottom:0;">Sistema de emissão massiva de notas fiscais com <strong>semáforo e fila</strong> &mdash; conceitos de concorrência que muitos devs plenos não dominam. Você implementou isso em pouquíssimo tempo, sem nunca ter feito antes. Isso mostra capacidade de aprender sob pressão e resolver problemas complexos. É um projeto que <strong>poucos juniors teriam no portfólio</strong>.</p>
+  </div>
+
+  <div class="card card-yellow">
+    <p class="bold mb-4">Um ponto de atenção:</p>
+    <p style="margin-bottom:0;">Você disse que <strong>evita pedir ajuda</strong> e resolve usando LLMs + documentação. Isso mostra independência e capacidade de pesquisa (que é boa!), mas também pode te isolar. Em um time, compartilhar dúvidas e pedir feedback <strong>não é sinal de fraqueza &mdash; é como times de engenharia funcionam</strong>. Code review, pair programming, pedir opinião &mdash; são práticas que existem justamente porque ninguém pega tudo sozinho.</p>
+  </div>
+
+  <div class="quote">
+    Seu perfil técnico é o mais forte da equipe. O que falta não é habilidade com código &mdash; é o ecossistema ao redor: processos de qualidade, comunicação técnica, e visibilidade do seu trabalho. É isso que separa "dev que resolve" de "dev que a empresa reconhece".
+  </div>
+</div>
+
+<!-- ==================== SEMANA 1 ==================== -->
+<div class="page page-break">
+  <h2><span class="section-number">3</span> Semana 1 &mdash; Code Review: A Habilidade que Você Nunca Praticou</h2>
+  <p class="small" style="margin-bottom:16px;">Seu maior gap de processo &bull; Tempo estimado: 4&ndash;6 horas</p>
+
+  <div class="phase phase-1" style="margin-bottom: 16px;">
+    <div class="phase-title">Fase 1 &mdash; Fundamento: Por que code review muda tudo?</div>
+    <p style="margin: 8px 0 4px;">No assessment, você marcou que <strong>nunca fez</strong> code review. Para alguém com seu nível técnico, esse é o gap mais impactante de resolver. Code review é a prática de ler o código que outra pessoa escreveu e dar feedback antes desse código ser integrado ao projeto. É assim que times profissionais garantem qualidade &mdash; e é também uma das formas mais rápidas de evoluir como dev.</p>
+
+    <p style="margin: 8px 0 4px;"><strong>Por que isso importa tanto para você especificamente:</strong></p>
+    <ul style="margin-left: 20px; font-size: 13px;">
+      <li><strong>Visibilidade</strong> &mdash; Você disse que sente que a empresa não reconhece seu trabalho. Code review é uma forma concreta de mostrar que você pensa em qualidade, que entende o código do projeto, e que contribui para a evolução do time. Quando você faz uma review bem feita, as pessoas percebem.</li>
+      <li><strong>Aprender mais rápido</strong> &mdash; Quando você só escreve código, você vê o mundo de um ângulo só. Quando lê código de outra pessoa, descobre formas diferentes de resolver problemas. Às vezes melhores que as suas, às vezes piores &mdash; e aprender a diferenciar é o que te torna um profissional melhor.</li>
+      <li><strong>Qualidade do projeto</strong> &mdash; Com review, bugs são encontrados antes de chegar em produção. Padrões do projeto são mantidos. Código confuso é simplificado. O resultado é um projeto mais estável e mais fácil de manter &mdash; e menos daquele sentimento de "apagar incêndio".</li>
+    </ul>
+
+    <p style="margin: 8px 0 4px;"><strong>O que olhar em um code review (checklist mental):</strong></p>
+    <ul style="margin-left: 20px; font-size: 13px;">
+      <li><strong>Funciona?</strong> &mdash; O código faz o que deveria? Cobre os cenários normais e os edge cases? Se a API retornar erro, ele trata ou quebra silenciosamente?</li>
+      <li><strong>Está claro?</strong> &mdash; Outro dev consegue entender sem perguntar pra quem escreveu? Os nomes de variáveis e funções são descritivos?</li>
+      <li><strong>Está seguro?</strong> &mdash; Os dados são validados? Informações sensíveis estão protegidas? Tem SQL injection, XSS, ou credenciais hardcoded?</li>
+      <li><strong>Tem testes?</strong> &mdash; Se é feature nova, tem teste? Se é bugfix, tem teste que impede o bug de voltar?</li>
+      <li><strong>Está consistente?</strong> &mdash; Segue os padrões do projeto? Mesmo estilo, mesma estrutura, mesmas convenções?</li>
+    </ul>
+
+    <p style="margin: 8px 0 0;"><strong>Como dar feedback construtivo:</strong> Nunca diga só "isso está errado". Explique <strong>o que</strong> está errado, <strong>por que</strong> é um problema, e <strong>sugira</strong> uma alternativa. Em vez de "esse código tá ruim", diga "essa query sem índice vai ficar lenta com muitos registros &mdash; que tal adicionar um índice em <code>user_id</code>?".</p>
+  </div>
+
+  <div class="phase phase-2" style="margin-bottom: 16px;">
+    <div class="phase-title">Fase 2 &mdash; Exemplo Guiado: Revisando um endpoint Node.js</div>
+    <p style="margin: 8px 0;">Imagine que um colega mandou esse código para review. Leia com calma e encontre os problemas antes de ver as anotações:</p>
+
+<pre><span class="comment">// endpoint enviado para review</span>
+<span class="keyword">app</span>.post(<span class="string">"/invoices"</span>, <span class="keyword">async</span> (req, res) => {
+    <span class="keyword">const</span> data = req.body;                         <span class="bad">// &larr; sem validação nenhuma</span>
+    <span class="keyword">const</span> q = <span class="string">`INSERT INTO invoices (client, amount)
+               VALUES ('${data.client}', ${data.amount})`</span>;  <span class="bad">// &larr; SQL INJECTION!</span>
+    <span class="keyword">await</span> db.query(q);
+    <span class="keyword">const</span> all = <span class="keyword">await</span> db.query(<span class="string">"SELECT * FROM invoices"</span>);  <span class="bad">// &larr; busca TUDO após inserir?</span>
+    res.json(all.rows);                            <span class="bad">// &larr; sem status code, sem try/catch</span>
+});</pre>
+
+    <p style="margin: 8px 0;"><strong>Review que você faria:</strong></p>
+    <ol style="font-size: 13px; padding-left: 20px;">
+      <li><strong>SQL Injection (CRÍTICO):</strong> A query usa template string com valores direto do <code>req.body</code>. Se alguém mandar <code>client: "'; DROP TABLE invoices; --"</code>, apaga a tabela inteira. Sugestão: usar <strong>parameterized queries</strong>: <code>db.query("INSERT INTO invoices (client, amount) VALUES ($1, $2)", [data.client, data.amount])</code>.</li>
+      <li><strong>Sem validação:</strong> O endpoint aceita qualquer coisa no body. Se <code>amount</code> vier como texto ou negativo, vai pro banco sem nenhum filtro. Sugestão: validar campos obrigatórios e tipos antes de inserir.</li>
+      <li><strong>Sem tratamento de erro:</strong> Se o banco estiver fora, a aplicação crasheia. Sugestão: envolver em <code>try/catch</code> e retornar status 500 com mensagem de erro.</li>
+      <li><strong>Busca desnecessária:</strong> Depois de inserir uma nota, busca <strong>todas</strong> as notas do banco. Se tem 100.000 notas, isso trava a resposta. Sugestão: retornar só a nota criada com status 201.</li>
+      <li><strong>Nomes genéricos:</strong> <code>data</code>, <code>q</code>, <code>all</code> não dizem nada. Sugestão: <code>invoiceData</code>, <code>insertQuery</code>, <code>createdInvoice</code>.</li>
+    </ol>
+
+<pre><span class="comment">// versão corrigida após a review</span>
+<span class="keyword">app</span>.post(<span class="string">"/invoices"</span>, <span class="keyword">async</span> (req, res) => {
+    <span class="keyword">try</span> {
+        <span class="keyword">const</span> { client, amount } = req.body;
+
+        <span class="keyword">if</span> (!client || <span class="keyword">typeof</span> client !== <span class="string">"string"</span>) {
+            <span class="keyword">return</span> res.status(400).json({ erro: <span class="string">"Campo 'client' é obrigatório"</span> });
+        }
+        <span class="keyword">if</span> (!amount || <span class="keyword">typeof</span> amount !== <span class="string">"number"</span> || amount <= 0) {
+            <span class="keyword">return</span> res.status(400).json({ erro: <span class="string">"Campo 'amount' deve ser um número positivo"</span> });
+        }
+
+        <span class="keyword">const</span> result = <span class="keyword">await</span> db.query(
+            <span class="string">"INSERT INTO invoices (client, amount) VALUES ($1, $2) RETURNING *"</span>,
+            [client, amount]                        <span class="good">// &larr; parameterized query, sem SQL injection</span>
+        );
+
+        res.status(201).json(result.rows[0]);       <span class="good">// &larr; retorna só a nota criada</span>
+    } <span class="keyword">catch</span> (error) {
+        res.status(500).json({ erro: <span class="string">"Erro interno ao criar nota fiscal"</span> });
+    }
+});</pre>
+  </div>
+
+  <div class="task-box">
+    <div class="task-box-title">Exercício Solo &mdash; Sua tarefa da semana</div>
+    <ol>
+      <li><strong>Crie um repositório</strong> no GitHub chamado <code>fedcorp-exercicios</code></li>
+      <li><strong>Crie a pasta</strong> <code>semana-01-code-review/</code></li>
+      <li>Crie o arquivo <code>para-revisar.ts</code> com um endpoint Node.js/Express propositalmente cheio de problemas: SQL injection, sem validação, sem tratamento de erro, nomes genéricos, sem tipagem, query ineficiente, credencial hardcoded</li>
+      <li>Crie o arquivo <code>review.md</code> onde você faz a review do seu próprio código:
+        <ul style="font-size: 12px; margin-top: 4px;">
+          <li>Liste cada problema encontrado com severidade (crítico / importante / menor)</li>
+          <li>Explique por que é um problema (qual o risco real se isso for pra produção)</li>
+          <li>Sugira a correção específica</li>
+        </ul>
+      </li>
+      <li>Crie o arquivo <code>corrigido.ts</code> com a versão corrigida aplicando todas as correções</li>
+      <li>Crie <code>decisoes.md</code>: redefina sua definição de "pronto" com critérios internos (não depender de "os superiores acharem bom"). O que <strong>você</strong> verifica antes de considerar algo pronto?</li>
+    </ol>
+    <p class="small" style="margin: 8px 0 0;"><strong>Dica com IA:</strong> <em>"Revise este endpoint Node.js/Express e me diga todos os problemas de segurança, performance e boas práticas que você encontra."</em> &mdash; depois compare com a sua review.</p>
+  </div>
+
+  <div class="card" style="margin-top: 16px;">
+    <p class="bold text-primary mb-4">Recursos complementares &mdash; Semana 1</p>
+    <ul style="font-size: 13px; padding-left: 20px;">
+      <li><strong>Vídeo:</strong> "How to Do Code Reviews Like a Human" &mdash; Michaela Greiler (YouTube, ~20min)</li>
+      <li><strong>Leitura:</strong> Google Engineering Practices &mdash; "How to do a code review" (público, buscar no Google)</li>
+      <li><strong>Referência:</strong> OWASP Top 10 &mdash; as 10 vulnerabilidades mais comuns em aplicações web</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ==================== SEMANA 2 ==================== -->
+<div class="page page-break">
+  <h2><span class="section-number">4</span> Semana 2 &mdash; Testes Sistemáticos: De "às vezes" para "sempre"</h2>
+  <p class="small" style="margin-bottom:16px;">Transformar hábito esporádico em prática profissional &bull; Tempo estimado: 4&ndash;6 horas</p>
+
+  <div class="phase phase-1" style="margin-bottom: 16px;">
+    <div class="phase-title">Fase 1 &mdash; Fundamento: Você sabe testar. A questão é: quando e o quê?</div>
+    <p style="margin: 8px 0 4px;">Seu score em testes é 4, mas você marcou que testa "às vezes". Isso significa que você sabe escrever testes, mas não tem uma <strong>estratégia</strong> de quando e o que testar. O resultado é que os testes ficam no "quando dá tempo" &mdash; e quando dá tempo geralmente é nunca. Esta semana é sobre construir uma estratégia clara: o que sempre testar, o que pode pular, e como escrever testes que realmente protegem o projeto.</p>
+
+    <p style="margin: 8px 0 4px;"><strong>A regra dos 3 cenários obrigatórios:</strong></p>
+    <p style="font-size: 13px; margin-bottom: 4px;">Para qualquer função ou endpoint que você escrever, pelo menos esses 3 cenários precisam de teste:</p>
+    <ul style="margin-left: 20px; font-size: 13px;">
+      <li><strong>Caminho feliz</strong> &mdash; A função recebe dados válidos e retorna o resultado esperado. Isso é o cenário normal, o que deveria acontecer na maioria das vezes. Exemplo: "passar um CPF válido para <code>validarCPF()</code> e ela retornar <code>true</code>".</li>
+      <li><strong>Edge case</strong> &mdash; Uma situação incomum mas possível. Valor zero, lista vazia, texto com caracteres especiais, data no limite (31 de dezembro, 29 de fevereiro), string com espaços extras. Exemplo: "passar um CPF com pontos e traços (<code>123.456.789-00</code>) e ela ainda funcionar".</li>
+      <li><strong>Cenário de erro</strong> &mdash; O que acontece quando algo dá errado? A função lança exceção, retorna mensagem de erro, ou falha silenciosamente? Exemplo: "passar um CPF com letras e a função retornar <code>false</code> em vez de crashear".</li>
+    </ul>
+
+    <p style="margin: 8px 0 4px;"><strong>Quando NÃO testar (para não perder tempo):</strong></p>
+    <ul style="margin-left: 20px; font-size: 13px;">
+      <li>Código que só passa dados adiante sem lógica (um controller que chama um service sem fazer nada além disso)</li>
+      <li>Código de terceiros (não teste se o Express funciona &mdash; a equipe do Express já fez isso)</li>
+      <li>Protótipos descartáveis que vão ser reescritos em breve</li>
+    </ul>
+  </div>
+
+  <div class="phase phase-2" style="margin-bottom: 16px;">
+    <div class="phase-title">Fase 2 &mdash; Exemplo Guiado: Testando um service Node.js com Jest</div>
+    <p style="margin: 8px 0;">Vamos testar um service que calcula o valor total de uma nota fiscal com impostos. Repare como cada teste cobre um dos 3 cenários obrigatórios:</p>
+
+<pre><span class="comment">// invoice.service.ts</span>
+<span class="keyword">interface</span> <span class="function">InvoiceItem</span> {
+    descricao: <span class="string">string</span>;
+    quantidade: <span class="string">number</span>;
+    valorUnitario: <span class="string">number</span>;
+}
+
+<span class="keyword">export function</span> <span class="function">calcularTotal</span>(itens: InvoiceItem[], aliquotaImposto: <span class="string">number</span>): <span class="string">number</span> {
+    <span class="keyword">if</span> (!itens || itens.length === 0) {
+        <span class="keyword">throw new</span> Error(<span class="string">"Lista de itens não pode ser vazia"</span>);
+    }
+    <span class="keyword">if</span> (aliquotaImposto < 0 || aliquotaImposto > 100) {
+        <span class="keyword">throw new</span> Error(<span class="string">"Alíquota deve ser entre 0 e 100"</span>);
+    }
+
+    <span class="keyword">const</span> subtotal = itens.reduce((acc, item) =>
+        acc + (item.quantidade * item.valorUnitario), 0
+    );
+
+    <span class="keyword">const</span> imposto = subtotal * (aliquotaImposto / 100);
+    <span class="keyword">return</span> Math.round((subtotal + imposto) * 100) / 100;
+}</pre>
+
+<pre><span class="comment">// invoice.service.test.ts</span>
+<span class="keyword">import</span> { calcularTotal } <span class="keyword">from</span> <span class="string">"./invoice.service"</span>;
+
+<span class="comment">// Cenário 1: caminho feliz</span>
+<span class="function">test</span>(<span class="string">"calcula total com imposto corretamente"</span>, () => {
+    <span class="keyword">const</span> itens = [
+        { descricao: <span class="string">"Produto A"</span>, quantidade: 2, valorUnitario: 50 },
+        { descricao: <span class="string">"Produto B"</span>, quantidade: 1, valorUnitario: 100 },
+    ];
+    <span class="comment">// subtotal = (2*50) + (1*100) = 200 | imposto 10% = 20 | total = 220</span>
+    expect(calcularTotal(itens, 10)).toBe(220);
+});
+
+<span class="comment">// Cenário 2: edge case &mdash; imposto zero</span>
+<span class="function">test</span>(<span class="string">"funciona com alíquota zero"</span>, () => {
+    <span class="keyword">const</span> itens = [{ descricao: <span class="string">"X"</span>, quantidade: 1, valorUnitario: 100 }];
+    expect(calcularTotal(itens, 0)).toBe(100);  <span class="good">// sem imposto, subtotal = total</span>
+});
+
+<span class="comment">// Cenário 2b: edge case &mdash; valores com centavos</span>
+<span class="function">test</span>(<span class="string">"arredonda centavos corretamente"</span>, () => {
+    <span class="keyword">const</span> itens = [{ descricao: <span class="string">"Y"</span>, quantidade: 3, valorUnitario: 33.33 }];
+    expect(calcularTotal(itens, 15)).toBe(114.99);  <span class="good">// 99.99 * 1.15 = 114.9885 → 114.99</span>
+});
+
+<span class="comment">// Cenário 3: erro &mdash; lista vazia</span>
+<span class="function">test</span>(<span class="string">"lança erro com lista vazia"</span>, () => {
+    expect(() => calcularTotal([], 10)).toThrow(<span class="string">"Lista de itens não pode ser vazia"</span>);
+});
+
+<span class="comment">// Cenário 3b: erro &mdash; alíquota inválida</span>
+<span class="function">test</span>(<span class="string">"lança erro com alíquota negativa"</span>, () => {
+    <span class="keyword">const</span> itens = [{ descricao: <span class="string">"Z"</span>, quantidade: 1, valorUnitario: 100 }];
+    expect(() => calcularTotal(itens, -5)).toThrow(<span class="string">"Alíquota deve ser entre 0 e 100"</span>);
+});</pre>
+
+    <p style="margin: 4px 0 0;"><strong>Perceba a estratégia:</strong> 5 testes, mas não são 5 aleatórios. Cada um cobre um cenário específico: dados normais, dados de borda (zero, centavos), e situações de erro. Com esses 5 testes, você tem confiança de que a função funciona corretamente &mdash; e se alguém mudar ela no futuro e quebrar algo, o teste avisa na hora.</p>
+  </div>
+
+  <div class="task-box">
+    <div class="task-box-title">Exercício Solo &mdash; Sua tarefa da semana</div>
+    <ol>
+      <li>Crie a pasta <code>semana-02-testes/</code></li>
+      <li>Crie um módulo <code>invoice.service.ts</code> com estas funções (conectado ao seu projeto de NFs!):
+        <ul style="font-size: 12px; margin-top: 4px;">
+          <li><code>calcularImpostos(subtotal, tipo)</code> &mdash; retorna o imposto baseado no tipo (serviço = ISS 5%, produto = ICMS 18%, etc.)</li>
+          <li><code>validarNF(nota)</code> &mdash; verifica se todos os campos obrigatórios estão presentes e válidos</li>
+          <li><code>gerarNumero(prefixo, sequencial)</code> &mdash; gera número de nota no formato "NF-2026-000123"</li>
+        </ul>
+      </li>
+      <li>Crie <code>invoice.service.test.ts</code> com <strong>pelo menos 12 testes</strong> seguindo a regra dos 3 cenários:
+        <ul style="font-size: 12px; margin-top: 4px;">
+          <li>4 testes por função (caminho feliz, edge case, erro, e um cenário real do seu dia a dia)</li>
+        </ul>
+      </li>
+      <li>Rode com <code>npx jest --verbose</code> e tire um print da saída</li>
+      <li>Crie <code>decisoes.md</code>: defina sua "Política de Testes Pessoal" &mdash; quando você vai testar, quando pode pular, e como decidir</li>
+    </ol>
+    <p class="small" style="margin: 8px 0 0;"><strong>Dica com IA:</strong> <em>"Tenho uma função que calcula impostos com regras diferentes por tipo. Quais edge cases devo testar além dos cenários óbvios?"</em></p>
+  </div>
+
+  <div class="card" style="margin-top: 16px;">
+    <p class="bold text-primary mb-4">Recursos complementares &mdash; Semana 2</p>
+    <ul style="font-size: 13px; padding-left: 20px;">
+      <li><strong>Vídeo:</strong> "Jest Tutorial for Beginners" &mdash; The Net Ninja (YouTube, playlist)</li>
+      <li><strong>Leitura:</strong> "Testing JavaScript" &mdash; Kent C. Dodds (testingjavascript.com, conceitos gratuitos)</li>
+      <li><strong>Referência:</strong> Jest docs oficial &mdash; seção "Getting Started" e "Using Matchers"</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ==================== SEMANA 3 ==================== -->
+<div class="page page-break">
+  <h2><span class="section-number">5</span> Semana 3 &mdash; CI/CD: Do Git Push ao Deploy Automático</h2>
+  <p class="small" style="margin-bottom:16px;">O gap que mais bloqueia devops &bull; Tempo estimado: 4&ndash;6 horas</p>
+
+  <div class="phase phase-1" style="margin-bottom: 16px;">
+    <div class="phase-title">Fase 1 &mdash; Fundamento: O que é CI/CD e por que muda o jogo?</div>
+    <p style="margin: 8px 0 4px;">Hoje, quando você termina uma feature, o que acontece? Provavelmente: você faz <code>git push</code>, alguém (ou você mesmo) entra no servidor e faz o deploy manual. Se der erro, alguém descobre depois &mdash; às vezes em produção. <strong>CI/CD automatiza tudo isso.</strong></p>
+
+    <p style="margin: 8px 0 4px;"><strong>CI (Continuous Integration)</strong> significa que toda vez que alguém faz push, uma máquina automática roda os testes, verifica se o código compila, e avisa se algo quebrou. Você fica sabendo do problema em minutos, não em dias. É como ter um QA robô que trabalha 24 horas e nunca esquece de verificar nada.</p>
+
+    <p style="margin: 8px 0 4px;"><strong>CD (Continuous Delivery/Deployment)</strong> vai além: se os testes passaram e tudo está ok, o código é deployado automaticamente para o ambiente de staging ou produção. Sem ninguém precisar entrar no servidor, sem processos manuais que alguém pode esquecer ou errar.</p>
+
+    <p style="margin: 8px 0 4px;"><strong>O que um pipeline CI/CD básico faz, passo a passo:</strong></p>
+    <ul style="margin-left: 20px; font-size: 13px;">
+      <li><strong>Passo 1 &mdash; Checkout:</strong> A máquina baixa o código do repositório (a mesma coisa que um <code>git clone</code>, só que automático).</li>
+      <li><strong>Passo 2 &mdash; Instalar dependências:</strong> Roda <code>npm install</code> para garantir que todas as bibliotecas estão presentes.</li>
+      <li><strong>Passo 3 &mdash; Lint:</strong> Verifica se o código segue os padrões de estilo do projeto (indentação, nomes, etc.).</li>
+      <li><strong>Passo 4 &mdash; Type check:</strong> Se é TypeScript, verifica se os tipos estão corretos (<code>tsc --noEmit</code>).</li>
+      <li><strong>Passo 5 &mdash; Testes:</strong> Roda todos os testes automatizados. Se algum falhar, o pipeline para aqui e você é notificado.</li>
+      <li><strong>Passo 6 &mdash; Build:</strong> Compila o código para produção.</li>
+      <li><strong>Passo 7 &mdash; Deploy:</strong> Se tudo passou, publica automaticamente no servidor.</li>
+    </ul>
+    <p style="margin: 8px 0 0;">Cada passo é uma <strong>barreira de qualidade</strong>. Se qualquer um falhar, o código não avança. Isso garante que só código verificado chega em produção.</p>
+  </div>
+
+  <div class="phase phase-2" style="margin-bottom: 16px;">
+    <div class="phase-title">Fase 2 &mdash; Exemplo Guiado: Pipeline com GitHub Actions</div>
+    <p style="margin: 8px 0;">GitHub Actions é a ferramenta de CI/CD do GitHub (que você já usa). Você cria um arquivo YAML no repositório e o GitHub executa automaticamente a cada push:</p>
+
+<pre><span class="comment"># .github/workflows/ci.yml</span>
+<span class="function">name</span>: CI Pipeline
+
+<span class="function">on</span>:
+  <span class="function">push</span>:
+    <span class="function">branches</span>: [main, develop]     <span class="good"># roda quando faz push nessas branches</span>
+  <span class="function">pull_request</span>:
+    <span class="function">branches</span>: [main]              <span class="good"># roda quando abre PR para main</span>
+
+<span class="function">jobs</span>:
+  <span class="function">quality</span>:
+    <span class="function">runs-on</span>: ubuntu-latest        <span class="comment"># roda numa máquina Linux gratuita do GitHub</span>
+    <span class="function">steps</span>:
+
+    - <span class="function">name</span>: Checkout do código
+      <span class="function">uses</span>: actions/checkout@v4     <span class="comment"># passo 1: baixa o código</span>
+
+    - <span class="function">name</span>: Setup Node.js
+      <span class="function">uses</span>: actions/setup-node@v4
+      <span class="function">with</span>:
+        <span class="function">node-version</span>: 20
+
+    - <span class="function">name</span>: Instalar dependências
+      <span class="function">run</span>: npm ci                  <span class="comment"># passo 2: instala exatamente o que está no lock</span>
+
+    - <span class="function">name</span>: Type check
+      <span class="function">run</span>: npx tsc --noEmit        <span class="comment"># passo 4: verifica tipos do TypeScript</span>
+
+    - <span class="function">name</span>: Rodar testes
+      <span class="function">run</span>: npm test                <span class="comment"># passo 5: roda todos os testes</span>
+
+    - <span class="function">name</span>: Build
+      <span class="function">run</span>: npm run build           <span class="comment"># passo 6: compila para produção</span></pre>
+
+    <p style="margin: 4px 0 0;"><strong>O que acontece na prática:</strong> toda vez que você fizer <code>git push</code>, o GitHub vai rodar esses passos automaticamente. Se qualquer um falhar, você recebe um email com o erro. Se tudo passar, um check verde aparece no commit e no PR. É assim que times profissionais garantem que código quebrado nunca chega em produção.</p>
+  </div>
+
+  <div class="task-box">
+    <div class="task-box-title">Exercício Solo &mdash; Sua tarefa da semana</div>
+    <ol>
+      <li>Crie a pasta <code>semana-03-cicd/</code></li>
+      <li>Dentro, crie um projeto Node.js + TypeScript simples com pelo menos 1 endpoint e 3 testes (pode reaproveitar da semana 2)</li>
+      <li>Crie o arquivo <code>.github/workflows/ci.yml</code> com um pipeline que:
+        <ul style="font-size: 12px; margin-top: 4px;">
+          <li>Roda em push para <code>main</code> e em pull requests</li>
+          <li>Instala dependências com <code>npm ci</code></li>
+          <li>Roda type check com <code>tsc --noEmit</code></li>
+          <li>Roda os testes com <code>npm test</code></li>
+          <li>Faz build com <code>npm run build</code></li>
+        </ul>
+      </li>
+      <li>Faça push para o GitHub e verifique que o pipeline roda corretamente (aba "Actions")</li>
+      <li>Propositalmente <strong>quebre um teste</strong>, faça push, e veja o pipeline falhar (isso é o importante: ele DEVE falhar quando algo está errado)</li>
+      <li>Crie <code>decisoes.md</code>: o que mudaria no seu dia a dia se todo projeto tivesse esse pipeline? Quais erros teriam sido pegos automaticamente?</li>
+    </ol>
+    <p class="small" style="margin: 8px 0 0;"><strong>Dica com IA:</strong> <em>"Quero criar meu primeiro pipeline CI com GitHub Actions para um projeto Node.js + TypeScript. Me guie passo a passo."</em></p>
+  </div>
+
+  <div class="card" style="margin-top: 16px;">
+    <p class="bold text-primary mb-4">Recursos complementares &mdash; Semana 3</p>
+    <ul style="font-size: 13px; padding-left: 20px;">
+      <li><strong>Vídeo:</strong> "GitHub Actions Tutorial" &mdash; TechWorld with Nana (YouTube, ~30min)</li>
+      <li><strong>Leitura:</strong> GitHub Actions docs &mdash; "Quickstart" e "Understanding GitHub Actions"</li>
+      <li><strong>Referência:</strong> github.com/actions/starter-workflows &mdash; templates prontos para vários tipos de projeto</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ==================== SEMANA 4 ==================== -->
+<div class="page page-break">
+  <h2><span class="section-number">6</span> Semana 4 &mdash; Padrões de Projeto: Formalizando o que Você já Faz Intuitivamente</h2>
+  <p class="small" style="margin-bottom:16px;">Dar nome e estrutura à experiência que você já tem &bull; Tempo estimado: 4&ndash;6 horas</p>
+
+  <div class="phase phase-1" style="margin-bottom: 16px;">
+    <div class="phase-title">Fase 1 &mdash; Fundamento: Você já usa padrões. Só não sabe o nome deles.</div>
+    <p style="margin: 8px 0 4px;">No seu projeto de notas fiscais, você implementou semáforos e filas. Sabia que isso tem nome? <strong>Semáforo</strong> é um padrão de concorrência chamado "Semaphore". <strong>Fila</strong> é o padrão "Queue" (ou "Message Queue" quando usado entre sistemas). Quando você sabe o nome dos padrões, três coisas mudam: (1) você encontra documentação e exemplos mais rápido, (2) você consegue explicar suas decisões para outros devs sem precisar redesenhar a solução inteira, e (3) você sabe quando aplicar cada padrão em situações futuras.</p>
+
+    <p style="margin: 8px 0 4px;"><strong>3 padrões que todo fullstack precisa dominar:</strong></p>
+    <ul style="margin-left: 20px; font-size: 13px;">
+      <li><strong>Repository Pattern</strong> &mdash; Separar o acesso ao banco de dados da lógica de negócio. Em vez de escrever queries SQL diretamente dentro das rotas (como no exemplo da semana 1), você cria um arquivo separado que é o único responsável por falar com o banco. Se amanhã precisar trocar de PostgreSQL para outro banco, só muda o repository &mdash; o resto do código nem percebe. Você provavelmente já faz algo parecido quando separa queries em funções específicas &mdash; esse é o padrão.</li>
+      <li><strong>Service Layer</strong> &mdash; Separar as regras de negócio das rotas HTTP. A rota só recebe a requisição e repassa para o service. O service aplica as regras (validações, cálculos, decisões). O repository salva no banco. Cada camada faz <strong>uma coisa só</strong>. Se precisar mudar uma regra de negócio, só mexe no service. Se precisar adicionar uma rota nova, só mexe no router. Ninguém pisa no pé de ninguém.</li>
+      <li><strong>Error Handling Pattern</strong> &mdash; Ter uma forma <strong>consistente</strong> de tratar erros no projeto inteiro. Em vez de cada endpoint ter seu próprio try/catch com formatos diferentes de resposta, você cria um middleware de erro que padroniza tudo: sempre retorna <code>{ erro: mensagem, codigo: statusCode }</code>. Quando algo dá errado em qualquer lugar, o erro é tratado de forma previsível &mdash; tanto para o frontend que consome quanto para você que debugga.</li>
+    </ul>
+  </div>
+
+  <div class="phase phase-2" style="margin-bottom: 16px;">
+    <div class="phase-title">Fase 2 &mdash; Exemplo Guiado: Aplicando os 3 padrões juntos</div>
+    <p style="margin: 8px 0;">Veja como fica um projeto organizado com Repository, Service, e Error Handling:</p>
+
+<pre><span class="comment">// errors/AppError.ts &mdash; erro padronizado do projeto</span>
+<span class="keyword">export class</span> <span class="function">AppError</span> <span class="keyword">extends</span> Error {
+    <span class="keyword">constructor</span>(
+        <span class="keyword">public</span> message: <span class="string">string</span>,
+        <span class="keyword">public</span> statusCode: <span class="string">number</span> = 400
+    ) { <span class="keyword">super</span>(message); }
+}
+
+<span class="comment">// repositories/invoice.repository.ts &mdash; SÓ fala com o banco</span>
+<span class="keyword">export class</span> <span class="function">InvoiceRepository</span> {
+    <span class="keyword">async</span> <span class="function">create</span>(data: InvoiceCreate) {
+        <span class="keyword">return</span> db.query(
+            <span class="string">"INSERT INTO invoices (client, amount, tax) VALUES ($1, $2, $3) RETURNING *"</span>,
+            [data.client, data.amount, data.tax]
+        );
+    }
+    <span class="keyword">async</span> <span class="function">findById</span>(id: <span class="string">number</span>) {
+        <span class="keyword">return</span> db.query(<span class="string">"SELECT * FROM invoices WHERE id = $1"</span>, [id]);
+    }
+}
+
+<span class="comment">// services/invoice.service.ts &mdash; SÓ aplica regras de negócio</span>
+<span class="keyword">export class</span> <span class="function">InvoiceService</span> {
+    <span class="keyword">constructor</span>(<span class="keyword">private</span> repo: InvoiceRepository) {}
+
+    <span class="keyword">async</span> <span class="function">emitir</span>(data: InvoiceCreate) {
+        <span class="keyword">if</span> (data.amount <= 0)
+            <span class="keyword">throw new</span> AppError(<span class="string">"Valor deve ser positivo"</span>, 400);
+
+        data.tax = calcularImposto(data.amount, data.tipo);
+        <span class="keyword">return</span> <span class="keyword">this</span>.repo.create(data);         <span class="good">// &larr; service NÃO sabe SQL</span>
+    }
+}
+
+<span class="comment">// routes/invoices.ts &mdash; SÓ recebe HTTP e repassa</span>
+router.post(<span class="string">"/invoices"</span>, <span class="keyword">async</span> (req, res, next) => {
+    <span class="keyword">try</span> {
+        <span class="keyword">const</span> result = <span class="keyword">await</span> invoiceService.emitir(req.body);
+        res.status(201).json(result);
+    } <span class="keyword">catch</span> (err) { next(err); }  <span class="good">// &larr; passa o erro pro middleware</span>
+});
+
+<span class="comment">// middleware/errorHandler.ts &mdash; trata TODOS os erros de forma padronizada</span>
+<span class="keyword">app</span>.use((err, req, res, next) => {
+    <span class="keyword">if</span> (err <span class="keyword">instanceof</span> AppError) {
+        res.status(err.statusCode).json({ erro: err.message });
+    } <span class="keyword">else</span> {
+        res.status(500).json({ erro: <span class="string">"Erro interno do servidor"</span> });
+    }
+});</pre>
+
+    <p style="margin: 4px 0 0;"><strong>Perceba a separação:</strong> o router não sabe de SQL, o service não sabe de HTTP, e o repository não sabe de regras de negócio. Cada peça é independente. Se precisar trocar o banco, só muda o repository. Se precisar mudar regra de imposto, só muda o service. E o middleware de erro garante que qualquer falha retorna no mesmo formato &mdash; o frontend sabe exatamente o que esperar.</p>
+  </div>
+
+  <div class="task-box">
+    <div class="task-box-title">Exercício Solo &mdash; Sua tarefa da semana</div>
+    <ol>
+      <li>Crie a pasta <code>semana-04-padroes/</code></li>
+      <li>Crie um projeto Node.js + TypeScript + Express organizado em camadas:
+        <ul style="font-size: 12px; margin-top: 4px;">
+          <li><code>errors/AppError.ts</code> &mdash; classe de erro padronizada</li>
+          <li><code>repositories/product.repository.ts</code> &mdash; CRUD de produtos (pode usar array em memória)</li>
+          <li><code>services/product.service.ts</code> &mdash; regras de negócio (validações, cálculos de desconto, verificação de estoque)</li>
+          <li><code>routes/products.ts</code> &mdash; rotas HTTP (GET, POST, PATCH, DELETE)</li>
+          <li><code>middleware/errorHandler.ts</code> &mdash; middleware de erro global</li>
+        </ul>
+      </li>
+      <li>Adicione o pipeline CI/CD da semana 3 (<code>.github/workflows/ci.yml</code>)</li>
+      <li>Escreva pelo menos 6 testes (reusando a estratégia da semana 2)</li>
+      <li>Crie <code>decisoes.md</code>: desenhe o fluxo de uma requisição pelas camadas (texto ou diagrama). Responda: como o seu projeto de notas fiscais ficaria se fosse organizado assim?</li>
+    </ol>
+    <p class="small" style="margin: 8px 0 0;"><strong>Dica com IA:</strong> <em>"Tenho um projeto Node.js com Express onde tudo está em um arquivo só. Me ajude a planejar a separação em Repository, Service, e Router. Não escreva o código, só o plano."</em></p>
+  </div>
+
+  <div class="card" style="margin-top: 16px;">
+    <p class="bold text-primary mb-4">Recursos complementares &mdash; Semana 4</p>
+    <ul style="font-size: 13px; padding-left: 20px;">
+      <li><strong>Vídeo:</strong> "Repository Pattern in Node.js" &mdash; TomDoesTech (YouTube, ~20min)</li>
+      <li><strong>Leitura:</strong> "Clean Architecture" conceito &mdash; pesquisar "Layered Architecture Node.js" para ver exemplos</li>
+      <li><strong>Referência:</strong> Projeto exemplo: github.com/santiq/bulletproof-nodejs &mdash; arquitetura Node.js em camadas</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ==================== IA NO DIA A DIA ==================== -->
+<div class="page page-break">
+  <h2><span class="section-number">7</span> IA no Dia a Dia &mdash; Como Usar de Forma Inteligente</h2>
+
+  <p>Você já usa ChatGPT e LLMs como ferramenta principal de resolução de problemas. Isso é bom &mdash; mas tem uma progressão para fazer isso de forma <strong>profissional</strong>, não apenas funcional.</p>
+
+  <div class="ai-level level-1">
+    <div class="ai-level-num">1</div>
+    <div>
+      <p class="bold mb-4">Consumidor (Mês 1&ndash;2)</p>
+      <p>Você já está aqui. Usa IA para resolver problemas e tirar dúvidas. A evolução é aprender a dar <strong>contexto melhor</strong> para obter respostas melhores.</p>
+      <p class="small">Exemplo: <em>"Tenho um endpoint Express que insere no PostgreSQL. Quero adicionar tratamento de erro padronizado. Estou usando TypeScript."</em></p>
+    </div>
+  </div>
+
+  <div class="ai-level level-2">
+    <div class="ai-level-num">2</div>
+    <div>
+      <p class="bold mb-4">Colaborador (Mês 3&ndash;4)</p>
+      <p>Você confronta as respostas da IA com documentação oficial (como já faz!) e identifica quando a sugestão é subótima. Exercícios incluem pedir a mesma coisa para 2 LLMs e comparar.</p>
+      <p class="small">Exemplo: <em>"O ChatGPT sugeriu usar callback para o semáforo, mas a documentação do Node mostra async/await com Mutex. Vou usar a abordagem mais moderna."</em></p>
+    </div>
+  </div>
+
+  <div class="ai-level level-3">
+    <div class="ai-level-num">3</div>
+    <div>
+      <p class="bold mb-4">Diretor (Mês 5&ndash;6)</p>
+      <p>Você sabe quando <strong>não confiar</strong> no AI. Consegue identificar respostas desatualizadas, inseguras, ou ineficientes. Usa a IA para acelerar, não para substituir seu julgamento.</p>
+      <p class="small">Exemplo: <em>"O Claude sugeriu usar template literals na query SQL, mas isso abre SQL injection. Vou usar parameterized queries."</em></p>
+    </div>
+  </div>
+
+  <div class="card card-yellow">
+    <p class="bold" style="margin-bottom:8px;">Regra de ouro:</p>
+    <p style="margin-bottom:0;">Se você não consegue explicar <strong>por que</strong> o código que a IA gerou funciona, você ainda não entendeu. Volte ao fundamento e tente de novo.</p>
+  </div>
+
+  <h3>Como usar IA nos exercícios deste plano</h3>
+  <table>
+    <tr><th>Situação</th><th>Pode usar IA?</th><th>Como</th></tr>
+    <tr><td>Travou no exercício</td><td><span class="tag tag-green">Sim</span></td><td>Use o prompt sugerido no final de cada exercício</td></tr>
+    <tr><td>Quer entender um conceito melhor</td><td><span class="tag tag-green">Sim</span></td><td>Pergunte com contexto: "Sou dev Node/Python aprendendo X..."</td></tr>
+    <tr><td>Quer que a IA faça o exercício por você</td><td><span class="tag tag-red">Não</span></td><td>O objetivo é <strong>você</strong> aprender, não a IA resolver</td></tr>
+    <tr><td>Quer comparar sua solução</td><td><span class="tag tag-green">Sim</span></td><td>Depois de fazer, peça: "Revise meu código e aponte melhorias"</td></tr>
+  </table>
+</div>
+
+<!-- ==================== CADÊNCIA ==================== -->
+<div class="page page-break">
+  <h2><span class="section-number">8</span> Como Funciona no Dia a Dia</h2>
+
+  <h3>Cadência Semanal</h3>
+  <p>Este plano é <strong>seu</strong>. Você tem o mapa completo nas mãos &mdash; as 4 semanas, os exercícios, os recursos. A responsabilidade de seguir o plano é sua. Lucas está disponível como consultor para tirar dúvidas e dar feedback, mas <strong>quem conduz é você</strong>.</p>
+  <table>
+    <tr><th>Dia</th><th>O que você faz</th></tr>
+    <tr><td><strong>Segunda</strong></td><td>Abrir o tema da semana neste documento e ler o Fundamento com calma</td></tr>
+    <tr><td><strong>Terça&ndash;Quinta</strong></td><td>Trabalhar nas atividades no seu ritmo (Exemplo Guiado + Exercício Solo)</td></tr>
+    <tr><td><strong>Terça&ndash;Quinta</strong></td><td>Se tiver dúvida, trazer pro check-in com Lucas (~30min) &mdash; preparado, com perguntas específicas</td></tr>
+    <tr><td><strong>Sexta</strong></td><td>Retrospectiva: <strong>você apresenta o que aprendeu, com suas palavras</strong></td></tr>
+  </table>
+
+  <h3>Cadência Mensal e Trimestral</h3>
+  <table>
+    <tr><th>Quando</th><th>O que acontece</th></tr>
+    <tr><td>Semanas 1&ndash;3 de cada mês</td><td>Atividades normais, progressão nos temas</td></tr>
+    <tr><td>Semana 4 de cada mês</td><td>Mini-avaliação: "O que você aprendeu? Me explica o conceito X."</td></tr>
+    <tr><td><strong>Maio/2026</strong></td><td>Assessment inicial (feito!) &rarr; baseline</td></tr>
+    <tr><td><strong>Setembro/2026</strong></td><td>Reaplicar assessment &rarr; comparar scores &rarr; ajustar trilha</td></tr>
+    <tr><td><strong>Novembro/2026</strong></td><td>Reaplicar assessment &rarr; meta: processos nota 4+</td></tr>
+  </table>
+
+  <h3 style="margin-top: 24px;">Como entregar as atividades</h3>
+  <div class="card card-accent">
+    <p style="margin-bottom: 8px;"><strong>Você é responsável por organizar e entregar. Ninguém vai cobrar &mdash; o progresso é seu.</strong></p>
+    <ul class="checklist">
+      <li>Crie o repositório <code>fedcorp-exercicios</code> no seu GitHub pessoal</li>
+      <li>Cada semana = 1 pasta (<code>semana-01-code-review/</code>, <code>semana-02-testes/</code>...)</li>
+      <li>Cada pasta tem: código + <code>decisoes.md</code> explicando suas escolhas</li>
+      <li>Na retrospectiva de sexta, você traz o que fez e explica suas decisões</li>
+      <li>Se travou, anote onde travou e o que tentou &mdash; isso é tão valioso quanto resolver</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ==================== META ==================== -->
+<div class="page page-break">
+  <h2><span class="section-number">9</span> Sua Meta de Evolução</h2>
+
+  <div class="card card-green" style="text-align:center; padding: 32px;">
+    <p style="font-size: 14px; margin-bottom: 8px;">Em 6 meses, o objetivo é ir de:</p>
+    <p style="font-size: 24px; font-weight: 800; color: var(--primary); margin-bottom: 8px;">
+      Dev que resolve &rarr; Dev que a empresa reconhece
+    </p>
+    <p class="small">Construir o arcabouço profissional (processos, qualidade, comunicação) ao redor da sua habilidade técnica</p>
+  </div>
+
+  <h3>O que muda na prática</h3>
+  <table>
+    <tr><th>Competência</th><th>Hoje</th><th>Em 6 meses</th></tr>
+    <tr><td>Code Review</td><td>Nunca fez</td><td>Faz e recebe reviews com feedback técnico construtivo</td></tr>
+    <tr><td>Testes</td><td>Sabe testar, faz "às vezes"</td><td>Tem estratégia clara de quando e o que testar</td></tr>
+    <tr><td>CI/CD</td><td>Score 2, deploy manual</td><td>Configura pipelines de CI/CD em projetos novos</td></tr>
+    <tr><td>Arquitetura</td><td>Resolve problemas complexos, mas sem padrões formais</td><td>Aplica padrões com nome e estrutura (Repository, Service, etc.)</td></tr>
+    <tr><td>Definição de "pronto"</td><td>"Os superiores acharam bom"</td><td>Critérios próprios: testado, revisado, documentado, tratamento de erro</td></tr>
+  </table>
+
+  <h3 style="margin-top: 24px;">Após consolidar processos &mdash; Temas avançados (Mês 5+)</h3>
+  <p style="font-size: 13px;">Você tem interesse em várias áreas. Elas entram <strong>após</strong> consolidar a base de processos:</p>
+  <table>
+    <tr><th>Tema</th><th>Por que</th><th>Quando</th></tr>
+    <tr><td><strong>Docker Avançado</strong></td><td>Score 3, já usa a ferramenta &mdash; aprofundar com Docker Compose, multi-stage builds, orquestração</td><td>Mês 5&ndash;6</td></tr>
+    <tr><td><strong>Cloud (AWS/GCP)</strong></td><td>Score 3 &mdash; deploy em cloud, S3, Lambda, conceitos de infraestrutura</td><td>Mês 5&ndash;6</td></tr>
+    <tr><td><strong>Mensageria e Filas</strong></td><td>Você já implementou filas! Agora formalizar com RabbitMQ, Redis Queue, ou SQS</td><td>Mês 7&ndash;8</td></tr>
+    <tr><td><strong>Mobile (React Native)</strong></td><td>Interesse declarado &mdash; com React 5 e Node 5, a transição é natural</td><td>Mês 9+</td></tr>
+  </table>
+
+  <h3 style="margin-top: 24px;">Seus Compromissos</h3>
+  <div class="card">
+    <ul class="checklist">
+      <li>Dedicar 4&ndash;6h/semana às atividades</li>
+      <li>Entregar os exercícios no GitHub pessoal</li>
+      <li>Participar dos check-ins preparado, com perguntas específicas</li>
+      <li>Explicar os conceitos, não só mostrar código</li>
+      <li>Pedir ajuda quando travar por mais de 30 minutos &mdash; não é fraqueza, é eficiência</li>
+      <li>Redefinir sua definição de "pronto" com critérios internos (exercício da semana 1)</li>
+    </ul>
+  </div>
+
+  <div class="quote" style="margin-top: 24px;">
+    Sua maior dificuldade não é técnica &mdash; seus scores provam isso. O gap é entre a sua capacidade real e a percepção que a empresa tem de você. Este plano ataca exatamente esse gap: quando você faz code review, escreve testes, configura pipelines e comunica decisões técnicas com clareza, o trabalho que você já faz fica <strong>visível</strong>. É assim que "dev que resolve" vira "dev reconhecido".
+  </div>
+
+  <div style="text-align: center; margin-top: 40px; padding-top: 20px; border-top: 2px solid var(--gray-200);">
+    <p class="small">Próximo assessment: <strong>Setembro de 2026</strong></p>
+    <p class="small">Dúvidas? Traga no check-in preparado, com perguntas específicas.</p>
+  </div>
+</div>
+
+</body>
+</html>

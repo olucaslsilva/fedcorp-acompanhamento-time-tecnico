@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Semana 1 - Ingryd - TypeScript Avançado</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap');
+    :root { --primary: #4c1d95; --purple: #7c3aed; --purple-light: #ede9fe; --green: #16a34a; --green-light: #dcfce7; --orange: #ea580c; --orange-light: #fff7ed; --gray-50: #f8fafc; --gray-100: #f1f5f9; --gray-200: #e2e8f0; --gray-500: #64748b; --gray-700: #334155; --gray-800: #1e293b; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Inter', sans-serif; color: var(--gray-700); line-height: 1.7; background: #fff; }
+    @media print { body { font-size: 10pt; } .page-break { page-break-before: always; } pre { font-size: 8.5pt; } }
+    @media screen { body { max-width: 850px; margin: 0 auto; padding: 20px; background: var(--gray-100); } .page { background: white; padding: 44px; margin-bottom: 20px; border-radius: 10px; box-shadow: 0 1px 3px rgba(0,0,0,.08); } }
+    h1 { font-size: 26px; font-weight: 800; color: var(--primary); margin-bottom: 4px; }
+    h2 { font-size: 20px; font-weight: 700; color: var(--primary); margin-bottom: 16px; padding-bottom: 8px; border-bottom: 2px solid var(--gray-200); }
+    h3 { font-size: 15px; font-weight: 700; color: var(--gray-800); margin: 18px 0 8px; }
+    p { margin-bottom: 10px; font-size: 14px; }
+    pre { background: var(--gray-800); color: #e2e8f0; padding: 16px; border-radius: 8px; overflow-x: auto; font-family: 'Fira Code', monospace; font-size: 12px; line-height: 1.5; margin: 10px 0; }
+    pre .cm { color: #718096; } pre .kw { color: #63b3ed; } pre .st { color: #68d391; } pre .fn { color: #fbd38d; } pre .bad { color: #fc8181; } pre .ok { color: #68d391; }
+    .card { background: var(--gray-50); border: 1px solid var(--gray-200); border-radius: 8px; padding: 18px; margin-bottom: 14px; }
+    .card-purple { background: var(--purple-light); border-left: 4px solid var(--purple); }
+    .card-green { background: var(--green-light); border-left: 4px solid var(--green); }
+    .card-orange { background: var(--orange-light); border-left: 4px solid var(--orange); }
+    .badge { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 11px; font-weight: 700; }
+    .badge-easy { background: var(--green-light); color: #166534; }
+    .badge-mid { background: #fef3c7; color: #92400e; }
+    .badge-hard { background: #fee2e2; color: #991b1b; }
+    .sub { font-size: 14px; color: var(--gray-500); margin-bottom: 24px; }
+    table { width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 13px; }
+    th { background: var(--primary); color: white; padding: 8px 12px; text-align: left; font-size: 12px; }
+    td { padding: 8px 12px; border-bottom: 1px solid var(--gray-200); }
+    tr:nth-child(even) { background: var(--gray-50); }
+    ul { padding-left: 18px; font-size: 13px; margin: 8px 0; } li { margin-bottom: 4px; }
+    .exnum { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 50%; color: white; font-size: 13px; font-weight: 700; margin-right: 8px; }
+    .footer { text-align: center; font-size: 11px; color: var(--gray-500); margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--gray-200); }
+  </style>
+</head>
+<body>
+
+<div class="page">
+  <h1>Semana 1: TypeScript Avançado</h1>
+  <p class="sub">Ingryd Aylana Silva dos Santos. React / TypeScript. Tempo estimado: 5 a 7 horas.</p>
+
+  <div class="card card-purple">
+    <p><strong>Você já sabe JavaScript nota 5 e já usa TypeScript.</strong> Esta semana não é sobre o básico. É sobre os 3 conceitos que separam "uso básico" de "domínio real": Generics, Utility Types e Discriminated Unions. Quando você domina esses conceitos, o editor vira seu melhor amigo e encontra bugs antes de você rodar o código.</p>
+  </div>
+
+  <h2>Conceitos com exemplos</h2>
+
+  <h3>1. Generics (tipos genéricos)</h3>
+  <p>Um generic é como um "espaço reservado" para um tipo. Você escreve a função uma vez, e na hora de usar, diz qual tipo vai ser. Em vez de criar várias funções iguais para tipos diferentes, você cria uma só.</p>
+
+<pre><span class="cm">// Sem generics: repetição desnecessária</span>
+<span class="kw">function</span> <span class="fn">buscarUsuario</span>(id: <span class="st">number</span>): Promise&lt;Usuario&gt; {
+    <span class="kw">return</span> fetch(<span class="st">`/api/usuarios/${id}`</span>).then(r =&gt; r.json());
+}
+<span class="kw">function</span> <span class="fn">buscarProduto</span>(id: <span class="st">number</span>): Promise&lt;Produto&gt; {
+    <span class="kw">return</span> fetch(<span class="st">`/api/produtos/${id}`</span>).then(r =&gt; r.json());  <span class="bad">// código idêntico!</span>
+}
+
+<span class="cm">// Com generics: uma função que funciona com qualquer tipo</span>
+<span class="kw">async function</span> <span class="fn">buscarPorId</span>&lt;T&gt;(endpoint: <span class="st">string</span>, id: <span class="st">number</span>): Promise&lt;T&gt; {
+    <span class="kw">const</span> resposta = <span class="kw">await</span> fetch(<span class="st">`${endpoint}/${id}`</span>);
+    <span class="kw">return</span> resposta.json();
+}
+
+<span class="cm">// Na hora de usar, você diz o tipo entre &lt; &gt;</span>
+<span class="kw">const</span> usuario = <span class="kw">await</span> buscarPorId&lt;Usuario&gt;(<span class="st">"/api/usuarios"</span>, 1);
+<span class="kw">const</span> produto = <span class="kw">await</span> buscarPorId&lt;Produto&gt;(<span class="st">"/api/produtos"</span>, 5);
+<span class="cm">// O TypeScript sabe que "usuario" é do tipo Usuario e "produto" é Produto</span></pre>
+
+  <h3>2. Utility Types (atalhos de tipos)</h3>
+  <p>Você define uma interface uma vez e depois cria variações usando atalhos que o TypeScript já tem prontos. Assim não precisa copiar e colar campos toda vez que precisar de uma versão ligeiramente diferente.</p>
+
+<pre><span class="kw">interface</span> <span class="fn">Tarefa</span> {
+    id: <span class="st">number</span>;
+    titulo: <span class="st">string</span>;
+    descricao: <span class="st">string</span>;
+    concluida: <span class="st">boolean</span>;
+    criadaEm: Date;
+}
+
+<span class="cm">// Partial: torna TODOS os campos opcionais</span>
+<span class="cm">// Útil para formulários de edição (o usuário pode mudar só o título)</span>
+<span class="kw">type</span> <span class="fn">TarefaUpdate</span> = Partial&lt;Tarefa&gt;;
+<span class="cm">// Resultado: { id?: number; titulo?: string; descricao?: string; ... }</span>
+
+<span class="cm">// Pick: pega SÓ os campos que você listar</span>
+<span class="cm">// Útil para cards, previews, listas resumidas</span>
+<span class="kw">type</span> <span class="fn">TarefaResumo</span> = Pick&lt;Tarefa, <span class="st">"id"</span> | <span class="st">"titulo"</span> | <span class="st">"concluida"</span>&gt;;
+<span class="cm">// Resultado: { id: number; titulo: string; concluida: boolean; }</span>
+
+<span class="cm">// Omit: remove os campos que você listar</span>
+<span class="cm">// Útil para criação (o banco gera o id e a data)</span>
+<span class="kw">type</span> <span class="fn">TarefaCreate</span> = Omit&lt;Tarefa, <span class="st">"id"</span> | <span class="st">"criadaEm"</span>&gt;;
+<span class="cm">// Resultado: { titulo: string; descricao: string; concluida: boolean; }</span>
+
+<span class="cm">// Required: torna TODOS os campos obrigatórios (oposto de Partial)</span>
+<span class="kw">type</span> <span class="fn">TarefaCompleta</span> = Required&lt;Tarefa&gt;;
+
+<span class="cm">// Readonly: impede que qualquer campo seja alterado depois de criado</span>
+<span class="kw">type</span> <span class="fn">TarefaCongelada</span> = Readonly&lt;Tarefa&gt;;</pre>
+
+  <h3>3. Discriminated Unions (uniões discriminadas)</h3>
+  <p>Quando uma variável pode ser de tipos diferentes dependendo de uma condição. O TypeScript usa um campo em comum (o "discriminador") para saber automaticamente quais campos existem.</p>
+
+<pre><span class="cm">// Uma resposta de API pode ser sucesso OU erro</span>
+<span class="cm">// O campo "status" é o discriminador</span>
+
+<span class="kw">type</span> <span class="fn">Sucesso</span>&lt;T&gt; = {
+    status: <span class="st">"sucesso"</span>;
+    dados: T;
+    total: <span class="st">number</span>;
+}
+
+<span class="kw">type</span> <span class="fn">Erro</span> = {
+    status: <span class="st">"erro"</span>;
+    mensagem: <span class="st">string</span>;
+    codigo: <span class="st">number</span>;
+}
+
+<span class="kw">type</span> <span class="fn">ApiResponse</span>&lt;T&gt; = Sucesso&lt;T&gt; | Erro;
+
+<span class="cm">// Quando você verifica o status, o TypeScript sabe quais campos existem</span>
+<span class="kw">function</span> <span class="fn">tratarResposta</span>&lt;T&gt;(resposta: ApiResponse&lt;T&gt;): T {
+    <span class="kw">if</span> (resposta.status === <span class="st">"sucesso"</span>) {
+        <span class="cm">// Aqui o TS sabe que resposta tem .dados e .total</span>
+        console.log(<span class="st">`Total: ${resposta.total}`</span>);
+        <span class="kw">return</span> resposta.dados;  <span class="ok">// autocomplete funciona!</span>
+    } <span class="kw">else</span> {
+        <span class="cm">// Aqui o TS sabe que resposta tem .mensagem e .codigo</span>
+        <span class="kw">throw new</span> Error(<span class="st">`Erro ${resposta.codigo}: ${resposta.mensagem}`</span>);
+    }
+}</pre>
+</div>
+
+<!-- ==================== EXERCÍCIOS ==================== -->
+<div class="page page-break">
+  <h2>Exercícios da Semana</h2>
+  <p>Três exercícios, do mais simples ao mais completo. Cada um trabalha um conceito diferente.</p>
+
+  <!-- EXERCÍCIO 1 -->
+  <div class="card" style="margin-top: 16px;">
+    <h3 style="margin-top: 0;"><span class="exnum" style="background: var(--green);">1</span> Exercício Fácil: Utility Types na prática <span class="badge badge-easy">Fácil</span></h3>
+    <p>Crie o arquivo <code>exercicio1_utility_types.ts</code> com o seguinte:</p>
+
+<pre><span class="cm">// Dada esta interface:</span>
+<span class="kw">interface</span> <span class="fn">Evento</span> {
+    id: <span class="st">number</span>;
+    titulo: <span class="st">string</span>;
+    descricao: <span class="st">string</span>;
+    data: Date;
+    local: <span class="st">string</span>;
+    capacidade: <span class="st">number</span>;
+    organizador: <span class="st">string</span>;
+    ativo: <span class="st">boolean</span>;
+}</pre>
+
+    <p><strong>Criar estes tipos derivados (sem repetir campos):</strong></p>
+    <ul>
+      <li><code>EventoCreate</code>: tudo menos id (o banco gera)</li>
+      <li><code>EventoUpdate</code>: todos os campos opcionais (formulário de edição)</li>
+      <li><code>EventoCard</code>: só titulo, data, local (card de preview)</li>
+      <li><code>EventoAdmin</code>: tudo obrigatório, incluindo campos que poderiam ser opcionais</li>
+      <li><code>EventoPublico</code>: tudo menos organizador e capacidade (o público não precisa ver esses dados)</li>
+    </ul>
+    <p>Depois, crie uma variável de cada tipo com dados de exemplo para provar que os tipos funcionam.</p>
+    <p><strong>Entregar:</strong> <code>exercicio1_utility_types.ts</code></p>
+  </div>
+
+  <!-- EXERCÍCIO 2 -->
+  <div class="card" style="margin-top: 16px;">
+    <h3 style="margin-top: 0;"><span class="exnum" style="background: var(--orange);">2</span> Exercício Intermediário: Generics para fetch tipado <span class="badge badge-mid">Intermediário</span></h3>
+    <p>Crie o arquivo <code>exercicio2_generics.ts</code> com:</p>
+
+    <p><strong>Parte A:</strong> Uma função genérica <code>buscarDados&lt;T&gt;</code> que:</p>
+    <ul>
+      <li>Recebe um endpoint (string) como parâmetro</li>
+      <li>Faz fetch e retorna os dados tipados como <code>Promise&lt;T&gt;</code></li>
+      <li>Trata erro de rede (try/catch) e retorna <code>null</code> se falhar</li>
+    </ul>
+
+    <p><strong>Parte B:</strong> Uma função genérica <code>filtrar&lt;T&gt;</code> que:</p>
+    <ul>
+      <li>Recebe uma lista de itens (<code>T[]</code>) e uma função de filtro (<code>(item: T) => boolean</code>)</li>
+      <li>Retorna os itens que passam no filtro</li>
+      <li>Funciona com qualquer tipo (Usuario, Produto, Tarefa, string, number...)</li>
+    </ul>
+
+    <p><strong>Parte C:</strong> Uma função genérica <code>agruparPor&lt;T&gt;</code> que:</p>
+    <ul>
+      <li>Recebe uma lista de itens (<code>T[]</code>) e o nome de um campo (<code>keyof T</code>)</li>
+      <li>Retorna um objeto agrupado por aquele campo</li>
+      <li>Exemplo: <code>agruparPor(produtos, "categoria")</code> retorna <code>{ "eletrônicos": [...], "roupas": [...] }</code></li>
+    </ul>
+
+    <p>Demonstre cada função com pelo menos 2 tipos diferentes.</p>
+    <p><strong>Entregar:</strong> <code>exercicio2_generics.ts</code></p>
+  </div>
+
+  <!-- EXERCÍCIO 3 -->
+  <div class="card" style="margin-top: 16px;">
+    <h3 style="margin-top: 0;"><span class="exnum" style="background: #dc2626;">3</span> Exercício Avançado: Sistema de notificações tipado <span class="badge badge-hard">Avançado</span></h3>
+    <p>Crie o arquivo <code>exercicio3_notificacoes.ts</code> com um sistema completo de notificações usando discriminated unions + generics + utility types juntos.</p>
+
+    <p><strong>Tipos de notificação (cada uma com campos diferentes):</strong></p>
+
+<pre><span class="cm">// Cada tipo de notificação tem campos específicos.</span>
+<span class="cm">// O campo "tipo" é o discriminador.</span>
+
+<span class="cm">// tipo "mensagem": tem remetente, conteudo, lida</span>
+<span class="cm">// tipo "alerta": tem severidade (info/warning/error), mensagem</span>
+<span class="cm">// tipo "tarefa": tem titulo, prazo (Date), prioridade (alta/media/baixa), concluida</span>
+<span class="cm">// tipo "sistema": tem acao, detalhes (opcional)</span>
+
+<span class="cm">// Todas compartilham: id (number), criadaEm (Date), destinatario (string)</span></pre>
+
+    <p><strong>O que criar:</strong></p>
+    <ul>
+      <li>Interface base <code>NotificacaoBase</code> com os campos compartilhados</li>
+      <li>4 interfaces específicas que estendem a base (uma por tipo)</li>
+      <li>Union type <code>Notificacao</code> que pode ser qualquer uma das 4</li>
+      <li>Função <code>processarNotificacao(n: Notificacao): string</code> que retorna uma mensagem diferente dependendo do tipo (use switch com discriminated union)</li>
+      <li>Função genérica <code>filtrarPorTipo&lt;T extends Notificacao&gt;(lista: Notificacao[], tipo: string): T[]</code> que filtra a lista pelo tipo</li>
+      <li>Tipos derivados: <code>NotificacaoResumo</code> (Pick com id, tipo, criadaEm) e <code>NotificacaoUpdate</code> (Partial da base)</li>
+    </ul>
+
+    <p>Crie um array com pelo menos 6 notificações de tipos variados e demonstre todas as funções.</p>
+    <p><strong>Entregar:</strong> <code>exercicio3_notificacoes.ts</code></p>
+  </div>
+
+  <h2 style="margin-top: 28px;">O que entregar no final</h2>
+  <div class="card card-green">
+    <p>No seu repositório <code>fedcorp-exercicios</code>, pasta <code>semana-01-typescript/</code>:</p>
+    <ul>
+      <li><code>exercicio1_utility_types.ts</code></li>
+      <li><code>exercicio2_generics.ts</code></li>
+      <li><code>exercicio3_notificacoes.ts</code></li>
+      <li><code>decisoes.md</code> explicando: qual a diferença entre Omit e Pick? Quando usar Partial? Por que generics evitam repetição? Qual a vantagem de discriminated unions em vez de if/else manual?</li>
+    </ul>
+    <p style="margin-top: 8px; font-size: 12px;">Todos os arquivos devem compilar sem erro com <code>tsc --noEmit</code>.</p>
+  </div>
+
+  <div class="footer">FedCorp. Programa de Evolução Técnica. Semana 1, Ingryd.</div>
+</div>
+
+</body>
+</html>

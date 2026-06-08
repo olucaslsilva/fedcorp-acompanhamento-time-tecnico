@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Semana 1 ,Exercícios por Dev</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap');
+    :root {
+      --primary: #1e293b;
+      --blue: #3b82f6; --blue-light: #dbeafe; --blue-dark: #1e40af;
+      --purple: #8b5cf6; --purple-light: #ede9fe; --purple-dark: #5b21b6;
+      --green: #22c55e; --green-light: #dcfce7; --green-dark: #166534;
+      --orange: #f59e0b; --orange-light: #fef3c7;
+      --gray-50: #f8fafc; --gray-100: #f1f5f9; --gray-200: #e2e8f0;
+      --gray-300: #cbd5e0; --gray-500: #64748b; --gray-700: #334155;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Inter', sans-serif; background: var(--gray-100); color: var(--gray-700); line-height: 1.7; max-width: 900px; margin: 0 auto; padding: 20px; }
+
+    @media print {
+      body { background: white; padding: 0; }
+      .dev-card { page-break-inside: avoid; box-shadow: none; }
+    }
+
+    .header {
+      background: var(--primary); color: white; padding: 24px 32px; border-radius: 12px;
+      margin-bottom: 24px; text-align: center;
+    }
+    .header h1 { font-size: 22px; font-weight: 800; margin-bottom: 4px; }
+    .header p { font-size: 13px; opacity: 0.7; }
+
+    .dev-card {
+      background: white; border-radius: 12px; padding: 32px; margin-bottom: 20px;
+      box-shadow: 0 1px 3px rgba(0,0,0,.06);
+    }
+
+    .dev-header {
+      display: flex; align-items: center; gap: 16px; margin-bottom: 20px;
+      padding-bottom: 16px; border-bottom: 2px solid var(--gray-200);
+    }
+    .dev-avatar {
+      width: 48px; height: 48px; border-radius: 50%; display: flex;
+      align-items: center; justify-content: center; font-size: 20px; font-weight: 800; color: white;
+    }
+    .dev-name { font-size: 18px; font-weight: 700; color: var(--primary); }
+    .dev-tema { font-size: 13px; color: var(--gray-500); }
+    .dev-tag {
+      margin-left: auto; font-size: 11px; font-weight: 700; padding: 4px 12px;
+      border-radius: 20px;
+    }
+
+    .objetivo {
+      padding: 16px 20px; border-radius: 10px; margin-bottom: 20px; font-size: 14px;
+    }
+
+    .etapas { margin-bottom: 20px; }
+    .etapa {
+      display: flex; gap: 12px; margin-bottom: 12px; padding: 14px 16px;
+      border-radius: 8px; background: var(--gray-50); border: 1px solid var(--gray-200);
+    }
+    .etapa-num {
+      width: 28px; height: 28px; border-radius: 50%; display: flex;
+      align-items: center; justify-content: center; font-size: 12px;
+      font-weight: 700; color: white; flex-shrink: 0; margin-top: 2px;
+    }
+    .etapa-body { flex: 1; }
+    .etapa-title { font-weight: 700; font-size: 13px; color: var(--primary); margin-bottom: 2px; }
+    .etapa-desc { font-size: 12px; color: var(--gray-500); }
+
+    .entregaveis {
+      background: var(--orange-light); border: 2px solid var(--orange);
+      border-radius: 10px; padding: 16px 20px; margin-bottom: 16px;
+    }
+    .entregaveis-title {
+      font-weight: 700; font-size: 12px; color: #92400e;
+      text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px;
+    }
+    .entregaveis ul { padding-left: 18px; font-size: 13px; margin: 0; }
+    .entregaveis li { margin-bottom: 4px; }
+    .entregaveis code { background: rgba(0,0,0,.06); padding: 1px 5px; border-radius: 3px; font-family: 'Fira Code', monospace; font-size: 11px; }
+
+    .dica-ia {
+      background: var(--gray-50); border: 1px solid var(--gray-200); border-radius: 8px;
+      padding: 12px 16px; font-size: 12px; color: var(--gray-500);
+    }
+    .dica-ia strong { color: var(--gray-700); }
+    .dica-ia em { font-style: italic; color: var(--blue); }
+
+    .criterios {
+      margin-top: 16px; padding: 16px 20px; border-radius: 8px;
+      font-size: 13px;
+    }
+    .criterios-title { font-weight: 700; font-size: 12px; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+
+    .recursos { margin-top: 12px; font-size: 12px; color: var(--gray-500); }
+    .recursos strong { color: var(--gray-700); }
+
+    .footer { text-align: center; padding: 20px; font-size: 12px; color: var(--gray-500); }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Semana 1: Exercícios Individuais</h1>
+  <p>Cada dev tem um tema e um exercício diferente. Prazo: até sexta-feira</p>
+</div>
+
+<!-- ==================== LEONAN ==================== -->
+<div class="dev-card" style="border-left: 4px solid var(--blue);">
+  <div class="dev-header">
+    <div class="dev-avatar" style="background: var(--blue);">L</div>
+    <div>
+      <div class="dev-name">Leonan</div>
+      <div class="dev-tema">Semana 1: Refatoração, do "funciona" para o "bem feito"</div>
+    </div>
+    <div class="dev-tag" style="background: var(--blue-light); color: var(--blue-dark);">Python / FastAPI</div>
+  </div>
+
+  <div class="objetivo" style="background: var(--blue-light); color: var(--blue-dark);">
+    <strong>Objetivo:</strong> Pegar um código que funciona mas está bagunçado (tudo num arquivo só, nomes genéricos, lógica repetida) e reorganizar em módulos separados, com nomes claros e sem repetição.
+  </div>
+
+  <div class="etapas">
+    <div class="etapa">
+      <div class="etapa-num" style="background: var(--blue);">1</div>
+      <div class="etapa-body">
+        <div class="etapa-title">Criar o repositório</div>
+        <div class="etapa-desc">No GitHub pessoal, criar o repositório <code>fedcorp-exercicios</code> e dentro criar a pasta <code>semana-01-refatoracao/</code></div>
+      </div>
+    </div>
+    <div class="etapa">
+      <div class="etapa-num" style="background: var(--blue);">2</div>
+      <div class="etapa-body">
+        <div class="etapa-title">Criar o código "bagunçado" (antes.py)</div>
+        <div class="etapa-desc">Criar uma API FastAPI de <strong>gerenciamento de produtos</strong> (criar, listar, atualizar, deletar) com TUDO em um único arquivo: validações repetidas, nomes genéricos como <code>data</code> e <code>result</code>, sem tipagem Pydantic, lógica de negócio misturada com rotas</div>
+      </div>
+    </div>
+    <div class="etapa">
+      <div class="etapa-num" style="background: var(--blue);">3</div>
+      <div class="etapa-body">
+        <div class="etapa-title">Refatorar em módulos separados</div>
+        <div class="etapa-desc">Reorganizar o código em arquivos separados com responsabilidades claras:
+          <br><code>schemas.py</code> para modelos Pydantic (validação de dados)
+          <br><code>routers/products.py</code> para rotas HTTP
+          <br><code>services/product_service.py</code> para lógica de negócio
+        </div>
+      </div>
+    </div>
+    <div class="etapa">
+      <div class="etapa-num" style="background: var(--blue);">4</div>
+      <div class="etapa-body">
+        <div class="etapa-title">Escrever o decisoes.md</div>
+        <div class="etapa-desc">Criar um arquivo <code>decisoes.md</code> explicando: quais problemas você identificou no código original, o que mudou, e <strong>por que cada mudança melhora o código</strong>. Não basta dizer "separei em arquivos", tem que explicar por quê isso importa.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="entregaveis">
+    <div class="entregaveis-title">O que entregar no GitHub</div>
+    <ul>
+      <li><code>semana-01-refatoracao/antes.py</code> (o código original bagunçado)</li>
+      <li><code>semana-01-refatoracao/schemas.py</code> (modelos Pydantic)</li>
+      <li><code>semana-01-refatoracao/routers/products.py</code> (só rotas)</li>
+      <li><code>semana-01-refatoracao/services/product_service.py</code> (só lógica)</li>
+      <li><code>semana-01-refatoracao/decisoes.md</code> (explicação das escolhas)</li>
+    </ul>
+  </div>
+
+  <div class="criterios" style="background: var(--blue-light); color: var(--blue-dark);">
+    <div class="criterios-title">Como vou avaliar</div>
+    <ul style="padding-left: 18px; font-size: 12px; margin: 0;">
+      <li>O código refatorado roda sem erro?</li>
+      <li>Cada arquivo tem UMA responsabilidade clara?</li>
+      <li>Os nomes de variáveis e funções são descritivos?</li>
+      <li>O <code>decisoes.md</code> explica o PORQUÊ, não só o QUÊ?</li>
+    </ul>
+  </div>
+
+  <div class="dica-ia" style="margin-top: 12px;">
+    <strong>Se travar, pergunte ao ChatGPT:</strong> <em>"Tenho uma API FastAPI com tudo em um arquivo só. Quais são os primeiros passos para refatorar em módulos separados?"</em>
+  </div>
+
+  <div class="recursos">
+    <strong>Recursos:</strong> Vídeo "Refactoring Python Code" de ArjanCodes (YouTube, ~20min). Pydantic docs, seção "Models"
+  </div>
+</div>
+
+<!-- ==================== INGRYD ==================== -->
+<div class="dev-card" style="border-left: 4px solid var(--purple);">
+  <div class="dev-header">
+    <div class="dev-avatar" style="background: var(--purple);">I</div>
+    <div>
+      <div class="dev-name">Ingryd</div>
+      <div class="dev-tema">Semana 1: TypeScript, do "sei usar" para o "domino"</div>
+    </div>
+    <div class="dev-tag" style="background: var(--purple-light); color: var(--purple-dark);">React / TypeScript</div>
+  </div>
+
+  <div class="objetivo" style="background: var(--purple-light); color: var(--purple-dark);">
+    <strong>Objetivo:</strong> Dominar 3 conceitos avançados de TypeScript que separam uso básico de domínio. Generics (tipos genéricos), Utility Types (atalhos de tipos), e Discriminated Unions (uniões discriminadas).
+  </div>
+
+  <div class="etapas">
+    <div class="etapa">
+      <div class="etapa-num" style="background: var(--purple);">1</div>
+      <div class="etapa-body">
+        <div class="etapa-title">Criar o repositório</div>
+        <div class="etapa-desc">No GitHub pessoal, criar o repositório <code>fedcorp-exercicios</code> e dentro criar a pasta <code>semana-01-typescript/</code></div>
+      </div>
+    </div>
+    <div class="etapa">
+      <div class="etapa-num" style="background: var(--purple);">2</div>
+      <div class="etapa-body">
+        <div class="etapa-title">Criar api-types.ts</div>
+        <div class="etapa-desc">
+          Interface <code>Produto</code> com: id, nome, preco, categoria, estoque (opcional), criadoEm (Date)
+          <br>Derivar usando Utility Types: <code>ProdutoCreate</code> (sem id e criadoEm), <code>ProdutoCard</code> (só nome, preco, categoria), <code>ProdutoUpdate</code> (tudo opcional)
+          <br>Função genérica <code>buscarLista&lt;T&gt;(endpoint: string): Promise&lt;T[]&gt;</code>
+        </div>
+      </div>
+    </div>
+    <div class="etapa">
+      <div class="etapa-num" style="background: var(--purple);">3</div>
+      <div class="etapa-body">
+        <div class="etapa-title">Criar api-response.ts</div>
+        <div class="etapa-desc">
+          Tipo <code>ApiResponse&lt;T&gt;</code> usando discriminated union: sucesso (com dados do tipo T) OU erro (com mensagem e código)
+          <br>Função <code>tratarResposta&lt;T&gt;(response: ApiResponse&lt;T&gt;)</code> que retorna os dados se sucesso, ou lança erro se falha
+        </div>
+      </div>
+    </div>
+    <div class="etapa">
+      <div class="etapa-num" style="background: var(--purple);">4</div>
+      <div class="etapa-body">
+        <div class="etapa-title">Escrever o decisoes.md</div>
+        <div class="etapa-desc">Explicar: por que usar <code>Omit</code> em vez de criar uma interface nova do zero? Quando usar <code>Partial</code> vs <code>Pick</code>? Qual a vantagem de generics em vez de funções separadas?</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="entregaveis">
+    <div class="entregaveis-title">O que entregar no GitHub</div>
+    <ul>
+      <li><code>semana-01-typescript/api-types.ts</code> (interfaces, tipos derivados e função genérica)</li>
+      <li><code>semana-01-typescript/api-response.ts</code> (discriminated union e função de tratamento)</li>
+      <li><code>semana-01-typescript/decisoes.md</code> (explicação das escolhas)</li>
+    </ul>
+  </div>
+
+  <div class="criterios" style="background: var(--purple-light); color: var(--purple-dark);">
+    <div class="criterios-title">Como vou avaliar</div>
+    <ul style="padding-left: 18px; font-size: 12px; margin: 0;">
+      <li>O código compila sem erro (<code>tsc --noEmit</code>)?</li>
+      <li>Usou <code>Omit</code>, <code>Pick</code>, <code>Partial</code> corretamente (não criou interfaces duplicadas)?</li>
+      <li>O generic <code>&lt;T&gt;</code> funciona com tipos diferentes?</li>
+      <li>O <code>decisoes.md</code> explica a diferença entre os utility types?</li>
+    </ul>
+  </div>
+
+  <div class="dica-ia" style="margin-top: 12px;">
+    <strong>Se travar, pergunte ao ChatGPT:</strong> <em>"Sou dev React com JS avançado, aprendendo TypeScript. Explique generics como se eu nunca tivesse visto, com um exemplo usando fetch de API."</em>
+  </div>
+
+  <div class="recursos">
+    <strong>Recursos:</strong> Vídeo "TypeScript Generics Tutorial" de Matt Pocock (YouTube, ~15min). TypeScript Playground (typescriptlang.org/play)
+  </div>
+</div>
+
+<!-- ==================== DANIEL ==================== -->
+<div class="dev-card" style="border-left: 4px solid var(--green);">
+  <div class="dev-header">
+    <div class="dev-avatar" style="background: var(--green);">D</div>
+    <div>
+      <div class="dev-name">Daniel</div>
+      <div class="dev-tema">Semana 1: Code Review, a habilidade que você nunca praticou</div>
+    </div>
+    <div class="dev-tag" style="background: var(--green-light); color: var(--green-dark);">Node.js / Fullstack</div>
+  </div>
+
+  <div class="objetivo" style="background: var(--green-light); color: var(--green-dark);">
+    <strong>Objetivo:</strong> Aprender a ler código com olhar crítico ,identificar problemas de segurança, performance, clareza e boas práticas. Criar código intencionalmente ruim, fazer a review dele mesmo, e corrigir.
+  </div>
+
+  <div class="etapas">
+    <div class="etapa">
+      <div class="etapa-num" style="background: var(--green);">1</div>
+      <div class="etapa-body">
+        <div class="etapa-title">Criar o repositório</div>
+        <div class="etapa-desc">No GitHub pessoal, criar o repositório <code>fedcorp-exercicios</code> e dentro criar a pasta <code>semana-01-code-review/</code></div>
+      </div>
+    </div>
+    <div class="etapa">
+      <div class="etapa-num" style="background: var(--green);">2</div>
+      <div class="etapa-body">
+        <div class="etapa-title">Criar o código "ruim" (para-revisar.ts)</div>
+        <div class="etapa-desc">Criar um endpoint Node.js/Express propositalmente cheio de problemas:
+          <br>SQL injection (template string direto na query)
+          <br>Sem validação de entrada
+          <br>Sem tratamento de erro (sem try/catch)
+          <br>Nomes genéricos (<code>data</code>, <code>q</code>, <code>result</code>)
+          <br>Sem tipagem TypeScript (usar <code>any</code>)
+          <br>Query ineficiente (buscar tudo do banco sem necessidade)
+        </div>
+      </div>
+    </div>
+    <div class="etapa">
+      <div class="etapa-num" style="background: var(--green);">3</div>
+      <div class="etapa-body">
+        <div class="etapa-title">Fazer a review (review.md)</div>
+        <div class="etapa-desc">Criar um arquivo <code>review.md</code> onde você faz a review do seu próprio código:
+          <br>Listar cada problema com <strong>severidade</strong> (crítico / importante / menor)
+          <br>Explicar <strong>por que</strong> é um problema (qual o risco real se isso for pra produção)
+          <br>Sugerir a <strong>correção específica</strong> para cada problema
+        </div>
+      </div>
+    </div>
+    <div class="etapa">
+      <div class="etapa-num" style="background: var(--green);">4</div>
+      <div class="etapa-body">
+        <div class="etapa-title">Corrigir (corrigido.ts)</div>
+        <div class="etapa-desc">Reescrever o endpoint aplicando todas as correções: parameterized queries, validação, try/catch, nomes descritivos, tipagem completa</div>
+      </div>
+    </div>
+    <div class="etapa">
+      <div class="etapa-num" style="background: var(--green);">5</div>
+      <div class="etapa-body">
+        <div class="etapa-title">Escrever o decisoes.md</div>
+        <div class="etapa-desc"><strong>Diferente dos outros devs:</strong> além de explicar as escolhas técnicas, redefinir sua definição de "pronto" com <strong>critérios internos</strong>. Não mais "os superiores acharam bom", e sim "o que EU verifico antes de considerar algo pronto?" (tem teste? trata erro? tá documentado? nomes estão claros?)</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="entregaveis">
+    <div class="entregaveis-title">O que entregar no GitHub</div>
+    <ul>
+      <li><code>semana-01-code-review/para-revisar.ts</code> (o código intencionalmente ruim)</li>
+      <li><code>semana-01-code-review/review.md</code> (a review com problemas, severidades e correções)</li>
+      <li><code>semana-01-code-review/corrigido.ts</code> (o código reescrito)</li>
+      <li><code>semana-01-code-review/decisoes.md</code> (explicação + nova definição de "pronto")</li>
+    </ul>
+  </div>
+
+  <div class="criterios" style="background: var(--green-light); color: var(--green-dark);">
+    <div class="criterios-title">Como vou avaliar</div>
+    <ul style="padding-left: 18px; font-size: 12px; margin: 0;">
+      <li>A review identificou pelo menos 5 problemas reais?</li>
+      <li>Cada problema tem severidade E explicação do risco?</li>
+      <li>O código corrigido resolve todos os problemas listados?</li>
+      <li>A nova definição de "pronto" tem critérios internos (não depende de aprovação externa)?</li>
+    </ul>
+  </div>
+
+  <div class="dica-ia" style="margin-top: 12px;">
+    <strong>Se travar, pergunte ao ChatGPT:</strong> <em>"Revise este endpoint Node.js/Express e me diga todos os problemas de segurança, performance e boas práticas que você encontra."</em> Depois compare com a sua review.
+  </div>
+
+  <div class="recursos">
+    <strong>Recursos:</strong> Vídeo "How to Do Code Reviews Like a Human" de Michaela Greiler (YouTube, ~20min). OWASP Top 10
+  </div>
+</div>
+
+<!-- ==================== RESUMO COMPARATIVO ==================== -->
+<div style="background: white; border-radius: 12px; padding: 28px; box-shadow: 0 1px 3px rgba(0,0,0,.06);">
+  <h2 style="font-size: 16px; font-weight: 700; color: var(--primary); margin-bottom: 16px; display: block;">Resumo ,O que cada um entrega até sexta</h2>
+
+  <table style="width: 100%; border-collapse: collapse; font-size: 12px;">
+    <tr style="background: var(--primary); color: white;">
+      <th style="padding: 8px 12px; text-align: left;">Dev</th>
+      <th style="padding: 8px 12px; text-align: left;">Tema</th>
+      <th style="padding: 8px 12px; text-align: left;">Arquivos</th>
+      <th style="padding: 8px 12px; text-align: left;">Foco do decisoes.md</th>
+    </tr>
+    <tr style="background: var(--blue-light);">
+      <td style="padding: 8px 12px; font-weight: 700;">Leonan</td>
+      <td style="padding: 8px 12px;">Refatoração</td>
+      <td style="padding: 8px 12px;"><code>antes.py</code> + 3 arquivos refatorados</td>
+      <td style="padding: 8px 12px;">Quais problemas identificou e por que cada mudança melhora</td>
+    </tr>
+    <tr style="background: var(--purple-light);">
+      <td style="padding: 8px 12px; font-weight: 700;">Ingryd</td>
+      <td style="padding: 8px 12px;">TypeScript avançado</td>
+      <td style="padding: 8px 12px;"><code>api-types.ts</code> + <code>api-response.ts</code></td>
+      <td style="padding: 8px 12px;">Quando usar Omit vs Pick vs Partial e por quê</td>
+    </tr>
+    <tr style="background: var(--green-light);">
+      <td style="padding: 8px 12px; font-weight: 700;">Daniel</td>
+      <td style="padding: 8px 12px;">Code Review</td>
+      <td style="padding: 8px 12px;"><code>para-revisar.ts</code> + <code>review.md</code> + <code>corrigido.ts</code></td>
+      <td style="padding: 8px 12px;">Redefinir sua definição de "pronto" com critérios internos</td>
+    </tr>
+  </table>
+
+  <p style="margin-top: 16px; font-size: 13px; text-align: center; color: var(--gray-500);">
+    <strong>Entrega:</strong> repositório <code>fedcorp-exercicios</code> no GitHub pessoal.
+    <strong>Prazo:</strong> até a retrospectiva de sexta.
+    <strong>Mínimo:</strong> Fundamento + Exercício + decisoes.md
+  </p>
+</div>
+
+<div class="footer" style="text-align: center; padding: 20px; font-size: 12px; color: var(--gray-500);">
+  FedCorp ,Programa de Evolução Técnica.Semana 1
+</div>
+
+</body>
+</html>

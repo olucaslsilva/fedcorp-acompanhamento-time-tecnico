@@ -1,0 +1,1016 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Plano de Desenvolvimento - Leonan Thomaz de Oliveira</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap');
+
+    :root {
+      --primary: #1a365d;
+      --primary-light: #2b6cb0;
+      --accent: #38a169;
+      --accent-light: #c6f6d5;
+      --warning: #d69e2e;
+      --warning-light: #fefcbf;
+      --danger: #e53e3e;
+      --danger-light: #fed7d7;
+      --gray-50: #f7fafc;
+      --gray-100: #edf2f7;
+      --gray-200: #e2e8f0;
+      --gray-300: #cbd5e0;
+      --gray-500: #718096;
+      --gray-600: #4a5568;
+      --gray-700: #2d3748;
+      --gray-800: #1a202c;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      color: var(--gray-700);
+      line-height: 1.6;
+      background: #fff;
+    }
+
+    @media print {
+      body { font-size: 11pt; }
+      .page-break { page-break-before: always; }
+      .no-print { display: none; }
+      .page { padding: 32px; }
+      pre { font-size: 9pt; }
+    }
+
+    @media screen {
+      body { max-width: 850px; margin: 0 auto; padding: 20px; background: var(--gray-100); }
+      .page { background: #fff; padding: 48px; margin-bottom: 24px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,.1); }
+    }
+
+    .cover {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 80px 48px;
+    }
+
+    .cover-badge {
+      display: inline-block;
+      background: var(--primary);
+      color: white;
+      padding: 6px 20px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      margin-bottom: 32px;
+    }
+
+    .cover h1 {
+      font-size: 32px;
+      font-weight: 800;
+      color: var(--primary);
+      margin-bottom: 8px;
+    }
+
+    .cover .subtitle { font-size: 18px; color: var(--gray-500); margin-bottom: 40px; }
+    .cover .dev-name { font-size: 24px; font-weight: 700; color: var(--gray-800); margin-bottom: 4px; }
+    .cover .dev-info { font-size: 14px; color: var(--gray-500); }
+    .cover-footer { margin-top: 60px; font-size: 12px; color: var(--gray-300); }
+
+    .section-number {
+      display: inline-block;
+      background: var(--primary);
+      color: white;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      text-align: center;
+      line-height: 32px;
+      font-size: 14px;
+      font-weight: 700;
+      margin-right: 12px;
+    }
+
+    h2 {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid var(--gray-200);
+      display: flex;
+      align-items: center;
+    }
+
+    h3 {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--gray-700);
+      margin: 20px 0 10px;
+    }
+
+    p { margin-bottom: 12px; }
+
+    .card {
+      background: var(--gray-50);
+      border: 1px solid var(--gray-200);
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 16px;
+    }
+
+    .card-accent { border-left: 4px solid var(--primary-light); }
+    .card-green { background: var(--accent-light); border-left: 4px solid var(--accent); }
+    .card-yellow { background: var(--warning-light); border-left: 4px solid var(--warning); }
+
+    .score-row { display: flex; align-items: center; margin-bottom: 8px; }
+    .score-label { width: 140px; font-size: 13px; font-weight: 500; flex-shrink: 0; }
+    .score-bar-bg { flex: 1; height: 20px; background: var(--gray-200); border-radius: 10px; overflow: hidden; margin: 0 10px; }
+    .score-bar-fill { height: 100%; border-radius: 10px; }
+    .score-value { width: 30px; text-align: right; font-size: 13px; font-weight: 700; }
+
+    .fill-1 { width: 20%; background: var(--danger); }
+    .fill-2 { width: 40%; background: #ed8936; }
+    .fill-3 { width: 60%; background: var(--warning); }
+    .fill-4 { width: 80%; background: #48bb78; }
+    .fill-5 { width: 100%; background: var(--accent); }
+
+    .tag { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; margin: 2px; }
+    .tag-green { background: var(--accent-light); color: #276749; }
+    .tag-yellow { background: var(--warning-light); color: #975a16; }
+    .tag-red { background: var(--danger-light); color: #c53030; }
+
+    .timeline { position: relative; padding-left: 32px; }
+    .timeline::before { content: ''; position: absolute; left: 11px; top: 0; bottom: 0; width: 2px; background: var(--gray-200); }
+    .timeline-item { position: relative; margin-bottom: 28px; }
+    .timeline-dot {
+      position: absolute; left: -32px; top: 2px; width: 24px; height: 24px;
+      border-radius: 50%; background: var(--primary); color: white;
+      font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center;
+    }
+    .timeline-content { background: var(--gray-50); border: 1px solid var(--gray-200); border-radius: 8px; padding: 16px 20px; }
+    .timeline-title { font-weight: 700; color: var(--primary); font-size: 15px; margin-bottom: 4px; }
+    .timeline-subtitle { font-size: 12px; color: var(--gray-500); margin-bottom: 10px; }
+
+    .phases { display: grid; grid-template-columns: 1fr; gap: 10px; }
+    .phase { padding: 12px 16px; border-radius: 6px; font-size: 13px; }
+    .phase-title { font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+    .phase-1 { background: #ebf8ff; border-left: 3px solid #3182ce; }
+    .phase-1 .phase-title { color: #2b6cb0; }
+    .phase-2 { background: #faf5ff; border-left: 3px solid #805ad5; }
+    .phase-2 .phase-title { color: #6b46c1; }
+    .phase-3 { background: #f0fff4; border-left: 3px solid #38a169; }
+    .phase-3 .phase-title { color: #276749; }
+
+    table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 13px; }
+    th { background: var(--primary); color: white; padding: 10px 14px; text-align: left; font-weight: 600; font-size: 12px; }
+    td { padding: 10px 14px; border-bottom: 1px solid var(--gray-200); }
+    tr:nth-child(even) { background: var(--gray-50); }
+
+    .quote {
+      background: var(--gray-50); border-left: 4px solid var(--primary-light);
+      padding: 16px 20px; margin: 16px 0; font-style: italic;
+      color: var(--gray-600); border-radius: 0 8px 8px 0;
+    }
+
+    .checklist { list-style: none; padding: 0; }
+    .checklist li { padding: 8px 0 8px 28px; position: relative; font-size: 14px; }
+    .checklist li::before {
+      content: ''; position: absolute; left: 0; top: 11px;
+      width: 16px; height: 16px; border: 2px solid var(--gray-300); border-radius: 3px;
+    }
+
+    .ai-level { display: flex; align-items: flex-start; gap: 16px; padding: 16px; margin-bottom: 12px; border-radius: 8px; }
+    .ai-level-num {
+      width: 40px; height: 40px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 800; font-size: 18px; flex-shrink: 0;
+    }
+    .level-1 { background: #ebf8ff; }
+    .level-1 .ai-level-num { background: #3182ce; color: white; }
+    .level-2 { background: #faf5ff; }
+    .level-2 .ai-level-num { background: #805ad5; color: white; }
+    .level-3 { background: #f0fff4; }
+    .level-3 .ai-level-num { background: #38a169; color: white; }
+
+    pre {
+      background: var(--gray-800);
+      color: #e2e8f0;
+      padding: 16px;
+      border-radius: 8px;
+      overflow-x: auto;
+      font-family: 'Fira Code', monospace;
+      font-size: 12px;
+      line-height: 1.5;
+      margin: 12px 0;
+    }
+
+    pre .comment { color: #718096; }
+    pre .keyword { color: #63b3ed; }
+    pre .string { color: #68d391; }
+    pre .function { color: #fbd38d; }
+    pre .bad { color: #fc8181; }
+    pre .good { color: #68d391; }
+
+    .task-box {
+      background: #fffaf0;
+      border: 2px solid #ed8936;
+      border-radius: 8px;
+      padding: 16px 20px;
+      margin: 12px 0;
+    }
+
+    .task-box-title {
+      font-weight: 700;
+      color: #c05621;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
+
+    .task-box ol {
+      padding-left: 20px;
+      font-size: 13px;
+    }
+
+    .task-box ol li {
+      margin-bottom: 6px;
+    }
+
+    .small { font-size: 12px; color: var(--gray-500); }
+    .bold { font-weight: 700; }
+    .text-primary { color: var(--primary); }
+    .mt-8 { margin-top: 8px; }
+    .mb-4 { margin-bottom: 4px; }
+  </style>
+</head>
+<body>
+
+<!-- ==================== CAPA ==================== -->
+<div class="page cover">
+  <div class="cover-badge">FedCorp &mdash; Time de Tecnologia</div>
+  <h1>Plano de Desenvolvimento Individual</h1>
+  <p class="subtitle">Programa de Evolução Técnica &mdash; Maio a Novembro 2026</p>
+
+  <div style="margin: 40px 0;">
+    <div class="dev-name">Leonan Thomaz de Oliveira</div>
+    <div class="dev-info">Backend Developer &bull; Python / FastAPI</div>
+    <div class="dev-info" style="margin-top: 4px;">Autodidata &bull; 6 meses a 1 ano de experiência</div>
+  </div>
+
+  <div style="margin-top: 20px;">
+    <table style="width: auto; margin: 0 auto; font-size: 13px;">
+      <tr><td style="font-weight:600; padding-right:20px;">Elaborado por:</td><td>Lucas Luan(Consultor Tech)</td></tr>
+      <tr><td style="font-weight:600; padding-right:20px;">Data:</td><td>27 de Maio de 2026</td></tr>
+      <tr><td style="font-weight:600; padding-right:20px;">Reavaliação:</td><td>Agosto de 2026 (trimestral)</td></tr>
+    </table>
+  </div>
+
+  <div class="cover-footer">
+    Documento confidencial &mdash; uso interno FedCorp
+  </div>
+</div>
+
+<!-- ==================== FILOSOFIA ==================== -->
+<div class="page page-break">
+  <h2><span class="section-number">1</span> A Filosofia deste Plano</h2>
+
+  <div class="card card-accent">
+    <h3 style="margin-top:0;">IA é uma ferramenta. Você é o engenheiro.</h3>
+    <p>Nos próximos meses, vamos implementar ferramentas de IA (Claude Code, ChatGPT) no dia a dia da equipe. Essas ferramentas vão acelerar muito o trabalho &mdash; mas <strong>só funcionam bem nas mãos de quem entende o que está fazendo.</strong></p>
+    <p>Um dev que usa IA sem base técnica <strong>copia código sem entender</strong>, não consegue avaliar se a sugestão está correta, e cria problemas silenciosos no projeto. Um dev com base técnica usa a IA para <strong>ir mais rápido na direção certa.</strong></p>
+    <p style="margin-bottom:0;"><strong>Este plano existe para construir essa base.</strong></p>
+  </div>
+
+  <h3>Como funciona o aprendizado aqui</h3>
+  <p>Cada tema segue 3 fases, baseadas no modelo de <strong>aprendizagem progressiva</strong>:</p>
+
+  <div class="phases">
+    <div class="phase phase-1">
+      <div class="phase-title">Fase 1 &mdash; Fundamento</div>
+      O que é esse conceito? Por que importa? Quais os princípios básicos?<br>
+      <span class="small">Você recebe uma explicação clara e acessível do tema.</span>
+    </div>
+    <div class="phase phase-2">
+      <div class="phase-title">Fase 2 &mdash; Exemplo Guiado</div>
+      Veja na prática: um código real sendo analisado e melhorado passo a passo.<br>
+      <span class="small">Você acompanha o raciocínio, não só o resultado.</span>
+    </div>
+    <div class="phase phase-3">
+      <div class="phase-title">Fase 3 &mdash; Exercício Solo</div>
+      Agora é sua vez: um cenário similar para resolver por conta própria.<br>
+      <span class="small">O critério de sucesso não é só "funcionar" &mdash; é você <strong>explicar o porquê</strong> da sua solução.</span>
+    </div>
+  </div>
+
+  <div class="quote">
+    "A melhor forma de provar que você entendeu algo é conseguir explicar para outra pessoa de forma simples."
+  </div>
+
+  <h3>Metodologia de estudo recomendada</h3>
+  <table>
+    <tr>
+      <th>Técnica</th>
+      <th>O que é</th>
+      <th>Como aplicar</th>
+    </tr>
+    <tr>
+      <td><strong>Prática Deliberada</strong></td>
+      <td>Focar nos pontos fracos, não nos fortes</td>
+      <td>As atividades deste plano já focam nos seus gaps</td>
+    </tr>
+    <tr>
+      <td><strong>Aprender Fazendo</strong></td>
+      <td>Praticar > assistir aula passivamente</td>
+      <td>Cada tema tem exercício prático obrigatório</td>
+    </tr>
+    <tr>
+      <td><strong>Explicar para Fixar</strong></td>
+      <td>Se você explica, você entende de verdade</td>
+      <td>No check-in semanal, você apresenta o que aprendeu</td>
+    </tr>
+    <tr>
+      <td><strong>Revisão Espaçada</strong></td>
+      <td>Revisar o tema dias depois para fixar na memória</td>
+      <td>Cada mês revisita temas anteriores em contextos novos</td>
+    </tr>
+  </table>
+</div>
+
+<!-- ==================== SEU PERFIL ==================== -->
+<div class="page page-break">
+  <h2><span class="section-number">2</span> Seu Perfil Atual</h2>
+
+  <p>Baseado na avaliação que você respondeu em 22/05/2026. Esses scores são seu <strong>ponto de partida</strong>, não um julgamento.</p>
+
+  <h3>Skills Técnicas (destaques)</h3>
+
+  <div class="score-row">
+    <span class="score-label">Python</span>
+    <div class="score-bar-bg"><div class="score-bar-fill fill-5"></div></div>
+    <span class="score-value">5.0</span>
+  </div>
+  <div class="score-row">
+    <span class="score-label">APIs REST</span>
+    <div class="score-bar-bg"><div class="score-bar-fill fill-5"></div></div>
+    <span class="score-value">5.0</span>
+  </div>
+  <div class="score-row">
+    <span class="score-label">SQL</span>
+    <div class="score-bar-bg"><div class="score-bar-fill fill-4"></div></div>
+    <span class="score-value">4.0</span>
+  </div>
+  <div class="score-row">
+    <span class="score-label">PostgreSQL</span>
+    <div class="score-bar-bg"><div class="score-bar-fill fill-4"></div></div>
+    <span class="score-value">4.0</span>
+  </div>
+  <div class="score-row">
+    <span class="score-label">HTML / CSS</span>
+    <div class="score-bar-bg"><div class="score-bar-fill fill-4"></div></div>
+    <span class="score-value">4.0</span>
+  </div>
+  <div class="score-row">
+    <span class="score-label">React</span>
+    <div class="score-bar-bg"><div class="score-bar-fill fill-4"></div></div>
+    <span class="score-value">4.0</span>
+  </div>
+
+  <h3 style="margin-top: 24px;">Áreas para Desenvolvimento (foco deste plano)</h3>
+
+  <div class="score-row">
+    <span class="score-label">TypeScript</span>
+    <div class="score-bar-bg"><div class="score-bar-fill fill-2"></div></div>
+    <span class="score-value">2.0</span>
+  </div>
+  <div class="score-row">
+    <span class="score-label">Node.js</span>
+    <div class="score-bar-bg"><div class="score-bar-fill fill-2"></div></div>
+    <span class="score-value">2.0</span>
+  </div>
+  <div class="score-row">
+    <span class="score-label">Testes</span>
+    <div class="score-bar-bg"><div class="score-bar-fill fill-2"></div></div>
+    <span class="score-value">2.0</span>
+  </div>
+  <div class="score-row">
+    <span class="score-label">CI/CD</span>
+    <div class="score-bar-bg"><div class="score-bar-fill fill-2"></div></div>
+    <span class="score-value">2.0</span>
+  </div>
+  <div class="score-row">
+    <span class="score-label">Cloud</span>
+    <div class="score-bar-bg"><div class="score-bar-fill fill-2"></div></div>
+    <span class="score-value">2.0</span>
+  </div>
+  <div class="score-row">
+    <span class="score-label">Linux/Terminal</span>
+    <div class="score-bar-bg"><div class="score-bar-fill fill-2"></div></div>
+    <span class="score-value">2.0</span>
+  </div>
+
+  <h3 style="margin-top: 24px;">Práticas de Engenharia</h3>
+  <table>
+    <tr><th>Prática</th><th>Nível Atual</th><th>Meta</th></tr>
+    <tr><td>Git</td><td><span class="tag tag-yellow">Usa branches (score 3)</span></td><td>Dominar merge, rebase e resolução de conflitos</td></tr>
+    <tr><td>Testes</td><td><span class="tag tag-yellow">Às vezes</span></td><td>Sempre, com cobertura mínima</td></tr>
+    <tr><td>Code Review</td><td><span class="tag tag-yellow">Entende o fluxo</span></td><td>Faz e recebe reviews ativamente</td></tr>
+    <tr><td>Documentação</td><td><span class="tag tag-yellow">README básico</span></td><td>README + comentários de API</td></tr>
+    <tr><td>Metodologia Ágil</td><td><span class="tag tag-red">Só ouviu falar</span></td><td>Pratica Kanban no dia a dia</td></tr>
+  </table>
+
+  <h3 style="margin-top: 24px;">O que você disse na avaliação</h3>
+  <div class="card card-green">
+    <p class="bold mb-4">Sua maior dificuldade:</p>
+    <p style="margin-bottom:0;">"Transformar soluções que funcionam em soluções mais bem estruturadas e escaláveis."</p>
+  </div>
+  <div class="card card-accent">
+    <p class="bold mb-4">Sua meta em 6 meses:</p>
+    <p style="margin-bottom:0;">"Quero estar mais maduro tecnicamente em arquitetura de sistemas, boas práticas de desenvolvimento e organização de projetos."</p>
+  </div>
+
+  <div class="card card-accent">
+    <p class="bold mb-4">Sua definição de "pronto" (destaque positivo):</p>
+    <p style="margin-bottom:0;">"Considero uma tarefa concluída quando ela atende ao objetivo proposto, foi validada nos cenários principais, não quebrou funcionalidades relacionadas e está pronta para uso. Também considero importante que o código esteja minimamente organizado e compreensível para manutenção futura."</p>
+    <p class="small mt-8">Essa visão de qualidade é acima da média para o nível. Mostra que você já pensa além do "funcionar".</p>
+  </div>
+
+  <div class="card card-green">
+    <p class="bold mb-4">Seu projeto mais complexo (força reconhecida):</p>
+    <p style="margin-bottom:0;">Gateway em FastAPI para integração com banco legado Firebird &mdash; centralização de comunicação entre sistemas internos. Você transformou uma camada simples de consultas SQL em um ponto central de integração da empresa. Essa experiência real com integração de sistemas, APIs e bancos legados é uma <strong>base sólida</strong> que poucos juniors têm.</p>
+  </div>
+
+  <div class="quote">
+    Sua abordagem de resolução de problemas &mdash; isolar, analisar logs, pesquisar, validar hipóteses &mdash; é a mais madura da equipe. Isso mostra uma mentalidade de engenheiro. O plano vai construir em cima disso.
+  </div>
+</div>
+
+<!-- ==================== SEMANA 1 ==================== -->
+<div class="page page-break">
+  <h2><span class="section-number">3</span> Semana 1 &mdash; Refatoração: De "funciona" para "bem feito"</h2>
+  <p class="small" style="margin-bottom:16px;">Diretamente ligado à sua maior dificuldade &bull; Tempo estimado: 4&ndash;6 horas</p>
+
+  <div class="phase phase-1" style="margin-bottom: 16px;">
+    <div class="phase-title">Fase 1 &mdash; Fundamento: O que é refatoração?</div>
+    <p style="margin: 8px 0 4px;">Imagine que você tem um quarto bagunçado. Tudo funciona &mdash; suas roupas estão lá, seus livros estão lá &mdash; mas encontrar algo demora, e se outra pessoa precisar pegar algo, não vai saber onde está. <strong>Refatoração é arrumar esse quarto.</strong> O quarto continua tendo as mesmas coisas (o código continua fazendo a mesma coisa), mas agora está organizado.</p>
+    <p style="margin-bottom: 4px;"><strong>Quando refatorar, você olha para 3 coisas:</strong></p>
+    <ul style="margin-left: 20px; font-size: 13px;">
+      <li><strong>Legibilidade</strong> &mdash; Se outro desenvolvedor abrir seu código amanhã, ele consegue entender o que cada parte faz sem precisar te perguntar? Se a resposta for "não", o código precisa ser mais claro.</li>
+      <li><strong>Manutenibilidade</strong> &mdash; Se você precisar mudar uma regra de negócio (por exemplo, mudar o formato de validação de email), dá para fazer isso mexendo em um lugar só? Ou você vai precisar caçar essa lógica em 5 arquivos diferentes?</li>
+      <li><strong>Simplicidade</strong> &mdash; Tem trecho de código que aparece copiado e colado em vários lugares? Tem funções gigantes que fazem 10 coisas ao mesmo tempo? Tem variáveis com nomes genéricos como <code>data</code> ou <code>x</code> que não dizem nada sobre o que guardam?</li>
+    </ul>
+    <p style="margin: 8px 0 0;"><strong>Sinais de que um código precisa de refatoração</strong> (chamados de "Code Smells" &mdash; literalmente "cheiro ruim no código"):</p>
+    <ul style="margin-left: 20px; font-size: 13px;">
+      <li>Uma função que tem mais de 30 linhas &mdash; provavelmente está fazendo coisas demais e deveria ser dividida em funções menores</li>
+      <li>Variáveis com nomes que não explicam nada: <code>data</code>, <code>result</code>, <code>temp</code>, <code>x</code> &mdash; troque por nomes que dizem o que guardam, como <code>usuario</code>, <code>lista_produtos</code>, <code>email_validado</code></li>
+      <li>Blocos de código iguais que aparecem em mais de um lugar &mdash; se você precisa mudar essa lógica, vai ter que lembrar de mudar em todos os lugares (e vai esquecer algum)</li>
+      <li>Um único arquivo que faz tudo: recebe requisição, valida dados, acessa o banco, retorna resposta &mdash; como uma cozinha onde a mesma pessoa lava, corta, cozinha e serve ao mesmo tempo</li>
+    </ul>
+  </div>
+
+  <div class="phase phase-2" style="margin-bottom: 16px;">
+    <div class="phase-title">Fase 2 &mdash; Exemplo Guiado: Refatorando uma API</div>
+    <p style="margin: 8px 0;">Observe este código &mdash; funciona, mas tem problemas. Consegue identificar quais?</p>
+
+<pre><span class="comment"># ANTES: tudo junto, nomes genéricos, lógica repetida</span>
+<span class="keyword">from</span> fastapi <span class="keyword">import</span> FastAPI
+app = FastAPI()
+
+@app.post(<span class="string">"/users"</span>)
+<span class="keyword">def</span> <span class="function">create</span>(data: dict):
+    <span class="keyword">if</span> <span class="keyword">not</span> data.get(<span class="string">"name"</span>) <span class="keyword">or</span> len(data[<span class="string">"name"</span>]) < 2:
+        <span class="keyword">return</span> {<span class="string">"error"</span>: <span class="string">"nome inválido"</span>}
+    <span class="keyword">if</span> <span class="keyword">not</span> data.get(<span class="string">"email"</span>) <span class="keyword">or</span> <span class="string">"@"</span> <span class="keyword">not in</span> data[<span class="string">"email"</span>]:
+        <span class="keyword">return</span> {<span class="string">"error"</span>: <span class="string">"email inválido"</span>}
+    <span class="comment"># salva no banco... (imagina 50 linhas aqui)</span>
+    <span class="keyword">return</span> {<span class="string">"ok"</span>: True}
+
+@app.put(<span class="string">"/users/{id}"</span>)
+<span class="keyword">def</span> <span class="function">update</span>(id: int, data: dict):
+    <span class="keyword">if</span> <span class="keyword">not</span> data.get(<span class="string">"name"</span>) <span class="keyword">or</span> len(data[<span class="string">"name"</span>]) < 2:   <span class="bad"># &larr; repetido!</span>
+        <span class="keyword">return</span> {<span class="string">"error"</span>: <span class="string">"nome inválido"</span>}
+    <span class="keyword">if</span> <span class="keyword">not</span> data.get(<span class="string">"email"</span>) <span class="keyword">or</span> <span class="string">"@"</span> <span class="keyword">not in</span> data[<span class="string">"email"</span>]:  <span class="bad"># &larr; repetido!</span>
+        <span class="keyword">return</span> {<span class="string">"error"</span>: <span class="string">"email inválido"</span>}
+    <span class="comment"># atualiza no banco...</span>
+    <span class="keyword">return</span> {<span class="string">"ok"</span>: True}</pre>
+
+    <p style="margin: 8px 0;"><strong>Problemas identificados:</strong> (1) validação duplicada, (2) nomes genéricos (<code>data</code>, <code>create</code>), (3) sem tipagem, (4) tudo no mesmo arquivo.</p>
+
+<pre><span class="comment"># DEPOIS: responsabilidades separadas, nomes claros, sem repetição</span>
+
+<span class="comment"># schemas.py</span>
+<span class="keyword">from</span> pydantic <span class="keyword">import</span> BaseModel, EmailStr
+
+<span class="keyword">class</span> <span class="function">UserCreate</span>(BaseModel):    <span class="good"># &larr; Pydantic valida automaticamente</span>
+    name: str
+    email: EmailStr
+
+<span class="comment"># routers/users.py</span>
+<span class="keyword">from</span> schemas <span class="keyword">import</span> UserCreate
+
+@router.post(<span class="string">"/users"</span>)
+<span class="keyword">def</span> <span class="function">create_user</span>(user: UserCreate):  <span class="good"># &larr; nome claro + tipado</span>
+    <span class="keyword">return</span> user_service.create(user)
+
+@router.put(<span class="string">"/users/{user_id}"</span>)
+<span class="keyword">def</span> <span class="function">update_user</span>(user_id: int, user: UserCreate):
+    <span class="keyword">return</span> user_service.update(user_id, user)</pre>
+
+    <p style="margin: 4px 0 0;"><strong>O que melhorou:</strong> validação em um lugar só (Pydantic), nomes descritivos, arquivo separado para schemas. Zero lógica repetida.</p>
+  </div>
+
+  <div class="task-box">
+    <div class="task-box-title">Exercício Solo &mdash; Sua tarefa da semana</div>
+    <ol>
+      <li><strong>Crie um repositório</strong> no GitHub chamado <code>fedcorp-exercicios</code></li>
+      <li><strong>Crie a pasta</strong> <code>semana-01-refatoracao/</code></li>
+      <li>Dentro, crie um arquivo <code>antes.py</code> com o seguinte cenário: uma API FastAPI de <strong>gerenciamento de produtos</strong> (criar, listar, atualizar, deletar) com tudo em um único arquivo, validações repetidas, nomes genéricos e sem tipagem</li>
+      <li><strong>Refatore</strong> para arquivos separados: <code>schemas.py</code>, <code>routers/products.py</code>, <code>services/product_service.py</code></li>
+      <li>Crie um arquivo <code>decisoes.md</code> explicando: quais problemas você identificou, o que você mudou, e <strong>por que cada mudança melhora o código</strong></li>
+    </ol>
+    <p class="small" style="margin: 8px 0 0;"><strong>Dica com IA (Nível 1):</strong> Se travar, pergunte ao ChatGPT: <em>"Tenho uma API FastAPI com tudo em um arquivo só. Quais são os primeiros passos para refatorar em módulos separados?"</em></p>
+  </div>
+
+  <div class="card" style="margin-top: 16px;">
+    <p class="bold text-primary mb-4">Recursos complementares &mdash; Semana 1</p>
+    <ul style="font-size: 13px; padding-left: 20px;">
+      <li><strong>Vídeo:</strong> "Refactoring Python Code" &mdash; ArjanCodes (YouTube, ~20min)</li>
+      <li><strong>Leitura:</strong> "Clean Code" de Robert Martin &mdash; Capítulo 3: Funções (resumo disponível online)</li>
+      <li><strong>Referência rápida:</strong> Documentação oficial do Pydantic &mdash; seção "Models"</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ==================== SEMANA 2 ==================== -->
+<div class="page page-break">
+  <h2><span class="section-number">4</span> Semana 2 &mdash; Testes Automatizados com pytest</h2>
+  <p class="small" style="margin-bottom:16px;">Garantir que o código funciona &mdash; e continua funcionando &bull; Tempo estimado: 4&ndash;6 horas</p>
+
+  <div class="phase phase-1" style="margin-bottom: 16px;">
+    <div class="phase-title">Fase 1 &mdash; Fundamento: Por que testar?</div>
+    <p style="margin: 8px 0 4px;">Imagine que você corrige um bug na rota de criar usuário. Tudo funciona. Mas será que essa correção não quebrou, sem querer, a rota de atualizar usuário? E a de deletar? Você vai abrir cada uma e testar manualmente toda vez? <strong>Testes automatizados fazem isso por você em segundos.</strong> Você escreve o teste uma vez, e ele roda sozinho toda vez que você mudar alguma coisa no código. Se algo quebrar, o teste avisa na hora.</p>
+
+    <p style="margin: 12px 0 4px;"><strong>A Pirâmide de Testes &mdash; 3 tipos, cada um com um papel diferente:</strong></p>
+    <ul style="margin-left: 20px; font-size: 13px;">
+      <li><strong>Testes Unitários</strong> (a base da pirâmide, onde você vai escrever mais) &mdash; Cada teste unitário pega <strong>uma única função</strong> e verifica se ela faz o que deveria. Por exemplo: "a função <code>calcular_desconto(100, 10)</code> retorna 90?". São testes rápidos de rodar (milissegundos cada), e você vai escrever <strong>muitos testes desse tipo</strong> &mdash; dezenas ou até centenas em um projeto. Eles formam a base da pirâmide porque são os mais numerosos.</li>
+      <li><strong>Testes de Integração</strong> (o meio da pirâmide) &mdash; Aqui você testa <strong>duas ou mais partes funcionando juntas</strong>. Por exemplo: "quando eu chamo a rota POST /usuarios, ela realmente salva o usuário no banco de dados?". Esses testes são <strong>mais lentos de rodar</strong> do que os unitários (porque precisam conectar no banco, por exemplo), então você escreve <strong>menos testes desse tipo</strong> do que testes unitários. Mas eles são essenciais para garantir que as peças se encaixam.</li>
+      <li><strong>Testes E2E (end-to-end)</strong> (o topo da pirâmide) &mdash; Testam <strong>o sistema inteiro</strong>, do começo ao fim, como se fosse um usuário real usando o software. Por exemplo: "o usuário abre o navegador, faz login, cria um produto, e o produto aparece na lista". Esses testes são <strong>lentos de rodar</strong> (podem levar minutos) e são mais difíceis de manter, então você escreve <strong>poucos testes desse tipo</strong> &mdash; só para os fluxos mais importantes.</li>
+    </ul>
+
+    <p style="margin: 12px 0 4px;"><strong>Como escrever um teste &mdash; o padrão AAA (3 passos simples):</strong></p>
+    <p style="font-size: 13px; margin-bottom: 4px;">Todo teste segue a mesma estrutura, sempre nessa ordem:</p>
+    <ul style="margin-left: 20px; font-size: 13px;">
+      <li><strong>Arrange (Preparar)</strong> &mdash; Primeiro, você monta o cenário. Cria os dados que vai usar no teste. Exemplo: "vou testar desconto de 10% num produto de R$100, então preciso dessas duas variáveis prontas".</li>
+      <li><strong>Act (Agir)</strong> &mdash; Depois, você executa a ação que quer testar. Chama a função, faz a requisição, dispara o evento. Exemplo: "chamo a função <code>calcular_desconto(100, 10)</code>".</li>
+      <li><strong>Assert (Verificar)</strong> &mdash; Por último, você verifica se o resultado é o que você esperava. Exemplo: "o resultado deveria ser 90.0 &mdash; se for diferente, o teste falha e avisa que algo está errado".</li>
+    </ul>
+  </div>
+
+  <div class="phase phase-2" style="margin-bottom: 16px;">
+    <div class="phase-title">Fase 2 &mdash; Exemplo Guiado: Testando com pytest</div>
+    <p style="margin: 8px 0;">Vamos ver como um teste funciona na prática. Primeiro, temos uma função simples que calcula desconto. Depois, escrevemos 3 testes para garantir que ela funciona em diferentes situações:</p>
+
+<pre><span class="comment"># Função que queremos testar</span>
+<span class="keyword">def</span> <span class="function">calcular_desconto</span>(preco: float, percentual: float) -> float:
+    <span class="keyword">if</span> percentual < 0 <span class="keyword">or</span> percentual > 100:
+        <span class="keyword">raise</span> ValueError(<span class="string">"Percentual deve ser entre 0 e 100"</span>)
+    <span class="keyword">return</span> round(preco - (preco * percentual / 100), 2)
+
+<span class="comment"># Testes</span>
+<span class="keyword">def</span> <span class="function">test_desconto_normal</span>():
+    <span class="comment"># Arrange</span>
+    preco = 100.0
+    percentual = 10.0
+    <span class="comment"># Act</span>
+    resultado = calcular_desconto(preco, percentual)
+    <span class="comment"># Assert</span>
+    <span class="keyword">assert</span> resultado == 90.0   <span class="good"># &larr; cenário feliz</span>
+
+<span class="keyword">def</span> <span class="function">test_desconto_zero</span>():
+    <span class="keyword">assert</span> calcular_desconto(100.0, 0) == 100.0  <span class="good"># &larr; edge case</span>
+
+<span class="keyword">def</span> <span class="function">test_desconto_invalido</span>():
+    <span class="keyword">with</span> pytest.raises(ValueError):  <span class="good"># &larr; testa o erro</span>
+        calcular_desconto(100.0, -5)</pre>
+
+    <p style="margin: 4px 0 0;"><strong>Perceba o que fizemos:</strong> escrevemos 3 testes, cada um testando uma situação diferente. O primeiro testa o <strong>cenário normal</strong> (desconto de 10% em R$100 &mdash; deveria dar R$90). O segundo testa um <strong>edge case</strong>, que é uma situação incomum mas possível (desconto de 0% &mdash; o preço deveria continuar igual). O terceiro testa uma <strong>situação de erro</strong> (desconto negativo &mdash; deveria dar erro, não um resultado absurdo). Com esses 3 testes, você tem 3 certezas de que a função funciona corretamente.</p>
+  </div>
+
+  <div class="task-box">
+    <div class="task-box-title">Exercício Solo &mdash; Sua tarefa da semana</div>
+    <ol>
+      <li>Crie a pasta <code>semana-02-testes/</code> no seu repositório</li>
+      <li>Crie o arquivo <code>utils.py</code> com estas 3 funções:
+        <ul style="font-size: 12px; margin-top: 4px;">
+          <li><code>validar_cpf(cpf: str) -> bool</code> &mdash; valida formato e dígitos</li>
+          <li><code>formatar_moeda(valor: float) -> str</code> &mdash; retorna "R$ 1.234,56"</li>
+          <li><code>calcular_idade(data_nascimento: str) -> int</code> &mdash; recebe "YYYY-MM-DD"</li>
+        </ul>
+      </li>
+      <li>Crie o arquivo <code>test_utils.py</code> com <strong>pelo menos 10 testes</strong> cobrindo:
+        <ul style="font-size: 12px; margin-top: 4px;">
+          <li>Cenários normais (dados válidos)</li>
+          <li>Edge cases (CPF com pontos, valor zero, data de hoje)</li>
+          <li>Cenários de erro (CPF inválido, data futura, valor negativo)</li>
+        </ul>
+      </li>
+      <li>Rode com <code>pytest -v</code> e tire um print da saída</li>
+      <li>Crie <code>decisoes.md</code>: por que escolheu esses cenários de teste?</li>
+    </ol>
+    <p class="small" style="margin: 8px 0 0;"><strong>Dica com IA:</strong> <em>"Quais edge cases devo considerar ao testar uma função de validação de CPF em Python?"</em></p>
+  </div>
+
+  <div class="card" style="margin-top: 16px;">
+    <p class="bold text-primary mb-4">Recursos complementares &mdash; Semana 2</p>
+    <ul style="font-size: 13px; padding-left: 20px;">
+      <li><strong>Vídeo:</strong> "Pytest Tutorial" &mdash; TechWithTim ou ArjanCodes (YouTube, ~30min)</li>
+      <li><strong>Leitura:</strong> Documentação oficial do pytest &mdash; "Getting Started"</li>
+      <li><strong>Referência rápida:</strong> FastAPI Testing docs &mdash; seção "Testing" com TestClient</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ==================== SEMANA 3 ==================== -->
+<div class="page page-break">
+  <h2><span class="section-number">5</span> Semana 3 &mdash; TypeScript: Introdução para quem vem do Python</h2>
+  <p class="small" style="margin-bottom:16px;">Expandindo para o frontend com tipagem &bull; Tempo estimado: 4&ndash;6 horas</p>
+
+  <div class="phase phase-1" style="margin-bottom: 16px;">
+    <div class="phase-title">Fase 1 &mdash; Fundamento: Python tem type hints. TypeScript é o mesmo conceito, só que obrigatório.</div>
+    <p style="margin: 8px 0;">Você já conhece Python, então vou explicar TypeScript como uma <strong>tradução</strong> do que você já sabe. No Python, você pode colocar "type hints" &mdash; aquelas anotações que dizem "essa variável é uma string" ou "essa função retorna um int". Mas no Python, essas anotações são <strong>opcionais</strong>: se você não colocar, o código roda do mesmo jeito. No TypeScript, é diferente: as anotações de tipo são <strong>obrigatórias</strong>. Se você tentar passar um texto onde era para ser um número, o código <strong>nem compila</strong> &mdash; o editor já mostra o erro antes de você rodar qualquer coisa. Isso parece chato no começo, mas na prática evita muitos bugs que você só descobriria em produção.</p>
+
+    <p style="margin: 8px 0 4px;">Veja como a <strong>mesma função</strong> fica nas duas linguagens &mdash; a lógica é idêntica, só muda a forma de escrever:</p>
+
+<pre><span class="comment"># Python (type hints opcionais &mdash; o código roda mesmo sem eles)</span>
+<span class="keyword">def</span> <span class="function">somar</span>(a: int, b: int) -> int:
+    <span class="keyword">return</span> a + b
+
+<span class="comment">// TypeScript (tipos obrigatórios &mdash; sem eles, o código não compila)</span>
+<span class="keyword">function</span> <span class="function">somar</span>(a: <span class="string">number</span>, b: <span class="string">number</span>): <span class="string">number</span> {
+    <span class="keyword">return</span> a + b;
+}</pre>
+
+    <p style="margin: 8px 0 4px;"><strong>Tabela de tradução Python &rarr; TypeScript:</strong></p>
+    <p style="font-size: 13px; margin-bottom: 4px;">Use esta tabela como um "dicionário" quando estiver lendo ou escrevendo código TypeScript. A coluna do meio mostra como o mesmo tipo se chama no TypeScript, e a coluna da direita mostra um exemplo real de como usar.</p>
+    <table style="font-size: 12px;">
+      <tr><th>No Python você escreve</th><th>No TypeScript vira</th><th>Exemplo prático em TypeScript</th></tr>
+      <tr><td><code>str</code> (texto)</td><td><code>string</code></td><td><code>let nome: string = "Leo"</code></td></tr>
+      <tr><td><code>int</code> ou <code>float</code> (número)</td><td><code>number</code> (um tipo só para qualquer número)</td><td><code>let idade: number = 25</code></td></tr>
+      <tr><td><code>bool</code> (verdadeiro/falso)</td><td><code>boolean</code></td><td><code>let ativo: boolean = true</code></td></tr>
+      <tr><td><code>list[str]</code> (lista de textos)</td><td><code>string[]</code> (o <code>[]</code> indica que é uma lista)</td><td><code>let nomes: string[] = ["Ana","Leo"]</code></td></tr>
+      <tr><td><code>dict</code> ou <code>TypedDict</code> (dicionário com estrutura definida)</td><td><code>interface</code> (define a "forma" de um objeto)</td><td>Ver exemplo na Fase 2 abaixo</td></tr>
+      <tr><td><code>Optional[str]</code> (pode ser texto ou vazio)</td><td><code>string | undefined</code> (ou adicionar <code>?</code> no campo)</td><td><code>let bio?: string</code> (o <code>?</code> significa "esse campo é opcional")</td></tr>
+    </table>
+  </div>
+
+  <div class="phase phase-2" style="margin-bottom: 16px;">
+    <div class="phase-title">Fase 2 &mdash; Exemplo Guiado: Interfaces e Componentes React</div>
+    <p style="margin: 8px 0;">Agora vamos ver como o TypeScript funciona junto com o React. No código abaixo, primeiro definimos a "forma" dos dados (usando <code>interface</code>, que é o equivalente ao <code>BaseModel</code> do Pydantic), e depois criamos um componente React que recebe esses dados já tipados:</p>
+
+<pre><span class="comment">// Definindo a forma dos dados (como um Pydantic model)</span>
+<span class="keyword">interface</span> <span class="function">Usuario</span> {
+    id: <span class="string">number</span>;
+    nome: <span class="string">string</span>;
+    email: <span class="string">string</span>;
+    bio?: <span class="string">string</span>;  <span class="comment">// &larr; opcional (como Optional no Python)</span>
+}
+
+<span class="comment">// Componente React que recebe um usuário como prop</span>
+<span class="keyword">interface</span> <span class="function">CardProps</span> {
+    usuario: Usuario;
+    onEditar: (id: <span class="string">number</span>) => <span class="string">void</span>;
+}
+
+<span class="keyword">function</span> <span class="function">UserCard</span>({ usuario, onEditar }: CardProps) {
+    <span class="keyword">return</span> (
+        &lt;div&gt;
+            &lt;h3&gt;{usuario.nome}&lt;/h3&gt;
+            &lt;p&gt;{usuario.email}&lt;/p&gt;
+            {usuario.bio && &lt;p&gt;{usuario.bio}&lt;/p&gt;}
+            &lt;button onClick={() =&gt; onEditar(usuario.id)}&gt;
+                Editar
+            &lt;/button&gt;
+        &lt;/div&gt;
+    );
+}</pre>
+    <p style="margin: 4px 0 0;"><strong>Perceba a conexão com Python:</strong> a <code>interface</code> no TypeScript faz o mesmo papel do <code>BaseModel</code> do Pydantic no Python &mdash; ela define a "forma" dos dados, ou seja, quais campos existem e de que tipo são. A diferença é que no TypeScript, se você esquecer de passar o campo <code>email</code> ou passar um número onde deveria ser texto, o editor já mostra o erro <strong>antes de você rodar o código</strong>. É como se o Pydantic rodasse automaticamente enquanto você escreve, em vez de só na hora de executar.</p>
+  </div>
+
+  <div class="task-box">
+    <div class="task-box-title">Exercício Solo &mdash; Sua tarefa da semana</div>
+    <ol>
+      <li>Crie a pasta <code>semana-03-typescript/</code></li>
+      <li>Crie o arquivo <code>tipos.ts</code> com:
+        <ul style="font-size: 12px; margin-top: 4px;">
+          <li>Uma interface <code>Produto</code> com: id, nome, preço, categoria, estoque (opcional)</li>
+          <li>Uma interface <code>Pedido</code> com: id, produtos (lista), cliente (string), total, status (use <em>union type</em>: "pendente" | "pago" | "enviado")</li>
+          <li>Uma função <code>calcularTotal(produtos: Produto[]): number</code></li>
+        </ul>
+      </li>
+      <li>Converta estas 3 funções JavaScript para TypeScript (crie <code>conversao.ts</code>):
+        <ul style="font-size: 12px; margin-top: 4px;">
+          <li><code>function filtrarAtivos(users)</code> &rarr; tipar entrada e saída</li>
+          <li><code>function buscarPorId(lista, id)</code> &rarr; tipar com generics ou interface</li>
+          <li><code>function formatarEndereco(obj)</code> &rarr; criar interface para o objeto</li>
+        </ul>
+      </li>
+      <li>Crie <code>decisoes.md</code>: compare com Python &mdash; o que é mais fácil? O que é diferente?</li>
+    </ol>
+    <p class="small" style="margin: 8px 0 0;"><strong>Dica com IA:</strong> <em>"Sou dev Python e estou aprendendo TypeScript. Como faço o equivalente a um TypedDict do Python em TypeScript?"</em></p>
+  </div>
+
+  <div class="card" style="margin-top: 16px;">
+    <p class="bold text-primary mb-4">Recursos complementares &mdash; Semana 3</p>
+    <ul style="font-size: 13px; padding-left: 20px;">
+      <li><strong>Vídeo:</strong> "TypeScript Tutorial for Beginners" &mdash; Traversy Media (YouTube, ~1h)</li>
+      <li><strong>Leitura:</strong> TypeScript Handbook oficial &mdash; seções "Everyday Types" e "Object Types"</li>
+      <li><strong>Interativo:</strong> TypeScript Playground (typescriptlang.org/play) &mdash; teste código TS no navegador</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ==================== SEMANA 4 ==================== -->
+<div class="page page-break">
+  <h2><span class="section-number">6</span> Semana 4 &mdash; Arquitetura Básica: Organizando um Projeto</h2>
+  <p class="small" style="margin-bottom:16px;">A ponte entre "funciona" e "escalável" &bull; Tempo estimado: 4&ndash;6 horas</p>
+
+  <div class="phase phase-1" style="margin-bottom: 16px;">
+    <div class="phase-title">Fase 1 &mdash; Fundamento: Separação de responsabilidades</div>
+    <p style="margin: 8px 0;">Imagine uma cozinha industrial. Tem a bancada de preparo (onde cortam os ingredientes), o fogão (onde cozinham), a área de montagem (onde montam o prato) e a expedição (onde entregam pro garçom). Cada área tem <strong>uma função específica</strong>, e as pessoas de cada área só se preocupam com o seu trabalho. O cara que corta os ingredientes não precisa saber como o garçom serve a mesa. Se a bancada vira uma bagunça, o prato inteiro atrasa &mdash; mas pelo menos você sabe exatamente <strong>onde</strong> o problema está.</p>
+
+    <p style="margin: 8px 0 4px;">No código é a mesma ideia. Em vez de jogar tudo num arquivo só (o que seria como uma cozinha onde a mesma pessoa corta, cozinha, monta e serve), você separa o código em <strong>4 camadas</strong>, cada uma com uma responsabilidade única:</p>
+
+    <table style="font-size: 12px;">
+      <tr><th>Camada</th><th>O que ela faz (e só isso)</th><th>Arquivo no projeto</th></tr>
+      <tr><td><strong>Router</strong> (também chamado de Controller)</td><td>É a "porta de entrada". Recebe a requisição HTTP que chega do cliente (por exemplo, "POST /usuarios"), e repassa para a camada de Service processar. O Router <strong>não faz lógica nenhuma</strong> &mdash; ele só recebe e entrega.</td><td><code>routers/users.py</code></td></tr>
+      <tr><td><strong>Service</strong></td><td>É o "cérebro". Aqui ficam as <strong>regras de negócio</strong>: validações, cálculos, decisões. Por exemplo: "o usuário pode criar mais de 5 pedidos por dia?" é uma pergunta que o Service responde. Ele não sabe como os dados chegam (isso é do Router) nem como são salvos (isso é do Repository).</td><td><code>services/user_service.py</code></td></tr>
+      <tr><td><strong>Repository</strong></td><td>É o "armazém". Essa camada <strong>só fala com o banco de dados</strong>: salvar, buscar, atualizar, deletar. Se amanhã você trocar de PostgreSQL para MongoDB, só essa camada muda &mdash; o resto do código nem percebe.</td><td><code>repositories/user_repo.py</code></td></tr>
+      <tr><td><strong>Schema</strong> (também chamado de Model)</td><td>É o "contrato". Define <strong>a forma dos dados</strong>: quais campos existem, qual o tipo de cada um, quais são obrigatórios. No Python com FastAPI, você usa Pydantic para isso. É como um formulário que diz "nome: texto obrigatório, email: texto obrigatório, idade: número opcional".</td><td><code>schemas/user.py</code></td></tr>
+    </table>
+
+    <p style="margin: 8px 0 0;"><strong>Por que separar em camadas?</strong> Porque se precisar trocar o banco de dados, você só mexe no Repository &mdash; o Service e o Router continuam funcionando sem mudar uma linha. Se precisar mudar uma regra de negócio, você só mexe no Service &mdash; o Repository e o Router nem ficam sabendo. Cada camada cuida do seu, e ninguém precisa saber dos detalhes da outra.</p>
+  </div>
+
+  <div class="phase phase-2" style="margin-bottom: 16px;">
+    <div class="phase-title">Fase 2 &mdash; Exemplo Guiado: Estrutura de projeto FastAPI</div>
+    <p style="margin: 8px 0;">Veja como fica a organização de pastas de um projeto FastAPI separado em camadas. Cada pasta contém arquivos de uma única camada. O <code>main.py</code> na raiz só faz uma coisa: iniciar o app e registrar as rotas &mdash; ele não tem lógica nenhuma:</p>
+
+<pre><span class="good">meu-projeto/</span>
+├── main.py              <span class="comment"># só inicializa o app e registra routers</span>
+├── schemas/
+│   └── product.py       <span class="comment"># ProductCreate, ProductResponse</span>
+├── routers/
+│   └── products.py      <span class="comment"># @router.get, @router.post...</span>
+├── services/
+│   └── product_service.py  <span class="comment"># regras de negócio</span>
+├── repositories/
+│   └── product_repo.py  <span class="comment"># queries SQL / ORM</span>
+└── tests/
+    └── test_products.py <span class="comment"># testes da semana 2!</span></pre>
+
+    <p style="margin: 8px 0;"><strong>O caminho que uma requisição percorre (de ponta a ponta):</strong></p>
+    <p style="font-size: 13px; text-align: center; padding: 12px; background: var(--gray-50); border-radius: 6px; line-height: 1.8;">
+      Cliente faz requisição &rarr; <strong>Router</strong> (recebe e repassa) &rarr; <strong>Service</strong> (aplica regras de negócio) &rarr; <strong>Repository</strong> (salva/busca no banco) &rarr; resposta volta o caminho inverso até o cliente
+    </p>
+    <p style="font-size: 13px; margin-top: 4px;">Pense assim: o pedido do cliente passa por cada camada como uma esteira de fábrica. Cada estação faz uma coisa, e o produto final (a resposta) volta pelo mesmo caminho. Se uma estação tiver problema, você sabe exatamente onde ir consertar.</p>
+  </div>
+
+  <div class="task-box">
+    <div class="task-box-title">Exercício Solo &mdash; Sua tarefa da semana</div>
+    <ol>
+      <li>Crie a pasta <code>semana-04-arquitetura/</code></li>
+      <li>Dentro, crie <code>antes/main.py</code>: uma API de <strong>gerenciamento de tarefas</strong> (todo list) com TUDO em um arquivo &mdash; rotas, lógica de negócio, acesso ao banco (pode usar lista em memória), schemas. Pelo menos 4 rotas: criar, listar, atualizar status, deletar.</li>
+      <li>Crie a pasta <code>depois/</code> e reorganize em camadas:
+        <ul style="font-size: 12px; margin-top: 4px;">
+          <li><code>depois/main.py</code> &mdash; só inicializa e registra routers</li>
+          <li><code>depois/schemas/task.py</code> &mdash; Pydantic models</li>
+          <li><code>depois/routers/tasks.py</code> &mdash; só rotas</li>
+          <li><code>depois/services/task_service.py</code> &mdash; lógica de negócio</li>
+          <li><code>depois/repositories/task_repo.py</code> &mdash; acesso aos dados</li>
+        </ul>
+      </li>
+      <li>Crie <code>decisoes.md</code>: desenhe um diagrama simples (pode ser texto) mostrando o fluxo de uma requisição pelas camadas. Explique: se precisar trocar o banco de uma lista em memória para PostgreSQL, o que muda?</li>
+    </ol>
+    <p class="small" style="margin: 8px 0 0;"><strong>Dica com IA:</strong> <em>"Tenho um main.py FastAPI com 4 rotas e toda lógica junta. Me ajude a planejar a separação em camadas (router/service/repository). Não escreva o código, só o plano."</em></p>
+  </div>
+
+  <div class="card" style="margin-top: 16px;">
+    <p class="bold text-primary mb-4">Recursos complementares &mdash; Semana 4</p>
+    <ul style="font-size: 13px; padding-left: 20px;">
+      <li><strong>Vídeo:</strong> "FastAPI Project Structure" &mdash; Eric Roby (YouTube, ~25min)</li>
+      <li><strong>Leitura:</strong> "Clean Architecture" conceito &mdash; pesquisar "Hexagonal Architecture Python" para ver exemplos</li>
+      <li><strong>Referência:</strong> Template oficial do FastAPI &mdash; github.com/fastapi/full-stack-fastapi-template</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ==================== IA NO DIA A DIA ==================== -->
+<div class="page page-break">
+  <h2><span class="section-number">7</span> IA no Dia a Dia &mdash; Como Usar de Forma Inteligente</h2>
+
+  <p>Vamos implementar <strong>Claude Code</strong> e <strong>ChatGPT</strong> como ferramentas do time. Mas existe uma progressão correta &mdash; não é "joga tudo pro AI e aceita o que vier".</p>
+
+  <div class="ai-level level-1">
+    <div class="ai-level-num">1</div>
+    <div>
+      <p class="bold mb-4">Consumidor (Mês 1&ndash;2)</p>
+      <p>Você aprende a fazer perguntas básicas e usar as respostas. Nas atividades, você recebe <strong>prompts prontos</strong> para usar quando travar. Objetivo: quebrar a barreira do "não sei o que perguntar".</p>
+      <p class="small">Exemplo: <em>"Estou refatorando esta função em Python. Quais code smells você identifica?"</em></p>
+    </div>
+  </div>
+
+  <div class="ai-level level-2">
+    <div class="ai-level-num">2</div>
+    <div>
+      <p class="bold mb-4">Colaborador (Mês 3&ndash;4)</p>
+      <p>Você formula seus próprios prompts com contexto: o que já tentou, qual o erro, o que espera. Exercícios incluem comparar prompts bons vs. ruins.</p>
+      <p class="small">Exemplo: <em>"Tenho uma API FastAPI com N+1 queries no endpoint /usuarios. Já tentei eager loading mas o ORM não suporta. Quais alternativas?"</em></p>
+    </div>
+  </div>
+
+  <div class="ai-level level-3">
+    <div class="ai-level-num">3</div>
+    <div>
+      <p class="bold mb-4">Diretor (Mês 5&ndash;6)</p>
+      <p>Você sabe quando <strong>não confiar</strong> no AI. Consegue identificar respostas subótimas, corrigir sugestões, e usar a IA para acelerar &mdash; não para substituir seu raciocínio.</p>
+      <p class="small">Exemplo: <em>"O Claude sugeriu usar global state aqui, mas isso viola o princípio de isolamento. Vou pedir uma alternativa com dependency injection."</em></p>
+    </div>
+  </div>
+
+  <div class="card card-yellow">
+    <p class="bold" style="margin-bottom:8px;">Regra de ouro:</p>
+    <p style="margin-bottom:0;">Se você não consegue explicar <strong>por que</strong> o código que a IA gerou funciona, você ainda não entendeu. Volte ao fundamento e tente de novo.</p>
+  </div>
+
+  <h3>Como usar IA nos exercícios deste plano</h3>
+  <table>
+    <tr><th>Situação</th><th>Pode usar IA?</th><th>Como</th></tr>
+    <tr>
+      <td>Travou no exercício</td>
+      <td><span class="tag tag-green">Sim</span></td>
+      <td>Use o prompt sugerido no final de cada exercício</td>
+    </tr>
+    <tr>
+      <td>Quer entender um conceito melhor</td>
+      <td><span class="tag tag-green">Sim</span></td>
+      <td>Pergunte com contexto: "Sou dev Python aprendendo X..."</td>
+    </tr>
+    <tr>
+      <td>Quer que a IA faça o exercício por você</td>
+      <td><span class="tag tag-red">Não</span></td>
+      <td>O objetivo é <strong>você</strong> aprender, não a IA resolver</td>
+    </tr>
+    <tr>
+      <td>Quer comparar sua solução</td>
+      <td><span class="tag tag-green">Sim</span></td>
+      <td>Depois de fazer, peça: "Revise meu código e aponte melhorias"</td>
+    </tr>
+  </table>
+</div>
+
+<!-- ==================== CADÊNCIA ==================== -->
+<div class="page page-break">
+  <h2><span class="section-number">8</span> Como Funciona no Dia a Dia</h2>
+
+  <h3>Cadência Semanal</h3>
+  <p>Este plano é <strong>seu</strong>. Você tem o mapa completo nas mãos &mdash; as 4 semanas, os exercícios, os recursos. A responsabilidade de seguir o plano é sua. Lucas está disponível como consultor para tirar dúvidas e dar feedback, mas <strong>quem conduz é você</strong>.</p>
+  <table>
+    <tr><th>Dia</th><th>O que você faz</th></tr>
+    <tr>
+      <td><strong>Segunda</strong></td>
+      <td>Abrir o tema da semana neste documento e ler o Fundamento com calma</td>
+    </tr>
+    <tr>
+      <td><strong>Terça&ndash;Quinta</strong></td>
+      <td>Trabalhar nas atividades no seu ritmo (Exemplo Guiado + Exercício Solo)</td>
+    </tr>
+    <tr>
+      <td><strong>Terça&ndash;Quinta</strong></td>
+      <td>Se tiver dúvida, trazer pro check-in com Lucas (~30min) &mdash; preparado, com perguntas específicas</td>
+    </tr>
+    <tr>
+      <td><strong>Sexta</strong></td>
+      <td>Retrospectiva: <strong>você apresenta o que aprendeu, com suas palavras</strong></td>
+    </tr>
+  </table>
+
+  <h3>Cadência Mensal e Trimestral</h3>
+  <table>
+    <tr><th>Quando</th><th>O que acontece</th></tr>
+    <tr><td>Semanas 1&ndash;3 de cada mês</td><td>Atividades normais, progressão nos temas</td></tr>
+    <tr><td>Semana 4 de cada mês</td><td>Mini-avaliação: "O que você aprendeu? Me explica o conceito X."</td></tr>
+    <tr><td><strong>Maio/2026</strong></td><td>avaliação inicial (feito!) &rarr; baseline</td></tr>
+    <tr><td><strong>Agosto/2026</strong></td><td>Reaplicar avaliação &rarr; comparar scores &rarr; ajustar trilha</td></tr>
+    <tr><td><strong>Novembro/2026</strong></td><td>Reaplicar avaliação &rarr; meta: score médio 3.0+ (intermediário)</td></tr>
+  </table>
+
+  <h3 style="margin-top: 24px;">Como entregar as atividades</h3>
+  <div class="card card-accent">
+    <p style="margin-bottom: 8px;"><strong>Você é responsável por organizar e entregar. Ninguém vai cobrar &mdash; o progresso é seu.</strong></p>
+    <ul class="checklist">
+      <li>Crie o repositório <code>fedcorp-exercicios</code> no seu GitHub pessoal</li>
+      <li>Cada semana = 1 pasta (<code>semana-01-refatoracao/</code>, <code>semana-02-testes/</code>...)</li>
+      <li>Cada pasta tem: código + <code>decisoes.md</code> explicando suas escolhas</li>
+      <li>Na retrospectiva de sexta, você traz o que fez e explica suas decisões</li>
+      <li>Se travou, anote onde travou e o que tentou &mdash; isso é tão valioso quanto resolver</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ==================== META ==================== -->
+<div class="page page-break">
+  <h2><span class="section-number">9</span> Sua Meta de Evolução</h2>
+
+  <div class="card card-green" style="text-align:center; padding: 32px;">
+    <p style="font-size: 14px; margin-bottom: 8px;">Em 6 meses, o objetivo é você sair de:</p>
+    <p style="font-size: 24px; font-weight: 800; color: var(--primary); margin-bottom: 8px;">
+      Básico (2.7) &rarr; Intermediário (3.5+)
+    </p>
+    <p class="small">Score médio técnico: de 2.71 para 3.5 ou mais</p>
+  </div>
+
+  <h3>O que "intermediário" significa na prática</h3>
+  <table>
+    <tr><th>Competência</th><th>Hoje</th><th>Em 6 meses</th></tr>
+    <tr>
+      <td>Refatoração</td>
+      <td>Sabe que precisa melhorar, mas não sabe por onde</td>
+      <td>Identifica code smells e aplica padrões de melhoria</td>
+    </tr>
+    <tr>
+      <td>Testes</td>
+      <td>Testa "às vezes", sem estratégia</td>
+      <td>Escreve testes unitários como parte natural do trabalho</td>
+    </tr>
+    <tr>
+      <td>TypeScript</td>
+      <td>Já leu sobre, nunca usou de verdade</td>
+      <td>Lê e escreve código TS com confiança</td>
+    </tr>
+    <tr>
+      <td>Arquitetura</td>
+      <td>Tudo funcional mas sem estrutura</td>
+      <td>Organiza projetos em camadas com responsabilidades claras</td>
+    </tr>
+    <tr>
+      <td>Uso de IA</td>
+      <td>Usa ChatGPT para dúvidas pontuais</td>
+      <td>Direciona a IA com prompts específicos e avalia criticamente</td>
+    </tr>
+  </table>
+
+  <h3 style="margin-top: 24px;">Após atingir intermediário &mdash; Temas avançados (Mês 6+)</h3>
+  <p style="font-size: 13px;">Você mencionou interesse em áreas mais avançadas. Elas entram no plano <strong>após</strong> consolidar a base intermediária:</p>
+  <table>
+    <tr><th>Tema</th><th>Por que</th><th>Quando</th></tr>
+    <tr>
+      <td><strong>Django</strong></td>
+      <td>Você quer evoluir em "FastAPI/Django" &mdash; dominar um segundo framework backend amplia empregabilidade</td>
+      <td>Mês 7&ndash;8</td>
+    </tr>
+    <tr>
+      <td><strong>Git Avançado</strong></td>
+      <td>Seu score atual é 3 &mdash; merge, rebase, resolução de conflitos, cherry-pick</td>
+      <td>Mês 5&ndash;6</td>
+    </tr>
+    <tr>
+      <td><strong>IA / Machine Learning</strong></td>
+      <td>Você citou interesse em "Tensorflow, ML e automação" &mdash; tema avançado que exige base sólida primeiro</td>
+      <td>Mês 9+ (após base consolidada)</td>
+    </tr>
+    <tr>
+      <td><strong>Integração de Sistemas</strong></td>
+      <td>Você já tem experiência real (Gateway Firebird) &mdash; formalizar padrões como API Gateway, message queues</td>
+      <td>Mês 7&ndash;8</td>
+    </tr>
+  </table>
+
+  <h3 style="margin-top: 24px;">Seus Compromissos</h3>
+  <div class="card">
+    <ul class="checklist">
+      <li>Dedicar 4&ndash;6h/semana às atividades</li>
+      <li>Entregar os exercícios no GitHub pessoal</li>
+      <li>Participar dos check-ins com honestidade</li>
+      <li>Explicar os conceitos, não só mostrar código</li>
+      <li>Anotar dúvidas e onde travou</li>
+    </ul>
+  </div>
+
+  <div class="quote" style="margin-top: 24px;">
+    Você mencionou na avaliação: "Tenho bastante interesse em evoluir tecnicamente e absorver boas práticas." Este plano é exatamente isso &mdash; um caminho estruturado para sair do "funciona" e chegar no "bem feito". Você já tem a mentalidade certa. Agora é construir a base.
+  </div>
+
+  <div style="text-align: center; margin-top: 40px; padding-top: 20px; border-top: 2px solid var(--gray-200);">
+    <p class="small">Próxima avaliação: <strong>Agosto de 2026</strong></p>
+    <p class="small">Dúvidas? Fale com Lucas no check-in diário ou pelo time.</p>
+  </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Semana 1 - Leonan - Refatoração</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap');
+    :root { --primary: #1e3a5f; --blue: #2563eb; --blue-light: #dbeafe; --green: #16a34a; --green-light: #dcfce7; --orange: #ea580c; --orange-light: #fff7ed; --gray-50: #f8fafc; --gray-100: #f1f5f9; --gray-200: #e2e8f0; --gray-500: #64748b; --gray-700: #334155; --gray-800: #1e293b; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Inter', sans-serif; color: var(--gray-700); line-height: 1.7; background: #fff; }
+    @media print { body { font-size: 10pt; } .page-break { page-break-before: always; } pre { font-size: 8.5pt; } }
+    @media screen { body { max-width: 850px; margin: 0 auto; padding: 20px; background: var(--gray-100); } .page { background: white; padding: 44px; margin-bottom: 20px; border-radius: 10px; box-shadow: 0 1px 3px rgba(0,0,0,.08); } }
+    h1 { font-size: 26px; font-weight: 800; color: var(--primary); margin-bottom: 4px; }
+    h2 { font-size: 20px; font-weight: 700; color: var(--primary); margin-bottom: 16px; padding-bottom: 8px; border-bottom: 2px solid var(--gray-200); }
+    h3 { font-size: 15px; font-weight: 700; color: var(--gray-800); margin: 18px 0 8px; }
+    p { margin-bottom: 10px; font-size: 14px; }
+    pre { background: var(--gray-800); color: #e2e8f0; padding: 16px; border-radius: 8px; overflow-x: auto; font-family: 'Fira Code', monospace; font-size: 12px; line-height: 1.5; margin: 10px 0; }
+    pre .cm { color: #718096; } pre .kw { color: #63b3ed; } pre .st { color: #68d391; } pre .fn { color: #fbd38d; } pre .bad { color: #fc8181; } pre .ok { color: #68d391; }
+    .card { background: var(--gray-50); border: 1px solid var(--gray-200); border-radius: 8px; padding: 18px; margin-bottom: 14px; }
+    .card-blue { background: var(--blue-light); border-left: 4px solid var(--blue); }
+    .card-green { background: var(--green-light); border-left: 4px solid var(--green); }
+    .card-orange { background: var(--orange-light); border-left: 4px solid var(--orange); }
+    .badge { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 11px; font-weight: 700; }
+    .badge-easy { background: var(--green-light); color: #166534; }
+    .badge-mid { background: #fef3c7; color: #92400e; }
+    .badge-hard { background: #fee2e2; color: #991b1b; }
+    .sub { font-size: 14px; color: var(--gray-500); margin-bottom: 24px; }
+    table { width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 13px; }
+    th { background: var(--primary); color: white; padding: 8px 12px; text-align: left; font-size: 12px; }
+    td { padding: 8px 12px; border-bottom: 1px solid var(--gray-200); }
+    tr:nth-child(even) { background: var(--gray-50); }
+    ul { padding-left: 18px; font-size: 13px; margin: 8px 0; }
+    li { margin-bottom: 4px; }
+    .exnum { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 50%; color: white; font-size: 13px; font-weight: 700; margin-right: 8px; }
+    .footer { text-align: center; font-size: 11px; color: var(--gray-500); margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--gray-200); }
+  </style>
+</head>
+<body>
+
+<div class="page">
+  <h1>Semana 1: Refatoração</h1>
+  <p class="sub">Leonan Thomaz de Oliveira. Python / FastAPI. Tempo estimado: 5 a 7 horas.</p>
+
+  <div class="card card-blue">
+    <p><strong>O que é refatoração:</strong> é reorganizar um código que já funciona, sem mudar o que ele faz, para que fique mais fácil de ler, manter e evoluir. Pense em um armário bagunçado: tudo está lá dentro, mas encontrar algo demora. Refatorar é organizar esse armário.</p>
+  </div>
+
+  <h2>Conceitos com exemplos</h2>
+
+  <h3>1. Nomes descritivos</h3>
+  <p>O nome de uma variável ou função deve dizer exatamente o que ela faz ou guarda. Se alguém ler o nome e precisar abrir a função pra entender, o nome está ruim.</p>
+
+<pre><span class="cm"># Ruim: o que é "d"? O que é "proc"? Ninguém sabe sem ler o código inteiro</span>
+<span class="kw">def</span> <span class="fn">proc</span>(d):
+    r = d[<span class="st">"v"</span>] * 0.9
+    <span class="kw">return</span> r
+
+<span class="cm"># Bom: lendo o nome da função e dos parâmetros, você já entende tudo</span>
+<span class="kw">def</span> <span class="fn">calcular_preco_com_desconto</span>(produto: dict) -> float:
+    preco_final = produto[<span class="st">"valor"</span>] * 0.9
+    <span class="kw">return</span> preco_final</pre>
+
+  <h3>2. Funções pequenas com uma responsabilidade</h3>
+  <p>Uma função deve fazer uma coisa só. Se ela valida dados, calcula imposto E salva no banco, ela está fazendo três coisas. Separe em três funções.</p>
+
+<pre><span class="cm"># Ruim: uma função gigante que faz tudo</span>
+<span class="kw">def</span> <span class="fn">criar_pedido</span>(dados):
+    <span class="cm"># valida</span>
+    <span class="kw">if not</span> dados.get(<span class="st">"cliente"</span>):
+        <span class="kw">return</span> {<span class="st">"erro"</span>: <span class="st">"cliente obrigatório"</span>}
+    <span class="kw">if not</span> dados.get(<span class="st">"itens"</span>) <span class="kw">or</span> len(dados[<span class="st">"itens"</span>]) == 0:
+        <span class="kw">return</span> {<span class="st">"erro"</span>: <span class="st">"precisa ter itens"</span>}
+    <span class="cm"># calcula</span>
+    total = 0
+    <span class="kw">for</span> item <span class="kw">in</span> dados[<span class="st">"itens"</span>]:
+        total += item[<span class="st">"preco"</span>] * item[<span class="st">"qtd"</span>]
+    imposto = total * 0.15
+    total_final = total + imposto
+    <span class="cm"># salva (imagina 20 linhas de SQL aqui)</span>
+    db.execute(<span class="st">"INSERT INTO pedidos..."</span>)
+    <span class="kw">return</span> {<span class="st">"total"</span>: total_final}
+
+<span class="cm"># Bom: cada função faz UMA coisa</span>
+<span class="kw">def</span> <span class="fn">validar_pedido</span>(dados: dict) -> None:
+    <span class="kw">if not</span> dados.get(<span class="st">"cliente"</span>):
+        <span class="kw">raise</span> ValueError(<span class="st">"Cliente é obrigatório"</span>)
+    <span class="kw">if not</span> dados.get(<span class="st">"itens"</span>):
+        <span class="kw">raise</span> ValueError(<span class="st">"Pedido precisa ter pelo menos um item"</span>)
+
+<span class="kw">def</span> <span class="fn">calcular_total</span>(itens: list, aliquota: float = 0.15) -> float:
+    subtotal = sum(item[<span class="st">"preco"</span>] * item[<span class="st">"qtd"</span>] <span class="kw">for</span> item <span class="kw">in</span> itens)
+    <span class="kw">return</span> subtotal + (subtotal * aliquota)
+
+<span class="kw">def</span> <span class="fn">salvar_pedido</span>(pedido: dict) -> int:
+    <span class="kw">return</span> db.execute(<span class="st">"INSERT INTO pedidos..."</span>)</pre>
+
+  <h3>3. Eliminar código repetido</h3>
+  <p>Se o mesmo bloco de código aparece em mais de um lugar, extraia para uma função. Se precisar mudar a lógica, vai mudar em um lugar só.</p>
+
+<pre><span class="cm"># Ruim: validação copiada e colada em dois lugares</span>
+@app.post(<span class="st">"/clientes"</span>)
+<span class="kw">def</span> <span class="fn">criar_cliente</span>(data: dict):
+    <span class="kw">if not</span> data.get(<span class="st">"email"</span>) <span class="kw">or</span> <span class="st">"@"</span> <span class="kw">not in</span> data[<span class="st">"email"</span>]:  <span class="bad"># aparece aqui</span>
+        <span class="kw">return</span> {<span class="st">"erro"</span>: <span class="st">"email inválido"</span>}
+    ...
+
+@app.put(<span class="st">"/clientes/{id}"</span>)
+<span class="kw">def</span> <span class="fn">atualizar_cliente</span>(id: int, data: dict):
+    <span class="kw">if not</span> data.get(<span class="st">"email"</span>) <span class="kw">or</span> <span class="st">"@"</span> <span class="kw">not in</span> data[<span class="st">"email"</span>]:  <span class="bad"># e aqui também</span>
+        <span class="kw">return</span> {<span class="st">"erro"</span>: <span class="st">"email inválido"</span>}
+    ...
+
+<span class="cm"># Bom: Pydantic valida automaticamente nos dois endpoints</span>
+<span class="kw">from</span> pydantic <span class="kw">import</span> BaseModel, EmailStr
+
+<span class="kw">class</span> <span class="fn">ClienteBase</span>(BaseModel):
+    nome: str
+    email: EmailStr  <span class="ok"># valida formato de email automaticamente</span>
+
+@app.post(<span class="st">"/clientes"</span>)
+<span class="kw">def</span> <span class="fn">criar_cliente</span>(cliente: ClienteBase):  <span class="ok"># validação automática</span>
+    ...
+
+@app.put(<span class="st">"/clientes/{id}"</span>)
+<span class="kw">def</span> <span class="fn">atualizar_cliente</span>(id: int, cliente: ClienteBase):  <span class="ok"># mesma validação</span>
+    ...</pre>
+
+  <h3>4. Separar em arquivos por responsabilidade</h3>
+  <p>Quando tudo está em um arquivo só, qualquer mudança no código pode afetar qualquer parte. Separar em arquivos isola as responsabilidades: quem cuida dos dados fica em um arquivo, quem cuida das rotas fica em outro, quem cuida da lógica fica em outro.</p>
+
+<pre><span class="ok">meu_projeto/</span>
+├── main.py              <span class="cm"># só inicia o app e registra as rotas</span>
+├── schemas/
+│   └── cliente.py       <span class="cm"># define a forma dos dados (Pydantic)</span>
+├── routers/
+│   └── clientes.py      <span class="cm"># recebe as requisições HTTP</span>
+├── services/
+│   └── cliente_service.py   <span class="cm"># regras de negócio</span>
+└── repositories/
+    └── cliente_repo.py  <span class="cm"># fala com o banco de dados</span></pre>
+</div>
+
+<!-- ==================== EXERCÍCIOS ==================== -->
+<div class="page page-break">
+  <h2>Exercícios da Semana</h2>
+  <p>Três exercícios, do mais simples ao mais completo. Faça todos. Cada um constrói em cima do anterior.</p>
+
+  <!-- EXERCÍCIO 1 -->
+  <div class="card" style="margin-top: 16px;">
+    <h3 style="margin-top: 0;"><span class="exnum" style="background: var(--green);">1</span> Exercício Fácil: Nomes e funções pequenas <span class="badge badge-easy">Fácil</span></h3>
+    <p>Refatore o código abaixo. Não mude o que ele faz, só melhore a organização.</p>
+
+<pre><span class="cm"># Arquivo: exercicio1_antes.py</span>
+<span class="cm"># Sistema de cálculo de frete (tudo bagunçado)</span>
+
+<span class="kw">def</span> <span class="fn">calc</span>(p, d, t):
+    <span class="kw">if</span> t == <span class="st">"normal"</span>:
+        v = p * 0.05
+    <span class="kw">elif</span> t == <span class="st">"expresso"</span>:
+        v = p * 0.12
+    <span class="kw">elif</span> t == <span class="st">"gratis"</span>:
+        <span class="kw">if</span> p > 200:
+            v = 0
+        <span class="kw">else</span>:
+            v = p * 0.05
+    <span class="kw">else</span>:
+        v = p * 0.05
+    <span class="kw">if</span> d > 500:
+        v = v + 15
+    <span class="kw">return</span> round(v, 2)
+
+<span class="cm"># Testes rápidos</span>
+print(calc(100, 200, <span class="st">"normal"</span>))    <span class="cm"># deve dar 5.0</span>
+print(calc(100, 600, <span class="st">"expresso"</span>))  <span class="cm"># deve dar 27.0</span>
+print(calc(300, 100, <span class="st">"gratis"</span>))    <span class="cm"># deve dar 0</span></pre>
+
+    <p><strong>O que fazer:</strong></p>
+    <ul>
+      <li>Renomear a função e os parâmetros para nomes que façam sentido</li>
+      <li>Separar a lógica de "calcular taxa por tipo" em uma função própria</li>
+      <li>Separar a lógica de "adicionar custo por distância" em outra função</li>
+      <li>Os testes rápidos devem continuar funcionando com os mesmos resultados</li>
+    </ul>
+    <p><strong>Entregar:</strong> <code>exercicio1_antes.py</code> (código original) e <code>exercicio1_depois.py</code> (código refatorado)</p>
+  </div>
+
+  <!-- EXERCÍCIO 2 -->
+  <div class="card" style="margin-top: 16px;">
+    <h3 style="margin-top: 0;"><span class="exnum" style="background: var(--orange);">2</span> Exercício Intermediário: Eliminar repetição com Pydantic <span class="badge badge-mid">Intermediário</span></h3>
+    <p>O código abaixo é uma API FastAPI de gerenciamento de funcionários. Funciona, mas tem validação repetida, nomes confusos e tudo num arquivo só. Refatore.</p>
+
+<pre><span class="cm"># Arquivo: exercicio2_antes.py</span>
+<span class="kw">from</span> fastapi <span class="kw">import</span> FastAPI
+app = FastAPI()
+
+funcionarios = []
+next_id = 1
+
+@app.post(<span class="st">"/func"</span>)
+<span class="kw">def</span> <span class="fn">add</span>(d: dict):
+    <span class="kw">global</span> next_id
+    <span class="kw">if not</span> d.get(<span class="st">"nome"</span>) <span class="kw">or</span> len(d[<span class="st">"nome"</span>]) < 2:
+        <span class="kw">return</span> {<span class="st">"e"</span>: <span class="st">"nome invalido"</span>}
+    <span class="kw">if not</span> d.get(<span class="st">"cargo"</span>):
+        <span class="kw">return</span> {<span class="st">"e"</span>: <span class="st">"cargo obrigatorio"</span>}
+    <span class="kw">if not</span> d.get(<span class="st">"salario"</span>) <span class="kw">or</span> d[<span class="st">"salario"</span>] <= 0:
+        <span class="kw">return</span> {<span class="st">"e"</span>: <span class="st">"salario invalido"</span>}
+    f = {<span class="st">"id"</span>: next_id, <span class="st">"nome"</span>: d[<span class="st">"nome"</span>], <span class="st">"cargo"</span>: d[<span class="st">"cargo"</span>], <span class="st">"salario"</span>: d[<span class="st">"salario"</span>], <span class="st">"ativo"</span>: True}
+    funcionarios.append(f)
+    next_id += 1
+    <span class="kw">return</span> f
+
+@app.get(<span class="st">"/func"</span>)
+<span class="kw">def</span> <span class="fn">listar</span>():
+    <span class="kw">return</span> funcionarios
+
+@app.put(<span class="st">"/func/{id}"</span>)
+<span class="kw">def</span> <span class="fn">edit</span>(id: int, d: dict):
+    <span class="kw">for</span> f <span class="kw">in</span> funcionarios:
+        <span class="kw">if</span> f[<span class="st">"id"</span>] == id:
+            <span class="kw">if not</span> d.get(<span class="st">"nome"</span>) <span class="kw">or</span> len(d[<span class="st">"nome"</span>]) < 2:   <span class="bad"># repetido!</span>
+                <span class="kw">return</span> {<span class="st">"e"</span>: <span class="st">"nome invalido"</span>}
+            <span class="kw">if not</span> d.get(<span class="st">"cargo"</span>):                         <span class="bad"># repetido!</span>
+                <span class="kw">return</span> {<span class="st">"e"</span>: <span class="st">"cargo obrigatorio"</span>}
+            <span class="kw">if not</span> d.get(<span class="st">"salario"</span>) <span class="kw">or</span> d[<span class="st">"salario"</span>] <= 0:   <span class="bad"># repetido!</span>
+                <span class="kw">return</span> {<span class="st">"e"</span>: <span class="st">"salario invalido"</span>}
+            f[<span class="st">"nome"</span>] = d[<span class="st">"nome"</span>]
+            f[<span class="st">"cargo"</span>] = d[<span class="st">"cargo"</span>]
+            f[<span class="st">"salario"</span>] = d[<span class="st">"salario"</span>]
+            <span class="kw">return</span> f
+    <span class="kw">return</span> {<span class="st">"e"</span>: <span class="st">"nao achei"</span>}
+
+@app.delete(<span class="st">"/func/{id}"</span>)
+<span class="kw">def</span> <span class="fn">rm</span>(id: int):
+    <span class="kw">for</span> f <span class="kw">in</span> funcionarios:
+        <span class="kw">if</span> f[<span class="st">"id"</span>] == id:
+            funcionarios.remove(f)
+            <span class="kw">return</span> {<span class="st">"ok"</span>: True}
+    <span class="kw">return</span> {<span class="st">"e"</span>: <span class="st">"nao achei"</span>}</pre>
+
+    <p><strong>O que fazer:</strong></p>
+    <ul>
+      <li>Criar um schema Pydantic (<code>FuncionarioCreate</code>) para eliminar toda validação manual</li>
+      <li>Renomear as funções e rotas para nomes claros (<code>/func</code> vira <code>/funcionarios</code>)</li>
+      <li>Usar HTTPException do FastAPI em vez de retornar dicts de erro</li>
+      <li>Separar em dois arquivos: <code>schemas.py</code> e <code>main.py</code></li>
+    </ul>
+    <p><strong>Entregar:</strong> <code>exercicio2_antes.py</code>, <code>exercicio2_schemas.py</code>, <code>exercicio2_main.py</code></p>
+  </div>
+</div>
+
+<div class="page page-break">
+  <!-- EXERCÍCIO 3 -->
+  <div class="card">
+    <h3 style="margin-top: 0;"><span class="exnum" style="background: #dc2626;">3</span> Exercício Avançado: Arquitetura em camadas completa <span class="badge badge-hard">Avançado</span></h3>
+    <p>Agora o desafio completo. O código abaixo é uma API de gerenciamento de produtos com estoque. Refatore em <strong>4 camadas</strong>: schemas, routers, services e repositories.</p>
+
+<pre><span class="cm"># Arquivo: exercicio3_antes.py</span>
+<span class="kw">from</span> fastapi <span class="kw">import</span> FastAPI
+app = FastAPI()
+
+produtos = []
+id_counter = 1
+
+@app.post(<span class="st">"/p"</span>)
+<span class="kw">def</span> <span class="fn">new</span>(d: dict):
+    <span class="kw">global</span> id_counter
+    <span class="kw">if not</span> d.get(<span class="st">"nome"</span>) <span class="kw">or not</span> d.get(<span class="st">"preco"</span>) <span class="kw">or</span> d[<span class="st">"preco"</span>] <= 0:
+        <span class="kw">return</span> {<span class="st">"e"</span>: <span class="st">"dados invalidos"</span>}
+    estoque = d.get(<span class="st">"estoque"</span>, 0)
+    <span class="kw">if</span> estoque < 0:
+        estoque = 0
+    p = {<span class="st">"id"</span>: id_counter, <span class="st">"nome"</span>: d[<span class="st">"nome"</span>], <span class="st">"preco"</span>: d[<span class="st">"preco"</span>],
+         <span class="st">"estoque"</span>: estoque, <span class="st">"categoria"</span>: d.get(<span class="st">"categoria"</span>, <span class="st">"geral"</span>)}
+    produtos.append(p)
+    id_counter += 1
+    <span class="kw">return</span> p
+
+@app.get(<span class="st">"/p"</span>)
+<span class="kw">def</span> <span class="fn">all</span>(cat=None):
+    <span class="kw">if</span> cat:
+        <span class="kw">return</span> [p <span class="kw">for</span> p <span class="kw">in</span> produtos <span class="kw">if</span> p[<span class="st">"categoria"</span>] == cat]
+    <span class="kw">return</span> produtos
+
+@app.get(<span class="st">"/p/{id}"</span>)
+<span class="kw">def</span> <span class="fn">one</span>(id: int):
+    <span class="kw">for</span> p <span class="kw">in</span> produtos:
+        <span class="kw">if</span> p[<span class="st">"id"</span>] == id:
+            <span class="kw">return</span> p
+    <span class="kw">return</span> {<span class="st">"e"</span>: <span class="st">"nao achei"</span>}
+
+@app.patch(<span class="st">"/p/{id}/estoque"</span>)
+<span class="kw">def</span> <span class="fn">stock</span>(id: int, d: dict):
+    <span class="kw">for</span> p <span class="kw">in</span> produtos:
+        <span class="kw">if</span> p[<span class="st">"id"</span>] == id:
+            qtd = d.get(<span class="st">"quantidade"</span>, 0)
+            <span class="kw">if</span> p[<span class="st">"estoque"</span>] + qtd < 0:
+                <span class="kw">return</span> {<span class="st">"e"</span>: <span class="st">"estoque insuficiente"</span>}
+            p[<span class="st">"estoque"</span>] += qtd
+            <span class="kw">return</span> p
+    <span class="kw">return</span> {<span class="st">"e"</span>: <span class="st">"nao achei"</span>}
+
+@app.delete(<span class="st">"/p/{id}"</span>)
+<span class="kw">def</span> <span class="fn">rm</span>(id: int):
+    <span class="kw">for</span> p <span class="kw">in</span> produtos:
+        <span class="kw">if</span> p[<span class="st">"id"</span>] == id:
+            <span class="kw">if</span> p[<span class="st">"estoque"</span>] > 0:
+                <span class="kw">return</span> {<span class="st">"e"</span>: <span class="st">"tem estoque, nao pode deletar"</span>}
+            produtos.remove(p)
+            <span class="kw">return</span> {<span class="st">"ok"</span>: True}
+    <span class="kw">return</span> {<span class="st">"e"</span>: <span class="st">"nao achei"</span>}</pre>
+
+    <p><strong>O que fazer:</strong></p>
+    <ul>
+      <li>Criar <code>schemas/produto.py</code> com: <code>ProdutoCreate</code>, <code>ProdutoResponse</code>, <code>EstoqueUpdate</code></li>
+      <li>Criar <code>repositories/produto_repo.py</code> que cuida do armazenamento (lista em memória por enquanto)</li>
+      <li>Criar <code>services/produto_service.py</code> com as regras de negócio (não pode deletar com estoque, estoque não pode ficar negativo)</li>
+      <li>Criar <code>routers/produtos.py</code> com as rotas usando nomes corretos (<code>/produtos</code>, não <code>/p</code>)</li>
+      <li>Criar <code>main.py</code> que só inicializa o app e registra o router</li>
+    </ul>
+    <p><strong>Entregar:</strong> <code>exercicio3_antes.py</code> + pasta <code>exercicio3/</code> com os 5 arquivos separados</p>
+  </div>
+
+  <h2 style="margin-top: 28px;">O que entregar no final</h2>
+  <div class="card card-green">
+    <p>No seu repositório <code>fedcorp-exercicios</code>, pasta <code>semana-01-refatoracao/</code>:</p>
+    <ul>
+      <li><code>exercicio1_antes.py</code> e <code>exercicio1_depois.py</code></li>
+      <li><code>exercicio2_antes.py</code>, <code>exercicio2_schemas.py</code>, <code>exercicio2_main.py</code></li>
+      <li><code>exercicio3_antes.py</code> + pasta <code>exercicio3/</code> com a arquitetura completa</li>
+      <li><code>decisoes.md</code> explicando: quais problemas encontrou em cada exercício, o que mudou, e por que cada mudança importa</li>
+    </ul>
+  </div>
+
+  <div class="footer">FedCorp. Programa de Evolução Técnica. Semana 1, Leonan.</div>
+</div>
+
+</body>
+</html>

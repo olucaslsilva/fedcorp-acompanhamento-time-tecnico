@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Playbook do Consultor Técnico — Lucas</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+    :root {
+      --primary: #1e293b;
+      --primary-light: #334155;
+      --blue: #3b82f6;
+      --blue-light: #dbeafe;
+      --green: #22c55e;
+      --green-light: #dcfce7;
+      --orange: #f59e0b;
+      --orange-light: #fef3c7;
+      --red: #ef4444;
+      --red-light: #fee2e2;
+      --purple: #8b5cf6;
+      --purple-light: #ede9fe;
+      --gray-50: #f8fafc;
+      --gray-100: #f1f5f9;
+      --gray-200: #e2e8f0;
+      --gray-300: #cbd5e0;
+      --gray-500: #64748b;
+      --gray-700: #334155;
+      --gray-800: #1e293b;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Inter', sans-serif; background: var(--gray-100); color: var(--gray-700); line-height: 1.7; }
+
+    @media print {
+      body { font-size: 10pt; background: white; }
+      .page-break { page-break-before: always; }
+      .page { padding: 24px; box-shadow: none; }
+    }
+    @media screen {
+      body { max-width: 900px; margin: 0 auto; padding: 20px; }
+      .page { background: white; padding: 48px; margin-bottom: 24px; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,.08); }
+    }
+
+    .cover { text-align: center; padding: 60px 48px; }
+    .cover-label { display: inline-block; background: var(--blue); color: white; padding: 4px 16px; border-radius: 20px; font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 24px; }
+    .cover h1 { font-size: 36px; font-weight: 800; color: var(--primary); margin-bottom: 8px; }
+    .cover .sub { font-size: 18px; color: var(--gray-500); margin-bottom: 32px; }
+    .cover .for { font-size: 14px; color: var(--gray-500); }
+    .cover .for strong { color: var(--primary); }
+
+    h2 { font-size: 22px; font-weight: 800; color: var(--primary); margin-bottom: 20px; display: flex; align-items: center; gap: 12px; }
+    h2 .num { display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 50%; background: var(--blue); color: white; font-size: 16px; flex-shrink: 0; }
+    h3 { font-size: 16px; font-weight: 700; color: var(--primary); margin: 20px 0 10px; }
+    p { margin-bottom: 12px; font-size: 14px; }
+
+    .callout {
+      padding: 20px 24px; border-radius: 10px; margin-bottom: 20px; font-size: 14px;
+    }
+    .callout-blue { background: var(--blue-light); border-left: 4px solid var(--blue); }
+    .callout-green { background: var(--green-light); border-left: 4px solid var(--green); }
+    .callout-orange { background: var(--orange-light); border-left: 4px solid var(--orange); }
+    .callout-red { background: var(--red-light); border-left: 4px solid var(--red); }
+    .callout-purple { background: var(--purple-light); border-left: 4px solid var(--purple); }
+    .callout strong { display: block; margin-bottom: 4px; font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px; }
+
+    .step-flow { position: relative; padding-left: 40px; margin: 20px 0; }
+    .step-flow::before { content: ''; position: absolute; left: 15px; top: 0; bottom: 0; width: 2px; background: var(--gray-200); }
+    .step { position: relative; margin-bottom: 24px; }
+    .step-dot { position: absolute; left: -40px; top: 2px; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; color: white; }
+    .step-dot-blue { background: var(--blue); }
+    .step-dot-green { background: var(--green); }
+    .step-dot-orange { background: var(--orange); }
+    .step-dot-purple { background: var(--purple); }
+    .step-title { font-weight: 700; font-size: 15px; color: var(--primary); margin-bottom: 4px; }
+    .step-body { font-size: 13px; color: var(--gray-700); }
+    .step-body em { color: var(--gray-500); font-style: normal; font-size: 12px; }
+
+    .script {
+      background: var(--gray-50); border: 1px solid var(--gray-200); border-radius: 8px;
+      padding: 16px 20px; margin: 12px 0; font-size: 13px; font-style: italic;
+      color: var(--gray-700); border-left: 3px solid var(--blue);
+    }
+    .script::before { content: '💬 '; font-style: normal; }
+
+    table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 13px; }
+    th { background: var(--primary); color: white; padding: 10px 14px; text-align: left; font-weight: 600; font-size: 12px; }
+    td { padding: 10px 14px; border-bottom: 1px solid var(--gray-200); }
+    tr:nth-child(even) { background: var(--gray-50); }
+
+    .card-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 12px 0; }
+    .mini-card { background: var(--gray-50); border: 1px solid var(--gray-200); border-radius: 8px; padding: 16px; }
+    .mini-card-title { font-weight: 700; font-size: 13px; color: var(--primary); margin-bottom: 4px; }
+    .mini-card-body { font-size: 12px; color: var(--gray-500); }
+
+    .tag { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; }
+    .tag-blue { background: var(--blue-light); color: #1e40af; }
+    .tag-green { background: var(--green-light); color: #166534; }
+    .tag-orange { background: var(--orange-light); color: #92400e; }
+    .tag-red { background: var(--red-light); color: #991b1b; }
+
+    .week-block { border: 2px solid var(--gray-200); border-radius: 10px; padding: 20px; margin-bottom: 16px; }
+    .week-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+    .week-title { font-weight: 700; font-size: 15px; color: var(--primary); }
+    .week-tag { font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 12px; }
+
+    ul { padding-left: 20px; margin-bottom: 12px; font-size: 13px; }
+    ul li { margin-bottom: 6px; }
+    ol { padding-left: 20px; margin-bottom: 12px; font-size: 13px; }
+    ol li { margin-bottom: 6px; }
+
+    .checklist { list-style: none; padding: 0; }
+    .checklist li { padding: 6px 0 6px 28px; position: relative; font-size: 13px; }
+    .checklist li::before { content: ''; position: absolute; left: 0; top: 9px; width: 16px; height: 16px; border: 2px solid var(--gray-300); border-radius: 3px; }
+
+    .divider { border: none; border-top: 2px solid var(--gray-200); margin: 24px 0; }
+
+    .small { font-size: 12px; color: var(--gray-500); }
+  </style>
+</head>
+<body>
+
+<!-- ==================== CAPA ==================== -->
+<div class="page cover">
+  <div class="cover-label">Documento interno &mdash; uso exclusivo</div>
+  <h1>Playbook do Consultor Técnico</h1>
+  <p class="sub">O passo a passo completo para acompanhar a evolução dos devs</p>
+  <p class="for">Para: <strong>Lucas (Consultor Técnico, FedCorp)</strong></p>
+  <p class="small" style="margin-top: 40px;">Versão 1.0 &mdash; Junho 2026</p>
+</div>
+
+<!-- ==================== SUA REALIDADE ==================== -->
+<div class="page page-break">
+  <h2><span class="num">1</span> Sua Realidade (sem filtro)</h2>
+
+  <p>Antes de qualquer metodologia, vamos deixar claro o cenário real:</p>
+
+  <div class="callout callout-blue">
+    <strong>Quem você é</strong>
+    Desenvolvedor frontend que usa IA (Claude) para backend, banco de dados e infraestrutura. Primeira vez como consultor técnico de uma equipe. Você sabe se desenrolar, mas não tem certeza se consegue mostrar o caminho para outros.
+  </div>
+
+  <div class="callout callout-green">
+    <strong>Sua vantagem escondida</strong>
+    Você usa IA de forma profissional há meses. Você sabe a diferença entre "aceitar qualquer código que a IA cospe" e "direcionar a IA para gerar código com qualidade". <strong>Essa é exatamente a habilidade que você vai ensinar.</strong> Você não precisa saber tudo de backend &mdash; você precisa saber como pensar criticamente sobre código. E isso você já faz.
+  </div>
+
+  <div class="callout callout-orange">
+    <strong>Limitação atual</strong>
+    Os devs não podem usar IA (Claude Code / ChatGPT) no trabalho ainda. O plano original de "AI first" foi adiado. Isso muda o foco: em vez de ensinar a usar IA, o foco agora é <strong>construir a base técnica</strong> para que, quando a IA entrar, eles saibam avaliar o que ela sugere.
+  </div>
+
+  <h3>O que você NÃO precisa ser</h3>
+  <ul>
+    <li><strong>Especialista em tudo.</strong> Você não precisa saber Python melhor que o Leonan ou Node melhor que o Daniel. Seu papel é outro.</li>
+    <li><strong>Professor de aula.</strong> Você não vai dar aula. O material já está nos planos. Você vai <strong>guiar, cobrar, e dar feedback</strong>.</li>
+    <li><strong>O cara que resolve tudo.</strong> Se eles travarem num problema técnico que você não domina, está tudo bem dizer: "Não sei a resposta de cabeça. Vamos pesquisar juntos." Isso é mais honesto e mais educativo do que fingir que sabe.</li>
+  </ul>
+
+  <h3>O que você PRECISA ser</h3>
+  <ul>
+    <li><strong>O cara que cobra consistência.</strong> "Você fez a atividade? Me mostra. Me explica."</li>
+    <li><strong>O cara que faz perguntas difíceis.</strong> "Por que você fez assim? O que acontece se essa entrada for nula? E se tiver 100.000 registros?"</li>
+    <li><strong>O cara que dá feedback honesto.</strong> "Isso aqui está bom, específicamente por causa de X. Isso aqui precisa melhorar, por causa de Y."</li>
+    <li><strong>O cara que mostra a direção.</strong> "Essa semana foca nisso. Na próxima, isso evolui pra aquilo."</li>
+  </ul>
+
+  <div class="callout callout-purple">
+    <strong>Segredo que ninguém fala</strong>
+    80% do valor de um consultor técnico não é saber código &mdash; é saber <strong>fazer as perguntas certas</strong>. Quando você pergunta "por que você fez assim?" e o dev não sabe responder, ele percebe sozinho que não entendeu. Você não precisa dar a resposta &mdash; a pergunta já ensina.
+  </div>
+</div>
+
+<!-- ==================== O MAPA COMPLETO ==================== -->
+<div class="page page-break">
+  <h2><span class="num">2</span> O Mapa Completo: De Onde Você Está até Onde Quer Chegar</h2>
+
+  <p>Esse é o caminho inteiro. Você está no passo 3. Cada etapa tem instruções específicas nas próximas páginas.</p>
+
+  <div class="step-flow">
+    <div class="step">
+      <div class="step-dot step-dot-green">✓</div>
+      <div class="step-title">Etapa 1 &mdash; Assessment <span class="tag tag-green">FEITO</span></div>
+      <div class="step-body">Formulário criado, devs responderam, dados coletados.<br><em>Resultado: perfil técnico de cada dev mapeado</em></div>
+    </div>
+    <div class="step">
+      <div class="step-dot step-dot-green">✓</div>
+      <div class="step-title">Etapa 2 &mdash; Planos Individuais <span class="tag tag-green">FEITO</span></div>
+      <div class="step-body">3 planos HTML criados (Leonan, Ingryd, Daniel), cada um com 4 semanas de atividades.<br><em>Resultado: cada dev tem um mapa personalizado</em></div>
+    </div>
+    <div class="step">
+      <div class="step-dot step-dot-blue">3</div>
+      <div class="step-title">Etapa 3 &mdash; Reunião de Kickoff com os 3 <span class="tag tag-blue">AGORA</span></div>
+      <div class="step-body">Apresentar o programa, alinhar expectativas, entregar planos, explicar a cadência.<br><em>Resultado: devs sabem o que é esperado e como funciona</em></div>
+    </div>
+    <div class="step">
+      <div class="step-dot step-dot-orange">4</div>
+      <div class="step-title">Etapa 4 &mdash; Semana 1: Primeira Atividade</div>
+      <div class="step-body">Devs fazem a Semana 1 do plano deles. Você faz check-in 1:1 no meio da semana.<br><em>Resultado: primeiro ciclo completo de atividade + feedback</em></div>
+    </div>
+    <div class="step">
+      <div class="step-dot step-dot-orange">5</div>
+      <div class="step-title">Etapa 5 &mdash; Retrospectiva + Check-in Form</div>
+      <div class="step-body">Sexta: cada dev apresenta o que aprendeu. Preenche o formulário de check-in.<br><em>Resultado: dados de progresso coletados, ajustes identificados</em></div>
+    </div>
+    <div class="step">
+      <div class="step-dot step-dot-orange">6</div>
+      <div class="step-title">Etapa 6 &mdash; Repetir (Semanas 2, 3, 4...)</div>
+      <div class="step-body">Mesmo ciclo: atividade → check-in → retro → form. A cada semana fica mais natural.<br><em>Resultado: ritmo estabelecido, devs ganham autonomia</em></div>
+    </div>
+    <div class="step">
+      <div class="step-dot step-dot-purple">7</div>
+      <div class="step-title">Etapa 7 &mdash; Reassessment (Mês 3)</div>
+      <div class="step-body">Reaplicar o formulário de assessment original. Comparar scores. Ajustar planos.<br><em>Resultado: progresso quantificado, próximo trimestre planejado</em></div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== ETAPA 3: A REUNIÃO DE HOJE ==================== -->
+<div class="page page-break">
+  <h2><span class="num">3</span> A Reunião de Hoje (1 hora com os 3)</h2>
+
+  <div class="callout callout-blue">
+    <strong>Contexto</strong>
+    O plano original era falar sobre IA/Claude Code, mas não vai rolar por enquanto. A reunião agora é sobre: apresentar o programa de evolução, alinhar expectativas, e lançar a Semana 1.
+  </div>
+
+  <h3>Roteiro minuto a minuto</h3>
+
+  <div class="step-flow">
+    <div class="step">
+      <div class="step-dot step-dot-blue">1</div>
+      <div class="step-title">Abertura &mdash; O que é isso? (10 min)</div>
+      <div class="step-body">
+        <div class="script">Galera, valeu por terem respondido o assessment. Com base nas respostas de vocês, eu montei um plano individual para cada um. Não é avaliação de desempenho — é um programa de evolução técnica. Cada um tem um plano diferente porque cada um tem gaps diferentes. O plano é de vocês. Eu tô aqui como suporte técnico, pra tirar dúvida e dar feedback. Quem segue é vocês.</div>
+        <p style="margin-top: 8px;">Pontos-chave:</p>
+        <ul>
+          <li><strong>Não é cobrança, é direção</strong> &mdash; "Ninguém vai ser demitido por não fazer o exercício"</li>
+          <li><strong>É personalizado</strong> &mdash; "Cada plano foi montado com base no que vocês responderam"</li>
+          <li><strong>A responsabilidade é de vocês</strong> &mdash; "O plano tá na mão de vocês. Eu mostro o mapa, vocês caminham"</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-dot step-dot-blue">2</div>
+      <div class="step-title">O que tem no plano de cada um (15 min)</div>
+      <div class="step-body">
+        <p>Abrir o plano de cada dev (compartilhar tela ou enviar o link) e dar um overview rápido. Não ler tudo &mdash; eles vão ler depois.</p>
+        <table>
+          <tr><th>Dev</th><th>Foco do plano</th><th>Falar pra ele</th></tr>
+          <tr>
+            <td><strong>Leonan</strong></td>
+            <td>Refatoração, Testes, TypeScript, Arquitetura</td>
+            <td>"Seu forte é Python/APIs. As 4 semanas focam em transformar código que funciona em código bem feito."</td>
+          </tr>
+          <tr>
+            <td><strong>Ingryd</strong></td>
+            <td>TypeScript avançado, Testes React, APIs, Code Review</td>
+            <td>"Seu frontend é nota máxima. O plano expande pro backend e processos — caminho direto pra fullstack."</td>
+          </tr>
+          <tr>
+            <td><strong>Daniel</strong></td>
+            <td>Code Review, Testes sistemáticos, CI/CD, Padrões</td>
+            <td>"Tecnicamente você é o mais forte. O plano foca em processo e visibilidade — é o que falta pra ser reconhecido."</td>
+          </tr>
+        </table>
+        <p class="small" style="margin-top: 8px;">Cada dev só precisa ouvir a parte dele com atenção. Mas ouvir a dos outros também ajuda a entender que cada um tem um caminho diferente.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-dot step-dot-blue">3</div>
+      <div class="step-title">Como funciona a cadência (10 min)</div>
+      <div class="step-body">
+        <div class="script">Toda semana funciona assim: na segunda vocês abrem o plano e leem o tema da semana. De terça a quinta, fazem as atividades no ritmo de vocês. Se travarem, trazem pro check-in comigo — terça ou quarta, 30 minutos, 1:1. Na sexta, a gente faz uma retrospectiva juntos: cada um apresenta o que aprendeu com as próprias palavras. Depois, vocês preenchem um formulário rápido de check-in — 5 minutos.</div>
+        <p style="margin-top: 8px;"><strong>Combinar agora:</strong></p>
+        <ul>
+          <li>Horário do check-in 1:1 (Terça ou Quarta) &mdash; que funcione para cada um</li>
+          <li>Horário da retrospectiva de sexta &mdash; fixo, mesmo horário toda semana</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-dot step-dot-blue">4</div>
+      <div class="step-title">Sobre IA &mdash; Ser honesto (10 min)</div>
+      <div class="step-body">
+        <div class="script">A ideia original era a gente já começar usando Claude Code e ChatGPT como ferramenta de desenvolvimento. Por enquanto, isso não vai rolar — tem uma questão de acesso que precisa ser resolvida. Mas olha: isso na verdade é bom. Porque o primeiro passo antes de usar IA é ter base técnica. Se você não entende o que o código faz, não importa se foi você ou a IA que escreveu — é código que pode causar problema. As primeiras semanas são pra construir essa base. Quando a IA entrar, vocês vão saber avaliar se o que ela sugere é bom ou ruim.</div>
+        <p style="margin-top: 8px;"><strong>Enquadramento:</strong> a IA não foi cancelada, foi <strong>adiada para o momento certo</strong>. As atividades do plano já têm "Dicas com IA" para quando estiver disponível.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-dot step-dot-blue">5</div>
+      <div class="step-title">Setup prático + Perguntas (10 min)</div>
+      <div class="step-body">
+        <p>Resolver agora, na reunião:</p>
+        <ul class="checklist">
+          <li>Todos conseguem criar o repositório <code>fedcorp-exercicios</code> no GitHub?</li>
+          <li>Todos sabem como criar pastas e fazer push? (se não, combinar 15 min extra)</li>
+          <li>Enviar o link do plano individual para cada um por email/Teams</li>
+          <li>Enviar o link do formulário de check-in semanal</li>
+        </ul>
+        <p style="margin-top: 8px;">Abrir para perguntas. Se não tiver, tudo bem — as dúvidas vão aparecer durante a semana.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-dot step-dot-green">6</div>
+      <div class="step-title">Fechamento (5 min)</div>
+      <div class="step-body">
+        <div class="script">A partir de agora, cada um tem o plano na mão. Semana 1 começa segunda. Qualquer dúvida, traz no check-in. O importante não é acertar tudo — é não parar. Se travou, anota onde e me traz. Se não deu tempo, me fala o porquê. Eu tô aqui pra ajudar, não pra julgar.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== COMO FAZER O CHECK-IN 1:1 ==================== -->
+<div class="page page-break">
+  <h2><span class="num">4</span> Como Fazer o Check-in 1:1 (seu script semanal)</h2>
+
+  <div class="callout callout-blue">
+    <strong>Contexto</strong>
+    30 minutos, terça ou quarta, com cada dev individualmente. Sempre a mesma estrutura — cria previsibilidade para você e para eles.
+  </div>
+
+  <h3>As 5 perguntas que você SEMPRE faz (nessa ordem)</h3>
+
+  <div class="step-flow">
+    <div class="step">
+      <div class="step-dot step-dot-blue">1</div>
+      <div class="step-title">"O que você fez desde a última vez?" (5 min)</div>
+      <div class="step-body">
+        Deixar o dev falar. Não interromper. Observar: ele explica com clareza ou fica vago?<br>
+        <strong>Se ficou vago:</strong> "Me dá um exemplo concreto do que você fez."<br>
+        <strong>Se não fez nada:</strong> Sem julgamento. "O que impediu?" &mdash; e entender de verdade.
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-dot step-dot-blue">2</div>
+      <div class="step-title">"Me mostra o código." (10 min)</div>
+      <div class="step-body">
+        Pedir para compartilhar tela. Navegar pelo exercício juntos.<br>
+        <strong>NÃO corrigir imediatamente.</strong> Perguntar:<br>
+        <em>"Por que você fez assim?"</em><br>
+        <em>"O que acontece se essa entrada for vazia?"</em><br>
+        <em>"Tem outra forma de fazer isso?"</em><br><br>
+        <strong>Dica para quando você não souber a resposta:</strong> "Não sei de cabeça. Vamos pensar juntos: o que a documentação diz?" — isso é mais honesto e mais educativo do que inventar.
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-dot step-dot-blue">3</div>
+      <div class="step-title">"Onde travou?" (5 min)</div>
+      <div class="step-body">
+        <strong>Se travou:</strong> "O que você tentou antes de travar?"<br>
+        <strong>Se não travou:</strong> "Qual parte foi mais difícil?"<br>
+        <strong>Se não fez:</strong> Entender o impedimento real (tempo? dificuldade? desmotivação?)
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-dot step-dot-blue">4</div>
+      <div class="step-title">"Me explica o conceito da semana." (5 min)</div>
+      <div class="step-body">
+        <strong>Esse é o termômetro real.</strong> Não é o código &mdash; é a explicação.<br>
+        <em>"O que é refatoração, nas suas palavras?"</em><br>
+        <em>"Qual a diferença entre teste unitário e de integração?"</em><br>
+        <em>"Por que separar em camadas?"</em><br><br>
+        Se o dev não consegue explicar, ele não entendeu de verdade &mdash; precisa de reforço.
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-dot step-dot-blue">5</div>
+      <div class="step-title">"Próximo passo." (5 min)</div>
+      <div class="step-body">
+        "O que falta fazer até sexta?"<br>
+        "Tem alguma dúvida que a gente resolve agora?"<br>
+        "Precisa de alguma coisa pra desbloquear?"
+      </div>
+    </div>
+  </div>
+
+  <div class="callout callout-green">
+    <strong>Sobre não saber a resposta</strong>
+    Vai acontecer. O Leonan pergunta algo de Python avançado que você não sabe. O Daniel pergunta sobre filas e semáforos. Tá tudo bem. Respostas honestas que funcionam:
+    <ul style="margin-top: 8px; margin-bottom: 0;">
+      <li>"Não é minha especialidade, mas vamos ver a documentação juntos."</li>
+      <li>"Boa pergunta. Pesquisa isso e me traz na sexta — quero ver o que você encontrou."</li>
+      <li>"Vou verificar e te respondo até amanhã." (e aí você pesquisa com o Claude depois)</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ==================== COMO DAR FEEDBACK ==================== -->
+<div class="page page-break">
+  <h2><span class="num">5</span> Como Dar Feedback (sem ser vago nem duro)</h2>
+
+  <p>Use o framework <strong>SBI</strong> &mdash; Situação, Comportamento, Impacto. Funciona para feedback positivo e construtivo.</p>
+
+  <h3>A fórmula</h3>
+  <table>
+    <tr><th>Parte</th><th>O que é</th><th>Exemplo</th></tr>
+    <tr>
+      <td><strong>S</strong> (Situação)</td>
+      <td>Quando/onde aconteceu</td>
+      <td>"No exercício da semana 2..."</td>
+    </tr>
+    <tr>
+      <td><strong>B</strong> (Comportamento)</td>
+      <td>O que a pessoa fez (concreto)</td>
+      <td>"...você separou a validação em uma função própria..."</td>
+    </tr>
+    <tr>
+      <td><strong>I</strong> (Impacto)</td>
+      <td>Por que isso importa</td>
+      <td>"...isso torna o código mais fácil de testar e reutilizar."</td>
+    </tr>
+  </table>
+
+  <h3>Exemplos prontos para cada dev</h3>
+
+  <div class="callout callout-green">
+    <strong>Feedback positivo (Leonan)</strong>
+    "No exercício de refatoração (S), você criou um arquivo separado para os schemas com Pydantic (B). Isso mostra que você entendeu o princípio de separação de responsabilidades — agora se precisar mudar a validação, é um lugar só (I)."
+  </div>
+
+  <div class="callout callout-orange">
+    <strong>Feedback construtivo (Ingryd)</strong>
+    "No teste do componente TaskItem (S), você testou se o botão aparece, mas não testou o que acontece quando clica nele (B). Sem esse teste, se alguém mudar o onClick no futuro e quebrar, ninguém vai perceber até o usuário reclamar (I). Que tal adicionar um teste com userEvent.click?"
+  </div>
+
+  <div class="callout callout-green">
+    <strong>Feedback positivo (Daniel)</strong>
+    "No review que você fez do endpoint (S), você identificou o SQL injection e explicou como corrigir com parameterized queries (B). Isso é exatamente o tipo de olhar que pega problemas antes de chegar em produção (I)."
+  </div>
+
+  <h3>O que NUNCA fazer</h3>
+  <table>
+    <tr><th>Não faça isso</th><th>Faça isso em vez</th></tr>
+    <tr><td>"Bom trabalho" (vago)</td><td>"A forma como você nomeou as variáveis ficou clara" (específico)</td></tr>
+    <tr><td>"Isso tá errado" (sem explicar)</td><td>"Isso pode causar X porque Y. Que tal fazer Z?"</td></tr>
+    <tr><td>"O Daniel já terminou e você não" (comparar)</td><td>Cada dev vs. a versão anterior dele mesmo</td></tr>
+    <tr><td>"Eu faria diferente" (sem dizer como)</td><td>"Uma alternativa seria X, porque Y"</td></tr>
+    <tr><td>Corrigir o código por ele</td><td>"O que acontece se essa entrada for nula?" (guiar com pergunta)</td></tr>
+  </table>
+</div>
+
+<!-- ==================== CUIDADOS POR DEV ==================== -->
+<div class="page page-break">
+  <h2><span class="num">6</span> Cuidados Específicos por Dev</h2>
+
+  <p>Cada dev tem uma dinâmica diferente. Isso muda como você conduz o 1:1.</p>
+
+  <div class="week-block" style="border-color: #3b82f6;">
+    <div class="week-header">
+      <div class="week-title">Leonan &mdash; O Prático</div>
+      <div class="week-tag" style="background: #dbeafe; color: #1e40af;">Backend Python</div>
+    </div>
+    <p><strong>Perfil:</strong> Forte em Python/APIs (nota 5), quer evoluir em arquitetura e boas práticas. Dificuldade declarada: "transformar código que funciona em bem estruturado".</p>
+    <p><strong>Como lidar:</strong></p>
+    <ul>
+      <li>Ele vai entregar. O risco não é "não fazer" — é "fazer rápido sem aprofundar"</li>
+      <li>Cobrar o <code>decisoes.md</code> com mais rigor &mdash; o exercício dele é explicar o PORQUÊ</li>
+      <li>Perguntas que funcionam: "Isso funciona, mas é a melhor forma? O que acontece com 10.000 registros?"</li>
+    </ul>
+    <p><strong>Cuidado:</strong> Não deixar ele pular a explicação por já ter feito o código. O código é meio, a explicação é fim.</p>
+  </div>
+
+  <div class="week-block" style="border-color: #8b5cf6;">
+    <div class="week-header">
+      <div class="week-title">Ingryd &mdash; A que Evita Pedir Ajuda</div>
+      <div class="week-tag" style="background: #ede9fe; color: #5b21b6;">Frontend React</div>
+    </div>
+    <p><strong>Perfil:</strong> Frontend nota máxima, quer fullstack. Dificuldade: "processos interrompidos por outras funções". <strong>Evita pedir ajuda.</strong></p>
+    <p><strong>Como lidar:</strong></p>
+    <ul>
+      <li>No check-in, perguntar diretamente: "Teve algum momento que travou e não perguntou?"</li>
+      <li>Normalizar pedir ajuda: "Se ficar mais de 30 min travada no mesmo problema, me manda mensagem"</li>
+      <li>As atividades dela são em blocos curtos de propósito — reforçar que não precisa de 4h seguidas</li>
+    </ul>
+    <p><strong>Cuidado:</strong> Ela pode dizer "tá tudo bem" quando não está. Prestar atenção se o código entregue condiz com "tá tudo bem".</p>
+  </div>
+
+  <div class="week-block" style="border-color: #22c55e;">
+    <div class="week-header">
+      <div class="week-title">Daniel &mdash; O que se Sente Subestimado</div>
+      <div class="week-tag" style="background: #dcfce7; color: #166534;">Fullstack Node/Python</div>
+    </div>
+    <p><strong>Perfil:</strong> Mais forte tecnicamente (múltiplos 5). Já implementou semáforos e filas. Dificuldade: "ter responsabilidades além de junior e ser visto como funcionário ruim".</p>
+    <p><strong>Como lidar:</strong></p>
+    <ul>
+      <li><strong>Reconhecer explicitamente o nível técnico dele.</strong> Não tratar como junior genérico</li>
+      <li>O plano dele foca em processo (code review, CI/CD, padrões) &mdash; posicionar como "formalizar o que você já faz"</li>
+      <li>Quando ele fizer algo bem, dizer com dados: "Isso que você fez tem nome: Repository Pattern. Devs plenos usam isso"</li>
+    </ul>
+    <p><strong>Cuidado:</strong> Ele tem uma dor emocional real. Não minimizar ("relaxa, tá tudo bem"). Validar e mostrar o caminho: "Seus scores mostram que você é capaz. O plano é pra que todo mundo enxergue isso."</p>
+  </div>
+</div>
+
+<!-- ==================== SEMANA A SEMANA ==================== -->
+<div class="page page-break">
+  <h2><span class="num">7</span> Sua Semana Tipo (o que VOCÊ faz, dia a dia)</h2>
+
+  <table>
+    <tr><th>Dia</th><th>O que você faz</th><th>Quanto tempo</th></tr>
+    <tr>
+      <td><strong>Segunda</strong></td>
+      <td>Nada. Os devs abrem o tema sozinhos. Você fica disponível se alguém mandar dúvida.</td>
+      <td>0 min</td>
+    </tr>
+    <tr>
+      <td><strong>Terça</strong></td>
+      <td>Check-in 1:1 com Dev 1 (usar as 5 perguntas da seção 4)</td>
+      <td>30 min</td>
+    </tr>
+    <tr>
+      <td><strong>Quarta</strong></td>
+      <td>Check-in 1:1 com Dev 2 e Dev 3</td>
+      <td>60 min</td>
+    </tr>
+    <tr>
+      <td><strong>Quinta</strong></td>
+      <td>Revisar os repositórios dos devs no GitHub (ver o que fizeram, anotar pontos para feedback)</td>
+      <td>30 min</td>
+    </tr>
+    <tr>
+      <td><strong>Sexta</strong></td>
+      <td>Retrospectiva com os 3 juntos (cada um apresenta + feedback SBI) + preenchem o form de check-in</td>
+      <td>45 min</td>
+    </tr>
+  </table>
+
+  <p style="margin-top: 12px;"><strong>Total: ~2h45/semana</strong> (cabe nas suas 2h/dia de consultoria)</p>
+
+  <h3>Na quinta, quando revisar os repos, anote:</h3>
+  <ul class="checklist">
+    <li>O dev criou a pasta da semana?</li>
+    <li>Tem código E decisoes.md?</li>
+    <li>O código roda ou tem erro?</li>
+    <li>O decisoes.md explica o porquê ou é superficial?</li>
+    <li>1 ponto positivo específico para dar no feedback de sexta</li>
+    <li>1 ponto de melhoria específico para dar no feedback de sexta</li>
+  </ul>
+
+  <div class="callout callout-purple">
+    <strong>Dica: use o Claude para revisar</strong>
+    Na quinta, quando for olhar os repos, abra o código no Claude e peça: "Revise esse código de um dev junior. Me diga 1 ponto positivo específico e 1 ponto de melhoria com sugestão concreta." O Claude te dá os insumos, você entrega o feedback.
+  </div>
+</div>
+
+<!-- ==================== O QUE FALAR SOBRE IA ==================== -->
+<div class="page page-break">
+  <h2><span class="num">8</span> O que Falar Sobre IA (quando perguntarem)</h2>
+
+  <p>Eles vão perguntar sobre IA. Você já usa e sabe o valor. Aqui está como abordar sem entregar ferramenta que eles não podem usar ainda:</p>
+
+  <h3>A narrativa</h3>
+  <div class="script">A IA vai entrar no dia a dia de vocês — é questão de tempo, não de "se". Mas existe uma ordem certa. Se você usa IA sem entender o que o código faz, você está colocando código que pode ter bugs, vulnerabilidades, ou ineficiências em produção sem saber. O objetivo dessas primeiras semanas é construir a base técnica para que, quando a IA entrar, vocês consigam olhar pro código que ela gera e dizer: "isso aqui tá bom" ou "isso aqui tem problema". Essa é a diferença entre um dev que usa IA como muleta e um dev que usa IA como ferramenta.</div>
+
+  <h3>Perguntas que vão aparecer</h3>
+  <table>
+    <tr><th>Pergunta</th><th>Resposta</th></tr>
+    <tr>
+      <td>"Posso usar ChatGPT pra fazer os exercícios?"</td>
+      <td>"Pra tirar dúvida quando travar, sim — cada exercício tem um prompt sugerido. Pra gerar o exercício inteiro, não. O objetivo é você aprender, não a IA resolver."</td>
+    </tr>
+    <tr>
+      <td>"Quando vamos usar Claude Code?"</td>
+      <td>"Quando a base técnica tiver sólida. As primeiras semanas constroem essa base. Quando a IA entrar, vocês vão saber avaliar o que ela sugere — e isso é o que separa um dev bom de um dev que só copia."</td>
+    </tr>
+    <tr>
+      <td>"Eu já uso ChatGPT por conta"</td>
+      <td>"Ótimo. A pergunta é: quando ele gera código, você consegue explicar por que funciona? Se sim, você tá usando certo. Se não, o exercício te ajuda a chegar lá."</td>
+    </tr>
+  </table>
+
+  <div class="callout callout-orange">
+    <strong>Honestidade que gera respeito</strong>
+    Se alguém perguntar "você usa IA?", seja honesto: "Sim, eu uso como ferramenta no meu trabalho. Mas eu sempre reviso o que ela sugere porque eu sei o que tô procurando. É isso que quero que vocês consigam fazer também." Isso é mais poderoso do que fingir que faz tudo na mão.
+  </div>
+</div>
+
+<!-- ==================== SE DER ERRADO ==================== -->
+<div class="page page-break">
+  <h2><span class="num">9</span> Se Algo Der Errado (e vai dar)</h2>
+
+  <p>Nenhum programa funciona perfeito desde o dia 1. Aqui está o que pode acontecer e o que fazer:</p>
+
+  <table>
+    <tr><th>Cenário</th><th>O que fazer</th></tr>
+    <tr>
+      <td><strong>Dev não fez nada a semana inteira</strong></td>
+      <td>Sem bronca. Perguntar: "O que impediu?" Se foi tempo: reduzir escopo ("essa semana faz só o Fundamento"). Se foi desmotivação: conversar sobre o que ele gostaria de mudar. Se virar padrão (3 semanas seguidas): conversa séria sobre comprometimento.</td>
+    </tr>
+    <tr>
+      <td><strong>Dev fez o exercício mas não sabe explicar</strong></td>
+      <td>Ele copiou ou fez no automático. Sem acusar: "Me explica essa parte aqui... e essa?" Identificar onde a compreensão parou. Reforçar: "O que importa é entender, não entregar."</td>
+    </tr>
+    <tr>
+      <td><strong>Dev diz que o plano é muito fácil/difícil</strong></td>
+      <td>Muito fácil: "Ótimo. Então faz o exercício com um cenário extra que você invente." Muito difícil: "Vamos reduzir: faz só o Fundamento e o Exemplo. O Exercício fica pra próxima semana."</td>
+    </tr>
+    <tr>
+      <td><strong>Dev pergunta algo que você não sabe</strong></td>
+      <td>"Boa pergunta. Não sei de cabeça. Pesquisa isso e me traz na sexta — quero ver o que você encontrou." (E depois pesquisa com o Claude)</td>
+    </tr>
+    <tr>
+      <td><strong>Daniel expressa frustração com a empresa</strong></td>
+      <td>Ouvir. Não minimizar. "Entendo que é frustrante. Vamos focar no que a gente pode controlar: construir o arcabouço que torna seu trabalho visível." Não prometer o que não pode cumprir.</td>
+    </tr>
+    <tr>
+      <td><strong>Ninguém preenche o formulário de check-in</strong></td>
+      <td>Preencher junto na retro de sexta. Se não fizerem sozinhos, fazer na frente deles nos últimos 5 minutos. É mais importante ter os dados do que ter o hábito perfeito.</td>
+    </tr>
+    <tr>
+      <td><strong>Você mesmo não sabe como avaliar o código</strong></td>
+      <td>Use o Claude: "Revise esse código de um dev junior que está aprendendo X. Me dê 1 ponto positivo e 1 melhoria." Você entrega o feedback, o Claude te deu os insumos.</td>
+    </tr>
+  </table>
+
+  <div class="callout callout-green">
+    <strong>A regra mais importante</strong>
+    Se tudo der errado e você não souber o que fazer: <strong>pergunte para eles</strong>. "O que vocês precisam de mim que eu não estou dando?" Às vezes a resposta mais poderosa vem deles, não de você.
+  </div>
+</div>
+
+<!-- ==================== CHECKLIST FINAL ==================== -->
+<div class="page page-break">
+  <h2><span class="num">10</span> Checklist: O que Ter Pronto Antes de Começar</h2>
+
+  <h3>Antes da reunião de hoje</h3>
+  <ul class="checklist">
+    <li>Plano do Leonan em PDF (Ctrl+P no HTML, salvar como PDF)</li>
+    <li>Plano da Ingryd em PDF</li>
+    <li>Plano do Daniel em PDF</li>
+    <li>Formulário de check-in semanal no ar (deployar na Vercel + criar planilha no Google)</li>
+    <li>Este playbook aberto na sua tela (referência durante a reunião)</li>
+  </ul>
+
+  <h3>Na reunião</h3>
+  <ul class="checklist">
+    <li>Apresentar o programa (10 min)</li>
+    <li>Mostrar o plano de cada dev (15 min)</li>
+    <li>Explicar a cadência semanal (10 min)</li>
+    <li>Falar sobre IA (10 min)</li>
+    <li>Setup prático + perguntas (10 min)</li>
+    <li>Combinar horários de check-in e retro (5 min)</li>
+  </ul>
+
+  <h3>Depois da reunião</h3>
+  <ul class="checklist">
+    <li>Enviar plano individual por email/Teams para cada dev</li>
+    <li>Enviar link do formulário de check-in</li>
+    <li>Anotar os horários combinados na sua agenda</li>
+    <li>Semana 1 começa na segunda</li>
+  </ul>
+
+  <hr class="divider">
+
+  <div style="text-align: center; padding: 20px 0;">
+    <p style="font-size: 16px; font-weight: 700; color: var(--primary);">Você não precisa ser o melhor dev da sala.</p>
+    <p style="font-size: 16px; font-weight: 700; color: var(--primary);">Você precisa ser o cara que faz as perguntas certas,</p>
+    <p style="font-size: 16px; font-weight: 700; color: var(--primary);">cobra consistência, e mostra a direção.</p>
+    <p style="font-size: 14px; color: var(--gray-500); margin-top: 16px;">Isso você já sabe fazer. Agora é só começar.</p>
+  </div>
+</div>
+
+</body>
+</html>

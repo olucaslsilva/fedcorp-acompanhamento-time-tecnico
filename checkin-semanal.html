@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Check-in Semanal — FedCorp Dev Team</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+    :root {
+      --primary: #1a365d;
+      --primary-light: #2b6cb0;
+      --accent: #38a169;
+      --accent-light: #c6f6d5;
+      --warning: #d69e2e;
+      --warning-light: #fefcbf;
+      --danger: #e53e3e;
+      --gray-50: #f7fafc;
+      --gray-100: #edf2f7;
+      --gray-200: #e2e8f0;
+      --gray-300: #cbd5e0;
+      --gray-500: #718096;
+      --gray-700: #2d3748;
+      --gray-800: #1a202c;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Inter', sans-serif; background: var(--gray-100); color: var(--gray-700); line-height: 1.6; }
+    .container { max-width: 680px; margin: 0 auto; padding: 20px; }
+
+    .header {
+      background: var(--primary);
+      color: white;
+      padding: 32px;
+      border-radius: 12px 12px 0 0;
+      text-align: center;
+    }
+    .header h1 { font-size: 22px; font-weight: 700; margin-bottom: 4px; }
+    .header p { font-size: 14px; opacity: 0.8; }
+
+    .form-card {
+      background: white;
+      border-radius: 0 0 12px 12px;
+      padding: 32px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+
+    .section { margin-bottom: 28px; }
+    .section-title {
+      font-size: 16px; font-weight: 700; color: var(--primary);
+      margin-bottom: 16px; padding-bottom: 8px;
+      border-bottom: 2px solid var(--gray-200);
+    }
+    .section-desc { font-size: 13px; color: var(--gray-500); margin-bottom: 12px; }
+
+    label { display: block; font-size: 14px; font-weight: 500; margin-bottom: 6px; }
+    .required::after { content: ' *'; color: var(--danger); }
+
+    select, input, textarea {
+      width: 100%; padding: 10px 14px; border: 1px solid var(--gray-300);
+      border-radius: 8px; font-size: 14px; font-family: 'Inter', sans-serif;
+      transition: border-color 0.2s;
+    }
+    select:focus, input:focus, textarea:focus { outline: none; border-color: var(--primary-light); box-shadow: 0 0 0 3px rgba(43,108,176,0.1); }
+    textarea { resize: vertical; min-height: 80px; }
+
+    .field { margin-bottom: 16px; }
+
+    .radio-group { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 4px; }
+    .radio-option {
+      flex: 1; min-width: 80px; text-align: center;
+      padding: 10px 8px; border: 2px solid var(--gray-200); border-radius: 8px;
+      cursor: pointer; font-size: 13px; transition: all 0.2s;
+    }
+    .radio-option:hover { border-color: var(--primary-light); background: var(--gray-50); }
+    .radio-option.selected { border-color: var(--primary); background: #ebf8ff; font-weight: 600; }
+    .radio-option input { display: none; }
+
+    .checkbox-group { display: flex; flex-direction: column; gap: 8px; margin-top: 4px; }
+    .checkbox-option {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 14px; border: 1px solid var(--gray-200); border-radius: 8px;
+      cursor: pointer; font-size: 13px; transition: all 0.2s;
+    }
+    .checkbox-option:hover { border-color: var(--primary-light); background: var(--gray-50); }
+    .checkbox-option.checked { border-color: var(--accent); background: var(--accent-light); }
+    .checkbox-option input { width: auto; margin: 0; }
+
+    .emoji-scale { display: flex; gap: 6px; justify-content: space-between; margin-top: 4px; }
+    .emoji-option {
+      flex: 1; text-align: center; padding: 12px 4px; border: 2px solid var(--gray-200);
+      border-radius: 8px; cursor: pointer; transition: all 0.2s; font-size: 20px;
+    }
+    .emoji-option span { display: block; font-size: 10px; margin-top: 4px; color: var(--gray-500); }
+    .emoji-option:hover { border-color: var(--primary-light); }
+    .emoji-option.selected { border-color: var(--primary); background: #ebf8ff; }
+    .emoji-option input { display: none; }
+
+    .btn {
+      display: block; width: 100%; padding: 14px; border: none;
+      border-radius: 8px; font-size: 16px; font-weight: 600;
+      cursor: pointer; transition: all 0.2s; font-family: 'Inter', sans-serif;
+    }
+    .btn-primary { background: var(--primary); color: white; }
+    .btn-primary:hover { background: var(--primary-light); }
+    .btn-primary:disabled { background: var(--gray-300); cursor: not-allowed; }
+
+    .success-msg {
+      display: none; text-align: center; padding: 40px 20px;
+      background: var(--accent-light); border-radius: 12px;
+    }
+    .success-msg h2 { color: #276749; margin-bottom: 8px; }
+    .success-msg p { color: #276749; font-size: 14px; }
+
+    .week-info {
+      background: var(--gray-50); border: 1px solid var(--gray-200);
+      border-radius: 8px; padding: 12px 16px; margin-bottom: 16px;
+      font-size: 13px;
+    }
+    .week-info strong { color: var(--primary); }
+
+    .hidden { display: none; }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <div class="header">
+    <h1>Check-in Semanal</h1>
+    <p>FedCorp — Programa de Evolução Técnica</p>
+  </div>
+
+  <div class="form-card" id="formCard">
+    <form id="checkinForm">
+
+      <!-- IDENTIFICAÇÃO -->
+      <div class="section">
+        <div class="section-title">Quem é você</div>
+        <div class="field">
+          <label class="required">Seu nome</label>
+          <select id="nome" required>
+            <option value="">Selecione...</option>
+            <option value="Leonan">Leonan Thomaz de Oliveira</option>
+            <option value="Ingryd">Ingryd Aylana Silva dos Santos</option>
+            <option value="Daniel">Daniel Mello de Carvalho de Faria</option>
+          </select>
+        </div>
+        <div class="field">
+          <label class="required">Semana</label>
+          <select id="semana" required>
+            <option value="">Selecione a semana...</option>
+            <option value="S01">Semana 1</option>
+            <option value="S02">Semana 2</option>
+            <option value="S03">Semana 3</option>
+            <option value="S04">Semana 4</option>
+            <option value="S05">Semana 5</option>
+            <option value="S06">Semana 6</option>
+            <option value="S07">Semana 7</option>
+            <option value="S08">Semana 8</option>
+            <option value="S09">Semana 9</option>
+            <option value="S10">Semana 10</option>
+            <option value="S11">Semana 11</option>
+            <option value="S12">Semana 12</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- ATIVIDADES -->
+      <div class="section">
+        <div class="section-title">Atividades da Semana</div>
+        <div class="section-desc">Marque o que você conseguiu fazer esta semana.</div>
+
+        <div class="field">
+          <label class="required">Fundamento (leitura do tema)</label>
+          <div class="radio-group" data-field="fundamento">
+            <label class="radio-option" onclick="selectRadio(this)">
+              <input type="radio" name="fundamento" value="completo" required> Fiz completo
+            </label>
+            <label class="radio-option" onclick="selectRadio(this)">
+              <input type="radio" name="fundamento" value="parcial"> Fiz parcialmente
+            </label>
+            <label class="radio-option" onclick="selectRadio(this)">
+              <input type="radio" name="fundamento" value="nao-fiz"> Não consegui fazer
+            </label>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="required">Exemplo Guiado (acompanhar o passo a passo)</label>
+          <div class="radio-group" data-field="exemplo">
+            <label class="radio-option" onclick="selectRadio(this)">
+              <input type="radio" name="exemplo" value="completo" required> Fiz completo
+            </label>
+            <label class="radio-option" onclick="selectRadio(this)">
+              <input type="radio" name="exemplo" value="parcial"> Fiz parcialmente
+            </label>
+            <label class="radio-option" onclick="selectRadio(this)">
+              <input type="radio" name="exemplo" value="nao-fiz"> Não consegui fazer
+            </label>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="required">Exercício Solo (a tarefa da semana)</label>
+          <div class="radio-group" data-field="exercicio">
+            <label class="radio-option" onclick="selectRadio(this)">
+              <input type="radio" name="exercicio" value="completo" required> Fiz completo
+            </label>
+            <label class="radio-option" onclick="selectRadio(this)">
+              <input type="radio" name="exercicio" value="parcial"> Fiz parcialmente
+            </label>
+            <label class="radio-option" onclick="selectRadio(this)">
+              <input type="radio" name="exercicio" value="nao-fiz"> Não consegui fazer
+            </label>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="required">Arquivo decisoes.md (explicação das suas escolhas)</label>
+          <div class="radio-group" data-field="decisoes_md">
+            <label class="radio-option" onclick="selectRadio(this)">
+              <input type="radio" name="decisoes_md" value="sim" required> Sim, criei
+            </label>
+            <label class="radio-option" onclick="selectRadio(this)">
+              <input type="radio" name="decisoes_md" value="parcial"> Parcialmente
+            </label>
+            <label class="radio-option" onclick="selectRadio(this)">
+              <input type="radio" name="decisoes_md" value="nao"> Não criei
+            </label>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Link do repositório (se tiver)</label>
+          <input type="url" id="repo_link" placeholder="https://github.com/seu-usuario/fedcorp-exercicios">
+        </div>
+      </div>
+
+      <!-- CONFIANÇA -->
+      <div class="section">
+        <div class="section-title">Como você se sentiu</div>
+
+        <div class="field">
+          <label class="required">Quanto você entendeu o tema desta semana?</label>
+          <div class="emoji-scale" data-field="entendimento">
+            <label class="emoji-option" onclick="selectEmoji(this)">
+              <input type="radio" name="entendimento" value="1" required>
+              😵
+              <span>Não entendi</span>
+            </label>
+            <label class="emoji-option" onclick="selectEmoji(this)">
+              <input type="radio" name="entendimento" value="2">
+              😕
+              <span>Pouco</span>
+            </label>
+            <label class="emoji-option" onclick="selectEmoji(this)">
+              <input type="radio" name="entendimento" value="3">
+              😐
+              <span>Mais ou menos</span>
+            </label>
+            <label class="emoji-option" onclick="selectEmoji(this)">
+              <input type="radio" name="entendimento" value="4">
+              🙂
+              <span>Bem</span>
+            </label>
+            <label class="emoji-option" onclick="selectEmoji(this)">
+              <input type="radio" name="entendimento" value="5">
+              🤩
+              <span>Dominei</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="required">Você conseguiria explicar esse tema para outra pessoa?</label>
+          <div class="radio-group" data-field="consegue_explicar">
+            <label class="radio-option" onclick="selectRadio(this)">
+              <input type="radio" name="consegue_explicar" value="sim-tranquilo" required> Sim, tranquilo
+            </label>
+            <label class="radio-option" onclick="selectRadio(this)">
+              <input type="radio" name="consegue_explicar" value="com-dificuldade"> Com dificuldade
+            </label>
+            <label class="radio-option" onclick="selectRadio(this)">
+              <input type="radio" name="consegue_explicar" value="nao-ainda"> Não ainda
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- DIFICULDADES -->
+      <div class="section">
+        <div class="section-title">Dificuldades e Necessidades</div>
+
+        <div class="field">
+          <label>Onde você travou esta semana? (descreva o problema específico)</label>
+          <textarea id="onde_travou" placeholder="Ex: Não consegui entender como generics funcionam no TypeScript. Tentei ler a documentação mas ficou abstrato."></textarea>
+        </div>
+
+        <div class="field">
+          <label>O que te impediu de fazer as atividades? (se não conseguiu)</label>
+          <div class="checkbox-group">
+            <label class="checkbox-option" onclick="toggleCheck(this)">
+              <input type="checkbox" name="impedimentos" value="tempo"> Falta de tempo
+            </label>
+            <label class="checkbox-option" onclick="toggleCheck(this)">
+              <input type="checkbox" name="impedimentos" value="dificuldade-tecnica"> Dificuldade técnica (não entendi o conteúdo)
+            </label>
+            <label class="checkbox-option" onclick="toggleCheck(this)">
+              <input type="checkbox" name="impedimentos" value="ambiente"> Problema com ambiente de desenvolvimento (instalação, config)
+            </label>
+            <label class="checkbox-option" onclick="toggleCheck(this)">
+              <input type="checkbox" name="impedimentos" value="demandas-trabalho"> Demandas do trabalho tomaram prioridade
+            </label>
+            <label class="checkbox-option" onclick="toggleCheck(this)">
+              <input type="checkbox" name="impedimentos" value="nenhum"> Nenhum impedimento — consegui fazer tudo
+            </label>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Tem alguma necessidade que o plano não cobre? (ferramenta, tema, recurso)</label>
+          <textarea id="necessidades" placeholder="Ex: Gostaria de ter mais exemplos práticos sobre X. Preciso de ajuda para configurar o ambiente de testes."></textarea>
+        </div>
+      </div>
+
+      <!-- TEMPO -->
+      <div class="section">
+        <div class="section-title">Tempo e Ritmo</div>
+
+        <div class="field">
+          <label class="required">Quantas horas você dedicou às atividades esta semana?</label>
+          <div class="radio-group" data-field="horas">
+            <label class="radio-option" onclick="selectRadio(this)">
+              <input type="radio" name="horas" value="0" required> 0h
+            </label>
+            <label class="radio-option" onclick="selectRadio(this)">
+              <input type="radio" name="horas" value="1-2"> 1–2h
+            </label>
+            <label class="radio-option" onclick="selectRadio(this)">
+              <input type="radio" name="horas" value="3-4"> 3–4h
+            </label>
+            <label class="radio-option" onclick="selectRadio(this)">
+              <input type="radio" name="horas" value="5-6"> 5–6h
+            </label>
+            <label class="radio-option" onclick="selectRadio(this)">
+              <input type="radio" name="horas" value="7+"> 7h+
+            </label>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="required">O ritmo do plano está adequado pra você?</label>
+          <div class="radio-group" data-field="ritmo">
+            <label class="radio-option" onclick="selectRadio(this)">
+              <input type="radio" name="ritmo" value="lento" required> Muito lento
+            </label>
+            <label class="radio-option" onclick="selectRadio(this)">
+              <input type="radio" name="ritmo" value="adequado"> Adequado
+            </label>
+            <label class="radio-option" onclick="selectRadio(this)">
+              <input type="radio" name="ritmo" value="rapido"> Muito rápido
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- LIVRE -->
+      <div class="section">
+        <div class="section-title">Espaço livre</div>
+        <div class="field">
+          <label>Quer dizer mais alguma coisa? (opcional)</label>
+          <textarea id="mensagem_livre" placeholder="Qualquer observação, sugestão ou feedback sobre o programa."></textarea>
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-primary" id="submitBtn">Enviar Check-in</button>
+    </form>
+  </div>
+
+  <div class="success-msg" id="successMsg">
+    <h2>Check-in enviado!</h2>
+    <p>Suas respostas foram registradas. Obrigado por compartilhar seu progresso.</p>
+    <p style="margin-top: 16px; font-size: 13px; color: #4a5568;">Você pode fechar esta página ou enviar outro check-in.</p>
+    <button class="btn btn-primary" style="margin-top: 20px; max-width: 300px; margin-left: auto; margin-right: auto;" onclick="resetForm()">Enviar outro</button>
+  </div>
+</div>
+
+<script>
+  // =====================================================
+  // CONFIGURAÇÃO: Cole aqui a URL do Google Apps Script
+  // =====================================================
+  const GOOGLE_SHEETS_URL = 'COLE_SUA_URL_AQUI';
+
+  function selectRadio(el) {
+    const group = el.parentElement;
+    group.querySelectorAll('.radio-option').forEach(o => o.classList.remove('selected'));
+    el.classList.add('selected');
+    el.querySelector('input').checked = true;
+  }
+
+  function selectEmoji(el) {
+    const group = el.parentElement;
+    group.querySelectorAll('.emoji-option').forEach(o => o.classList.remove('selected'));
+    el.classList.add('selected');
+    el.querySelector('input').checked = true;
+  }
+
+  function toggleCheck(el) {
+    const cb = el.querySelector('input');
+    cb.checked = !cb.checked;
+    el.classList.toggle('checked', cb.checked);
+
+    if (cb.value === 'nenhum' && cb.checked) {
+      el.parentElement.querySelectorAll('.checkbox-option').forEach(o => {
+        if (o !== el) { o.classList.remove('checked'); o.querySelector('input').checked = false; }
+      });
+    } else if (cb.value !== 'nenhum' && cb.checked) {
+      el.parentElement.querySelectorAll('.checkbox-option').forEach(o => {
+        if (o.querySelector('input').value === 'nenhum') { o.classList.remove('checked'); o.querySelector('input').checked = false; }
+      });
+    }
+  }
+
+  function getRadioValue(name) {
+    const el = document.querySelector(`input[name="${name}"]:checked`);
+    return el ? el.value : '';
+  }
+
+  function getCheckboxValues(name) {
+    return Array.from(document.querySelectorAll(`input[name="${name}"]:checked`)).map(cb => cb.value);
+  }
+
+  document.getElementById('checkinForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const btn = document.getElementById('submitBtn');
+    btn.disabled = true;
+    btn.textContent = 'Enviando...';
+
+    const data = {
+      nome: document.getElementById('nome').value,
+      semana: document.getElementById('semana').value,
+      fundamento: getRadioValue('fundamento'),
+      exemplo: getRadioValue('exemplo'),
+      exercicio: getRadioValue('exercicio'),
+      decisoes_md: getRadioValue('decisoes_md'),
+      repo_link: document.getElementById('repo_link').value,
+      entendimento: getRadioValue('entendimento'),
+      consegue_explicar: getRadioValue('consegue_explicar'),
+      onde_travou: document.getElementById('onde_travou').value,
+      impedimentos: getCheckboxValues('impedimentos'),
+      necessidades: document.getElementById('necessidades').value,
+      horas: getRadioValue('horas'),
+      ritmo: getRadioValue('ritmo'),
+      mensagem_livre: document.getElementById('mensagem_livre').value
+    };
+
+    try {
+      const response = await fetch(GOOGLE_SHEETS_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+      document.getElementById('formCard').style.display = 'none';
+      document.getElementById('successMsg').style.display = 'block';
+    } catch (error) {
+      alert('Erro ao enviar. Tente novamente.');
+      btn.disabled = false;
+      btn.textContent = 'Enviar Check-in';
+    }
+  });
+
+  function resetForm() {
+    document.getElementById('checkinForm').reset();
+    document.querySelectorAll('.selected, .checked').forEach(el => el.classList.remove('selected', 'checked'));
+    document.getElementById('formCard').style.display = 'block';
+    document.getElementById('successMsg').style.display = 'none';
+    document.getElementById('submitBtn').disabled = false;
+    document.getElementById('submitBtn').textContent = 'Enviar Check-in';
+  }
+</script>
+</body>
+</html>

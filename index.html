@@ -1,0 +1,1562 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pesquisa Técnica — FedCorp</title>
+  <style>
+    :root {
+      --primary: #0f172a;
+      --primary-light: #1e293b;
+      --accent: #3b82f6;
+      --accent-hover: #2563eb;
+      --accent-light: #dbeafe;
+      --success: #22c55e;
+      --success-light: #dcfce7;
+      --warn: #f59e0b;
+      --danger: #ef4444;
+      --gray-50: #f8fafc;
+      --gray-100: #f1f5f9;
+      --gray-200: #e2e8f0;
+      --gray-300: #cbd5e1;
+      --gray-400: #94a3b8;
+      --gray-500: #64748b;
+      --gray-600: #475569;
+      --gray-700: #334155;
+      --gray-800: #1e293b;
+      --radius: 12px;
+      --radius-sm: 8px;
+      --shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+      --transition: 0.2s ease;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: var(--gray-50);
+      color: var(--gray-700);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    .header {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+      color: white;
+      padding: 2rem 1.5rem;
+      text-align: center;
+    }
+
+    .header-logo {
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      opacity: 0.7;
+      margin-bottom: 0.75rem;
+    }
+
+    .header h1 {
+      font-size: 1.75rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .header p {
+      font-size: 0.95rem;
+      opacity: 0.8;
+      max-width: 540px;
+      margin: 0 auto;
+    }
+
+    .progress-container {
+      background: white;
+      border-bottom: 1px solid var(--gray-200);
+      padding: 1.25rem 1.5rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: var(--shadow);
+    }
+
+    .progress-steps {
+      display: flex;
+      justify-content: center;
+      gap: 0.5rem;
+      max-width: 700px;
+      margin: 0 auto;
+      flex-wrap: wrap;
+    }
+
+    .progress-step {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.8rem;
+      color: var(--gray-400);
+      font-weight: 500;
+      transition: var(--transition);
+    }
+
+    .progress-step .step-num {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 700;
+      border: 2px solid var(--gray-300);
+      background: white;
+      transition: var(--transition);
+      flex-shrink: 0;
+    }
+
+    .progress-step.active {
+      color: var(--accent);
+    }
+
+    .progress-step.active .step-num {
+      border-color: var(--accent);
+      background: var(--accent);
+      color: white;
+    }
+
+    .progress-step.completed {
+      color: var(--success);
+    }
+
+    .progress-step.completed .step-num {
+      border-color: var(--success);
+      background: var(--success);
+      color: white;
+    }
+
+    .progress-step .step-connector {
+      width: 24px;
+      height: 2px;
+      background: var(--gray-300);
+      margin: 0 0.25rem;
+      transition: var(--transition);
+    }
+
+    .progress-step.completed .step-connector {
+      background: var(--success);
+    }
+
+    @media (max-width: 600px) {
+      .progress-step .step-label {
+        display: none;
+      }
+
+      .progress-step .step-connector {
+        width: 16px;
+      }
+    }
+
+    .container {
+      max-width: 720px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+
+    .form-step {
+      display: none;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .form-step.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(12px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .card {
+      background: white;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 2rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .card-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 0.35rem;
+    }
+
+    .card-subtitle {
+      font-size: 0.9rem;
+      color: var(--gray-500);
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group:last-child {
+      margin-bottom: 0;
+    }
+
+    label {
+      display: block;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--gray-700);
+      margin-bottom: 0.4rem;
+    }
+
+    label .required {
+      color: var(--danger);
+      margin-left: 2px;
+    }
+
+    .form-hint {
+      font-size: 0.8rem;
+      color: var(--gray-400);
+      margin-bottom: 0.4rem;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 0.7rem 0.9rem;
+      border: 1.5px solid var(--gray-200);
+      border-radius: var(--radius-sm);
+      font-size: 0.95rem;
+      font-family: inherit;
+      color: var(--gray-700);
+      background: white;
+      transition: var(--transition);
+      outline: none;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-light);
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    .input-error {
+      border-color: var(--danger) !important;
+      box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1) !important;
+    }
+
+    .error-msg {
+      font-size: 0.8rem;
+      color: var(--danger);
+      margin-top: 0.3rem;
+      display: none;
+    }
+
+    .skill-grid {
+      display: grid;
+      gap: 1rem;
+    }
+
+    .skill-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 0.75rem 0;
+      border-bottom: 1px solid var(--gray-100);
+    }
+
+    .skill-row:last-child {
+      border-bottom: none;
+    }
+
+    .skill-name {
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--gray-700);
+      min-width: 140px;
+    }
+
+    .rating-group {
+      display: flex;
+      gap: 0.35rem;
+    }
+
+    .rating-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      border: 1.5px solid var(--gray-200);
+      background: white;
+      color: var(--gray-500);
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .rating-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: var(--accent-light);
+    }
+
+    .rating-btn.selected {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: white;
+    }
+
+    .rating-legend {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.72rem;
+      color: var(--gray-400);
+      margin-bottom: 1rem;
+      padding: 0.5rem 0.75rem;
+      background: var(--gray-50);
+      border-radius: var(--radius-sm);
+    }
+
+    .check-group {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 0.5rem;
+    }
+
+    .check-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.6rem 0.75rem;
+      border: 1.5px solid var(--gray-200);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: var(--transition);
+      font-size: 0.9rem;
+    }
+
+    .check-item:hover {
+      border-color: var(--accent);
+      background: var(--accent-light);
+    }
+
+    .check-item input[type="checkbox"] {
+      width: auto;
+      accent-color: var(--accent);
+    }
+
+    .check-item.checked {
+      border-color: var(--accent);
+      background: var(--accent-light);
+    }
+
+    .radio-group {
+      display: grid;
+      gap: 0.5rem;
+    }
+
+    .radio-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.6rem;
+      padding: 0.75rem 1rem;
+      border: 1.5px solid var(--gray-200);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .radio-item:hover {
+      border-color: var(--accent);
+      background: var(--accent-light);
+    }
+
+    .radio-item input[type="radio"] {
+      width: auto;
+      margin-top: 3px;
+      accent-color: var(--accent);
+    }
+
+    .radio-item.selected {
+      border-color: var(--accent);
+      background: var(--accent-light);
+    }
+
+    .radio-item .radio-label {
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+
+    .radio-item .radio-desc {
+      font-size: 0.8rem;
+      color: var(--gray-500);
+    }
+
+    .nav-buttons {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    .btn {
+      padding: 0.75rem 2rem;
+      border-radius: var(--radius-sm);
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      border: none;
+      font-family: inherit;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: var(--accent-hover);
+    }
+
+    .btn-secondary {
+      background: white;
+      color: var(--gray-600);
+      border: 1.5px solid var(--gray-200);
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--gray-400);
+    }
+
+    .btn-success {
+      background: var(--success);
+      color: white;
+      padding: 1rem 2.5rem;
+      font-size: 1.05rem;
+    }
+
+    .btn-success:hover {
+      background: #16a34a;
+    }
+
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .success-screen {
+      display: none;
+      text-align: center;
+      padding: 3rem 1.5rem;
+    }
+
+    .success-screen.active {
+      display: block;
+    }
+
+    .success-icon {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: var(--success-light);
+      color: var(--success);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+      margin: 0 auto 1.5rem;
+    }
+
+    .success-screen h2 {
+      font-size: 1.5rem;
+      color: var(--primary);
+      margin-bottom: 0.75rem;
+    }
+
+    .success-screen p {
+      color: var(--gray-500);
+      max-width: 400px;
+      margin: 0 auto;
+    }
+
+    .section-divider {
+      height: 1px;
+      background: var(--gray-200);
+      margin: 1.5rem 0;
+    }
+
+    .info-box {
+      background: var(--accent-light);
+      border-left: 3px solid var(--accent);
+      padding: 0.85rem 1rem;
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      margin-bottom: 1.5rem;
+      font-size: 0.85rem;
+      color: var(--gray-600);
+    }
+
+    .footer {
+      text-align: center;
+      padding: 2rem 1rem;
+      color: var(--gray-400);
+      font-size: 0.8rem;
+    }
+
+    @media (max-width: 600px) {
+      .card {
+        padding: 1.25rem;
+      }
+
+      .header h1 {
+        font-size: 1.35rem;
+      }
+
+      .skill-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+      }
+
+      .rating-btn {
+        width: 40px;
+        height: 40px;
+      }
+
+      .nav-buttons {
+        flex-direction: column-reverse;
+      }
+
+      .btn {
+        width: 100%;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="header">
+    <div class="header-logo">FedCorp</div>
+    <h1>Pesquisa Técnica</h1>
+    <p>Me ajude a entender onde você está hoje para que possamos criar o melhor plano de evolução para você. Não existe
+      resposta certa ou errada — seja honesto!</p>
+  </div>
+
+  <div class="progress-container">
+    <div class="progress-steps">
+      <div class="progress-step active" data-progress="1">
+        <span class="step-num">1</span>
+        <span class="step-label">Sobre Você</span>
+        <span class="step-connector"></span>
+      </div>
+      <div class="progress-step" data-progress="2">
+        <span class="step-num">2</span>
+        <span class="step-label">Técnico</span>
+        <span class="step-connector"></span>
+      </div>
+      <div class="progress-step" data-progress="3">
+        <span class="step-num">3</span>
+        <span class="step-label">Práticas</span>
+        <span class="step-connector"></span>
+      </div>
+      <div class="progress-step" data-progress="4">
+        <span class="step-num">4</span>
+        <span class="step-label">Processos</span>
+        <span class="step-connector"></span>
+      </div>
+      <div class="progress-step" data-progress="5">
+        <span class="step-num">5</span>
+        <span class="step-label">Objetivos</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <form id="assessmentForm" novalidate>
+
+      <!-- STEP 1: Sobre Você -->
+      <div class="form-step active" data-step="1">
+        <div class="card">
+          <div class="card-title">Sobre Você</div>
+          <div class="card-subtitle">Informações básicas para começarmos.</div>
+
+          <div class="form-group">
+            <label>Nome completo <span class="required">*</span></label>
+            <input type="text" name="nome" required placeholder="Seu nome completo">
+            <div class="error-msg">Por favor, insira seu nome.</div>
+          </div>
+
+          <div class="form-group">
+            <label>E-mail <span class="required">*</span></label>
+            <input type="email" name="email" required placeholder="seu@email.com">
+            <div class="error-msg">Por favor, insira um e-mail válido.</div>
+          </div>
+
+          <div class="form-group">
+            <label>Há quanto tempo trabalha com desenvolvimento? <span class="required">*</span></label>
+            <select name="experiencia" required>
+              <option value="">Selecione...</option>
+              <option value="menos-6-meses">Menos de 6 meses</option>
+              <option value="6m-1-ano">6 meses a 1 ano</option>
+              <option value="1-2-anos">1 a 2 anos</option>
+              <option value="2-3-anos">2 a 3 anos</option>
+              <option value="3-5-anos">3 a 5 anos</option>
+              <option value="5-mais">Mais de 5 anos</option>
+            </select>
+            <div class="error-msg">Por favor, selecione uma opção.</div>
+          </div>
+
+          <div class="form-group">
+            <label>Como aprendeu a programar? <span class="required">*</span></label>
+            <select name="formacao" required>
+              <option value="">Selecione...</option>
+              <option value="autodidata">Autodidata (YouTube, cursos online, docs)</option>
+              <option value="bootcamp">Bootcamp</option>
+              <option value="curso-tecnico">Curso técnico</option>
+              <option value="faculdade">Faculdade / Graduação</option>
+              <option value="misto">Misto (faculdade + autodidata)</option>
+            </select>
+            <div class="error-msg">Por favor, selecione uma opção.</div>
+          </div>
+
+          <div class="form-group">
+            <label>Qual projeto mais complexo que já fez? <span class="required">*</span></label>
+            <textarea name="projeto_complexo" required
+              placeholder="Descreva brevemente o projeto mais desafiador que você já trabalhou..."></textarea>
+            <div class="error-msg">Por favor, descreva um projeto.</div>
+          </div>
+        </div>
+
+        <div class="nav-buttons">
+          <div></div>
+          <button type="button" class="btn btn-primary" onclick="nextStep()">Próximo &rarr;</button>
+        </div>
+      </div>
+
+      <!-- STEP 2: Conhecimentos Técnicos -->
+      <div class="form-step" data-step="2">
+        <div class="card">
+          <div class="card-title">Conhecimentos Técnicos</div>
+          <div class="card-subtitle">Avalie seu nível de confiança em cada tecnologia.</div>
+
+          <div class="info-box">
+            Essa é uma autoavaliação — não se preocupe em "acertar". O objetivo é entender onde você está hoje para
+            podermos te ajudar a evoluir.
+          </div>
+
+          <div class="rating-legend">
+            <span>1 = Nunca usei</span>
+            <span>2 = Já vi/li sobre</span>
+            <span>3 = Uso com ajuda</span>
+            <span>4 = Uso com confiança</span>
+            <span>5 = Posso ensinar</span>
+          </div>
+
+          <div class="card-title" style="font-size:1rem; margin-top:1rem;">Frontend</div>
+          <div class="skill-grid">
+            <div class="skill-row">
+              <span class="skill-name">HTML</span>
+              <div class="rating-group" data-skill="html">
+                <button type="button" class="rating-btn" data-value="1">1</button>
+                <button type="button" class="rating-btn" data-value="2">2</button>
+                <button type="button" class="rating-btn" data-value="3">3</button>
+                <button type="button" class="rating-btn" data-value="4">4</button>
+                <button type="button" class="rating-btn" data-value="5">5</button>
+              </div>
+            </div>
+            <div class="skill-row">
+              <span class="skill-name">CSS</span>
+              <div class="rating-group" data-skill="css">
+                <button type="button" class="rating-btn" data-value="1">1</button>
+                <button type="button" class="rating-btn" data-value="2">2</button>
+                <button type="button" class="rating-btn" data-value="3">3</button>
+                <button type="button" class="rating-btn" data-value="4">4</button>
+                <button type="button" class="rating-btn" data-value="5">5</button>
+              </div>
+            </div>
+            <div class="skill-row">
+              <span class="skill-name">JavaScript</span>
+              <div class="rating-group" data-skill="javascript">
+                <button type="button" class="rating-btn" data-value="1">1</button>
+                <button type="button" class="rating-btn" data-value="2">2</button>
+                <button type="button" class="rating-btn" data-value="3">3</button>
+                <button type="button" class="rating-btn" data-value="4">4</button>
+                <button type="button" class="rating-btn" data-value="5">5</button>
+              </div>
+            </div>
+            <div class="skill-row">
+              <span class="skill-name">TypeScript</span>
+              <div class="rating-group" data-skill="typescript">
+                <button type="button" class="rating-btn" data-value="1">1</button>
+                <button type="button" class="rating-btn" data-value="2">2</button>
+                <button type="button" class="rating-btn" data-value="3">3</button>
+                <button type="button" class="rating-btn" data-value="4">4</button>
+                <button type="button" class="rating-btn" data-value="5">5</button>
+              </div>
+            </div>
+            <div class="skill-row">
+              <span class="skill-name">React</span>
+              <div class="rating-group" data-skill="react">
+                <button type="button" class="rating-btn" data-value="1">1</button>
+                <button type="button" class="rating-btn" data-value="2">2</button>
+                <button type="button" class="rating-btn" data-value="3">3</button>
+                <button type="button" class="rating-btn" data-value="4">4</button>
+                <button type="button" class="rating-btn" data-value="5">5</button>
+              </div>
+            </div>
+            <div class="skill-row">
+              <span class="skill-name">Vue.js</span>
+              <div class="rating-group" data-skill="vuejs">
+                <button type="button" class="rating-btn" data-value="1">1</button>
+                <button type="button" class="rating-btn" data-value="2">2</button>
+                <button type="button" class="rating-btn" data-value="3">3</button>
+                <button type="button" class="rating-btn" data-value="4">4</button>
+                <button type="button" class="rating-btn" data-value="5">5</button>
+              </div>
+            </div>
+            <div class="skill-row">
+              <span class="skill-name">Angular</span>
+              <div class="rating-group" data-skill="angular">
+                <button type="button" class="rating-btn" data-value="1">1</button>
+                <button type="button" class="rating-btn" data-value="2">2</button>
+                <button type="button" class="rating-btn" data-value="3">3</button>
+                <button type="button" class="rating-btn" data-value="4">4</button>
+                <button type="button" class="rating-btn" data-value="5">5</button>
+              </div>
+            </div>
+            <div class="skill-row">
+              <span class="skill-name">Tailwind CSS</span>
+              <div class="rating-group" data-skill="tailwind">
+                <button type="button" class="rating-btn" data-value="1">1</button>
+                <button type="button" class="rating-btn" data-value="2">2</button>
+                <button type="button" class="rating-btn" data-value="3">3</button>
+                <button type="button" class="rating-btn" data-value="4">4</button>
+                <button type="button" class="rating-btn" data-value="5">5</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="section-divider"></div>
+
+          <div class="card-title" style="font-size:1rem;">Backend</div>
+          <div class="skill-grid">
+            <div class="skill-row">
+              <span class="skill-name">Node.js</span>
+              <div class="rating-group" data-skill="nodejs">
+                <button type="button" class="rating-btn" data-value="1">1</button>
+                <button type="button" class="rating-btn" data-value="2">2</button>
+                <button type="button" class="rating-btn" data-value="3">3</button>
+                <button type="button" class="rating-btn" data-value="4">4</button>
+                <button type="button" class="rating-btn" data-value="5">5</button>
+              </div>
+            </div>
+            <div class="skill-row">
+              <span class="skill-name">Python</span>
+              <div class="rating-group" data-skill="python">
+                <button type="button" class="rating-btn" data-value="1">1</button>
+                <button type="button" class="rating-btn" data-value="2">2</button>
+                <button type="button" class="rating-btn" data-value="3">3</button>
+                <button type="button" class="rating-btn" data-value="4">4</button>
+                <button type="button" class="rating-btn" data-value="5">5</button>
+              </div>
+            </div>
+            <div class="skill-row">
+              <span class="skill-name">Java</span>
+              <div class="rating-group" data-skill="java">
+                <button type="button" class="rating-btn" data-value="1">1</button>
+                <button type="button" class="rating-btn" data-value="2">2</button>
+                <button type="button" class="rating-btn" data-value="3">3</button>
+                <button type="button" class="rating-btn" data-value="4">4</button>
+                <button type="button" class="rating-btn" data-value="5">5</button>
+              </div>
+            </div>
+            <div class="skill-row">
+              <span class="skill-name">PHP</span>
+              <div class="rating-group" data-skill="php">
+                <button type="button" class="rating-btn" data-value="1">1</button>
+                <button type="button" class="rating-btn" data-value="2">2</button>
+                <button type="button" class="rating-btn" data-value="3">3</button>
+                <button type="button" class="rating-btn" data-value="4">4</button>
+                <button type="button" class="rating-btn" data-value="5">5</button>
+              </div>
+            </div>
+            <div class="skill-row">
+              <span class="skill-name">C# / .NET</span>
+              <div class="rating-group" data-skill="csharp">
+                <button type="button" class="rating-btn" data-value="1">1</button>
+                <button type="button" class="rating-btn" data-value="2">2</button>
+                <button type="button" class="rating-btn" data-value="3">3</button>
+                <button type="button" class="rating-btn" data-value="4">4</button>
+                <button type="button" class="rating-btn" data-value="5">5</button>
+              </div>
+            </div>
+            <div class="skill-row">
+              <span class="skill-name">APIs REST</span>
+              <div class="rating-group" data-skill="apis-rest">
+                <button type="button" class="rating-btn" data-value="1">1</button>
+                <button type="button" class="rating-btn" data-value="2">2</button>
+                <button type="button" class="rating-btn" data-value="3">3</button>
+                <button type="button" class="rating-btn" data-value="4">4</button>
+                <button type="button" class="rating-btn" data-value="5">5</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="section-divider"></div>
+
+          <div class="card-title" style="font-size:1rem;">Banco de Dados</div>
+          <div class="skill-grid">
+            <div class="skill-row">
+              <span class="skill-name">SQL (geral)</span>
+              <div class="rating-group" data-skill="sql">
+                <button type="button" class="rating-btn" data-value="1">1</button>
+                <button type="button" class="rating-btn" data-value="2">2</button>
+                <button type="button" class="rating-btn" data-value="3">3</button>
+                <button type="button" class="rating-btn" data-value="4">4</button>
+                <button type="button" class="rating-btn" data-value="5">5</button>
+              </div>
+            </div>
+            <div class="skill-row">
+              <span class="skill-name">PostgreSQL / MySQL</span>
+              <div class="rating-group" data-skill="postgresql-mysql">
+                <button type="button" class="rating-btn" data-value="1">1</button>
+                <button type="button" class="rating-btn" data-value="2">2</button>
+                <button type="button" class="rating-btn" data-value="3">3</button>
+                <button type="button" class="rating-btn" data-value="4">4</button>
+                <button type="button" class="rating-btn" data-value="5">5</button>
+              </div>
+            </div>
+            <div class="skill-row">
+              <span class="skill-name">MongoDB</span>
+              <div class="rating-group" data-skill="mongodb">
+                <button type="button" class="rating-btn" data-value="1">1</button>
+                <button type="button" class="rating-btn" data-value="2">2</button>
+                <button type="button" class="rating-btn" data-value="3">3</button>
+                <button type="button" class="rating-btn" data-value="4">4</button>
+                <button type="button" class="rating-btn" data-value="5">5</button>
+              </div>
+            </div>
+            <div class="skill-row">
+              <span class="skill-name">Firebase / Supabase</span>
+              <div class="rating-group" data-skill="firebase-supabase">
+                <button type="button" class="rating-btn" data-value="1">1</button>
+                <button type="button" class="rating-btn" data-value="2">2</button>
+                <button type="button" class="rating-btn" data-value="3">3</button>
+                <button type="button" class="rating-btn" data-value="4">4</button>
+                <button type="button" class="rating-btn" data-value="5">5</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="section-divider"></div>
+
+          <div class="card-title" style="font-size:1rem;">Infraestrutura & DevOps</div>
+          <div class="skill-grid">
+            <div class="skill-row">
+              <span class="skill-name">Git</span>
+              <div class="rating-group" data-skill="git">
+                <button type="button" class="rating-btn" data-value="1">1</button>
+                <button type="button" class="rating-btn" data-value="2">2</button>
+                <button type="button" class="rating-btn" data-value="3">3</button>
+                <button type="button" class="rating-btn" data-value="4">4</button>
+                <button type="button" class="rating-btn" data-value="5">5</button>
+              </div>
+            </div>
+            <div class="skill-row">
+              <span class="skill-name">Docker</span>
+              <div class="rating-group" data-skill="docker">
+                <button type="button" class="rating-btn" data-value="1">1</button>
+                <button type="button" class="rating-btn" data-value="2">2</button>
+                <button type="button" class="rating-btn" data-value="3">3</button>
+                <button type="button" class="rating-btn" data-value="4">4</button>
+                <button type="button" class="rating-btn" data-value="5">5</button>
+              </div>
+            </div>
+            <div class="skill-row">
+              <span class="skill-name">Linux / Terminal</span>
+              <div class="rating-group" data-skill="linux">
+                <button type="button" class="rating-btn" data-value="1">1</button>
+                <button type="button" class="rating-btn" data-value="2">2</button>
+                <button type="button" class="rating-btn" data-value="3">3</button>
+                <button type="button" class="rating-btn" data-value="4">4</button>
+                <button type="button" class="rating-btn" data-value="5">5</button>
+              </div>
+            </div>
+            <div class="skill-row">
+              <span class="skill-name">CI/CD</span>
+              <div class="rating-group" data-skill="cicd">
+                <button type="button" class="rating-btn" data-value="1">1</button>
+                <button type="button" class="rating-btn" data-value="2">2</button>
+                <button type="button" class="rating-btn" data-value="3">3</button>
+                <button type="button" class="rating-btn" data-value="4">4</button>
+                <button type="button" class="rating-btn" data-value="5">5</button>
+              </div>
+            </div>
+            <div class="skill-row">
+              <span class="skill-name">Cloud (AWS/GCP/Azure)</span>
+              <div class="rating-group" data-skill="cloud">
+                <button type="button" class="rating-btn" data-value="1">1</button>
+                <button type="button" class="rating-btn" data-value="2">2</button>
+                <button type="button" class="rating-btn" data-value="3">3</button>
+                <button type="button" class="rating-btn" data-value="4">4</button>
+                <button type="button" class="rating-btn" data-value="5">5</button>
+              </div>
+            </div>
+            <div class="skill-row">
+              <span class="skill-name">Testes Automatizados</span>
+              <div class="rating-group" data-skill="testes">
+                <button type="button" class="rating-btn" data-value="1">1</button>
+                <button type="button" class="rating-btn" data-value="2">2</button>
+                <button type="button" class="rating-btn" data-value="3">3</button>
+                <button type="button" class="rating-btn" data-value="4">4</button>
+                <button type="button" class="rating-btn" data-value="5">5</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="nav-buttons">
+          <button type="button" class="btn btn-secondary" onclick="prevStep()">&larr; Voltar</button>
+          <button type="button" class="btn btn-primary" onclick="nextStep()">Próximo &rarr;</button>
+        </div>
+      </div>
+
+      <!-- STEP 3: Práticas de Engenharia -->
+      <div class="form-step" data-step="3">
+        <div class="card">
+          <div class="card-title">Práticas de Engenharia</div>
+          <div class="card-subtitle">Como você trabalha no dia a dia.</div>
+
+          <div class="form-group">
+            <label>Qual seu nível de uso do Git? <span class="required">*</span></label>
+            <div class="radio-group">
+              <label class="radio-item" onclick="selectRadio(this)">
+                <input type="radio" name="git_nivel" value="nunca" required>
+                <div>
+                  <div class="radio-label">Nunca usei</div>
+                  <div class="radio-desc">Não sei o que é ou nunca mexi</div>
+                </div>
+              </label>
+              <label class="radio-item" onclick="selectRadio(this)">
+                <input type="radio" name="git_nivel" value="basico">
+                <div>
+                  <div class="radio-label">Básico</div>
+                  <div class="radio-desc">Sei fazer commit e push, mas sem branches</div>
+                </div>
+              </label>
+              <label class="radio-item" onclick="selectRadio(this)">
+                <input type="radio" name="git_nivel" value="branches">
+                <div>
+                  <div class="radio-label">Uso branches</div>
+                  <div class="radio-desc">Crio branches, faço merge, resolvo conflitos simples</div>
+                </div>
+              </label>
+              <label class="radio-item" onclick="selectRadio(this)">
+                <input type="radio" name="git_nivel" value="avancado">
+                <div>
+                  <div class="radio-label">Avançado</div>
+                  <div class="radio-desc">PRs, code review, rebase, gitflow ou similar</div>
+                </div>
+              </label>
+            </div>
+            <div class="error-msg">Por favor, selecione uma opção.</div>
+          </div>
+
+          <div class="section-divider"></div>
+
+          <div class="form-group">
+            <label>Você escreve testes para seu código? <span class="required">*</span></label>
+            <div class="radio-group">
+              <label class="radio-item" onclick="selectRadio(this)">
+                <input type="radio" name="testes_nivel" value="nunca" required>
+                <div>
+                  <div class="radio-label">Nunca escrevi testes</div>
+                </div>
+              </label>
+              <label class="radio-item" onclick="selectRadio(this)">
+                <input type="radio" name="testes_nivel" value="conceito">
+                <div>
+                  <div class="radio-label">Sei o conceito, mas não pratico</div>
+                </div>
+              </label>
+              <label class="radio-item" onclick="selectRadio(this)">
+                <input type="radio" name="testes_nivel" value="as-vezes">
+                <div>
+                  <div class="radio-label">Escrevo às vezes, quando lembro</div>
+                </div>
+              </label>
+              <label class="radio-item" onclick="selectRadio(this)">
+                <input type="radio" name="testes_nivel" value="sempre">
+                <div>
+                  <div class="radio-label">Escrevo testes regularmente</div>
+                </div>
+              </label>
+            </div>
+            <div class="error-msg">Por favor, selecione uma opção.</div>
+          </div>
+
+          <div class="section-divider"></div>
+
+          <div class="form-group">
+            <label>Já participou de Code Review? <span class="required">*</span></label>
+            <div class="radio-group">
+              <label class="radio-item" onclick="selectRadio(this)">
+                <input type="radio" name="code_review" value="nunca" required>
+                <div>
+                  <div class="radio-label">Nunca</div>
+                </div>
+              </label>
+              <label class="radio-item" onclick="selectRadio(this)">
+                <input type="radio" name="code_review" value="recebi">
+                <div>
+                  <div class="radio-label">Já recebi review de outro dev</div>
+                </div>
+              </label>
+              <label class="radio-item" onclick="selectRadio(this)">
+                <input type="radio" name="code_review" value="faco">
+                <div>
+                  <div class="radio-label">Já fiz review do código de outros</div>
+                </div>
+              </label>
+              <label class="radio-item" onclick="selectRadio(this)">
+                <input type="radio" name="code_review" value="fluxo">
+                <div>
+                  <div class="radio-label">Faz parte do meu fluxo diário</div>
+                </div>
+              </label>
+            </div>
+            <div class="error-msg">Por favor, selecione uma opção.</div>
+          </div>
+
+          <div class="section-divider"></div>
+
+          <div class="form-group">
+            <label>Como você documenta seu código? <span class="required">*</span></label>
+            <div class="radio-group">
+              <label class="radio-item" onclick="selectRadio(this)">
+                <input type="radio" name="documentacao" value="nao" required>
+                <div>
+                  <div class="radio-label">Não documento</div>
+                </div>
+              </label>
+              <label class="radio-item" onclick="selectRadio(this)">
+                <input type="radio" name="documentacao" value="comentarios">
+                <div>
+                  <div class="radio-label">Comentários no código</div>
+                </div>
+              </label>
+              <label class="radio-item" onclick="selectRadio(this)">
+                <input type="radio" name="documentacao" value="readme">
+                <div>
+                  <div class="radio-label">README e comentários</div>
+                </div>
+              </label>
+              <label class="radio-item" onclick="selectRadio(this)">
+                <input type="radio" name="documentacao" value="completa">
+                <div>
+                  <div class="radio-label">Documentação estruturada (README, JSDoc, Swagger, etc.)</div>
+                </div>
+              </label>
+            </div>
+            <div class="error-msg">Por favor, selecione uma opção.</div>
+          </div>
+
+          <div class="section-divider"></div>
+
+          <div class="form-group">
+            <label>Quais ferramentas você usa no dia a dia?</label>
+            <div class="form-hint">Selecione todas que se aplicam.</div>
+            <div class="check-group">
+              <label class="check-item" onclick="toggleCheck(this)">
+                <input type="checkbox" name="ferramentas" value="vscode"> VS Code
+              </label>
+              <label class="check-item" onclick="toggleCheck(this)">
+                <input type="checkbox" name="ferramentas" value="terminal"> Terminal / CMD
+              </label>
+              <label class="check-item" onclick="toggleCheck(this)">
+                <input type="checkbox" name="ferramentas" value="github"> GitHub / GitLab
+              </label>
+              <label class="check-item" onclick="toggleCheck(this)">
+                <input type="checkbox" name="ferramentas" value="figma"> Figma
+              </label>
+              <label class="check-item" onclick="toggleCheck(this)">
+                <input type="checkbox" name="ferramentas" value="postman"> Postman / Insomnia
+              </label>
+              <label class="check-item" onclick="toggleCheck(this)">
+                <input type="checkbox" name="ferramentas" value="chatgpt"> ChatGPT / IA
+              </label>
+              <label class="check-item" onclick="toggleCheck(this)">
+                <input type="checkbox" name="ferramentas" value="notion"> Notion / Trello
+              </label>
+              <label class="check-item" onclick="toggleCheck(this)">
+                <input type="checkbox" name="ferramentas" value="docker-tool"> Docker Desktop
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="nav-buttons">
+          <button type="button" class="btn btn-secondary" onclick="prevStep()">&larr; Voltar</button>
+          <button type="button" class="btn btn-primary" onclick="nextStep()">Próximo &rarr;</button>
+        </div>
+      </div>
+
+      <!-- STEP 4: Processos & Organização -->
+      <div class="form-step" data-step="4">
+        <div class="card">
+          <div class="card-title">Organização & Processos</div>
+          <div class="card-subtitle">Como você organiza seu trabalho e resolve problemas.</div>
+
+          <div class="form-group">
+            <label>Já trabalhou com metodologias ágeis (Scrum, Kanban)? <span class="required">*</span></label>
+            <div class="radio-group">
+              <label class="radio-item" onclick="selectRadio(this)">
+                <input type="radio" name="agile" value="nao-sei" required>
+                <div>
+                  <div class="radio-label">Não sei o que é</div>
+                </div>
+              </label>
+              <label class="radio-item" onclick="selectRadio(this)">
+                <input type="radio" name="agile" value="ouvi-falar">
+                <div>
+                  <div class="radio-label">Ouvi falar, mas nunca pratiquei</div>
+                </div>
+              </label>
+              <label class="radio-item" onclick="selectRadio(this)">
+                <input type="radio" name="agile" value="basico">
+                <div>
+                  <div class="radio-label">Já participei de sprints ou dailys</div>
+                </div>
+              </label>
+              <label class="radio-item" onclick="selectRadio(this)">
+                <input type="radio" name="agile" value="pratico">
+                <div>
+                  <div class="radio-label">Pratico no dia a dia</div>
+                </div>
+              </label>
+            </div>
+            <div class="error-msg">Por favor, selecione uma opção.</div>
+          </div>
+
+          <div class="section-divider"></div>
+
+          <div class="form-group">
+            <label>Como você organiza suas tarefas diárias? <span class="required">*</span></label>
+            <div class="radio-group">
+              <label class="radio-item" onclick="selectRadio(this)">
+                <input type="radio" name="organizacao" value="cabeca" required>
+                <div>
+                  <div class="radio-label">De cabeça, sem ferramenta</div>
+                </div>
+              </label>
+              <label class="radio-item" onclick="selectRadio(this)">
+                <input type="radio" name="organizacao" value="anotacoes">
+                <div>
+                  <div class="radio-label">Anotações (caderno, bloco de notas)</div>
+                </div>
+              </label>
+              <label class="radio-item" onclick="selectRadio(this)">
+                <input type="radio" name="organizacao" value="ferramenta">
+                <div>
+                  <div class="radio-label">Ferramenta digital (Trello, Notion, Todoist, etc.)</div>
+                </div>
+              </label>
+              <label class="radio-item" onclick="selectRadio(this)">
+                <input type="radio" name="organizacao" value="sistema">
+                <div>
+                  <div class="radio-label">Sistema estruturado com priorização e prazos</div>
+                </div>
+              </label>
+            </div>
+            <div class="error-msg">Por favor, selecione uma opção.</div>
+          </div>
+
+          <div class="section-divider"></div>
+
+          <div class="form-group">
+            <label>Quando você trava em um problema, o que faz? <span class="required">*</span></label>
+            <textarea name="resolucao_problema" required
+              placeholder="Descreva seu processo quando encontra um bug ou problema que não consegue resolver de imediato..."></textarea>
+            <div class="error-msg">Por favor, descreva seu processo.</div>
+          </div>
+
+          <div class="form-group">
+            <label>Quanto tempo você espera antes de pedir ajuda? <span class="required">*</span></label>
+            <select name="tempo_ajuda" required>
+              <option value="">Selecione...</option>
+              <option value="imediato">Peço ajuda logo</option>
+              <option value="15-30min">15 a 30 minutos tentando sozinho</option>
+              <option value="1-2h">1 a 2 horas</option>
+              <option value="meio-dia">Meio dia ou mais</option>
+              <option value="evito">Evito pedir ajuda — tento resolver sozinho</option>
+            </select>
+            <div class="error-msg">Por favor, selecione uma opção.</div>
+          </div>
+
+          <div class="form-group">
+            <label>O que significa "tarefa concluída" pra você? <span class="required">*</span></label>
+            <textarea name="definicao_pronto" required
+              placeholder="Quando você considera que uma tarefa de desenvolvimento está realmente pronta?"></textarea>
+            <div class="error-msg">Por favor, descreva.</div>
+          </div>
+        </div>
+
+        <div class="nav-buttons">
+          <button type="button" class="btn btn-secondary" onclick="prevStep()">&larr; Voltar</button>
+          <button type="button" class="btn btn-primary" onclick="nextStep()">Próximo &rarr;</button>
+        </div>
+      </div>
+
+      <!-- STEP 5: Objetivos & Crescimento -->
+      <div class="form-step" data-step="5">
+        <div class="card">
+          <div class="card-title">Objetivos & Crescimento</div>
+          <div class="card-subtitle">Queremos entender suas metas para criar um plano personalizado.</div>
+
+          <div class="form-group">
+            <label>Qual área do desenvolvimento te interessa mais? <span class="required">*</span></label>
+            <div class="check-group">
+              <label class="check-item" onclick="toggleCheck(this)">
+                <input type="checkbox" name="interesse_area" value="frontend"> Frontend
+              </label>
+              <label class="check-item" onclick="toggleCheck(this)">
+                <input type="checkbox" name="interesse_area" value="backend"> Backend
+              </label>
+              <label class="check-item" onclick="toggleCheck(this)">
+                <input type="checkbox" name="interesse_area" value="fullstack"> Fullstack
+              </label>
+              <label class="check-item" onclick="toggleCheck(this)">
+                <input type="checkbox" name="interesse_area" value="mobile"> Mobile
+              </label>
+              <label class="check-item" onclick="toggleCheck(this)">
+                <input type="checkbox" name="interesse_area" value="devops"> DevOps / Infra
+              </label>
+              <label class="check-item" onclick="toggleCheck(this)">
+                <input type="checkbox" name="interesse_area" value="data"> Dados / IA
+              </label>
+            </div>
+            <div class="error-msg">Selecione pelo menos uma área.</div>
+          </div>
+
+          <div class="section-divider"></div>
+
+          <div class="form-group">
+            <label>Como você aprende melhor?</label>
+            <div class="form-hint">Selecione todas que se aplicam.</div>
+            <div class="check-group">
+              <label class="check-item" onclick="toggleCheck(this)">
+                <input type="checkbox" name="estilo_aprendizado" value="videos"> Vídeos / YouTube
+              </label>
+              <label class="check-item" onclick="toggleCheck(this)">
+                <input type="checkbox" name="estilo_aprendizado" value="leitura"> Leitura / Docs
+              </label>
+              <label class="check-item" onclick="toggleCheck(this)">
+                <input type="checkbox" name="estilo_aprendizado" value="projetos"> Projetos pessoais
+              </label>
+              <label class="check-item" onclick="toggleCheck(this)">
+                <input type="checkbox" name="estilo_aprendizado" value="pair"> Pair programming
+              </label>
+              <label class="check-item" onclick="toggleCheck(this)">
+                <input type="checkbox" name="estilo_aprendizado" value="cursos"> Cursos estruturados
+              </label>
+              <label class="check-item" onclick="toggleCheck(this)">
+                <input type="checkbox" name="estilo_aprendizado" value="mentoria"> Mentoria 1:1
+              </label>
+            </div>
+          </div>
+
+          <div class="section-divider"></div>
+
+          <div class="form-group">
+            <label>Quantas horas por semana dedica a estudos fora do trabalho?</label>
+            <select name="horas_estudo">
+              <option value="">Selecione...</option>
+              <option value="0-2h">0 a 2 horas</option>
+              <option value="2-5h">2 a 5 horas</option>
+              <option value="5-10h">5 a 10 horas</option>
+              <option value="10-mais">Mais de 10 horas</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Onde você se vê em 6 meses como desenvolvedor? <span class="required">*</span></label>
+            <textarea name="meta_6_meses" required
+              placeholder="Descreva onde você gostaria de estar tecnicamente daqui a 6 meses..."></textarea>
+            <div class="error-msg">Por favor, descreva sua meta.</div>
+          </div>
+
+          <div class="form-group">
+            <label>Qual sua maior dificuldade hoje como dev? <span class="required">*</span></label>
+            <textarea name="maior_dificuldade" required
+              placeholder="Pode ser técnica, organizacional, de comunicação... o que mais te trava?"></textarea>
+            <div class="error-msg">Por favor, descreva sua dificuldade.</div>
+          </div>
+
+          <div class="form-group">
+            <label>Tem algo que você gostaria de dizer?</label>
+            <textarea name="mensagem_livre"
+              placeholder="Espaço livre para dúvidas, expectativas, sugestões ou qualquer coisa que queira compartilhar..."></textarea>
+          </div>
+        </div>
+
+        <div class="nav-buttons">
+          <button type="button" class="btn btn-secondary" onclick="prevStep()">&larr; Voltar</button>
+          <button type="button" class="btn btn-success" onclick="submitForm()">Enviar Assessment</button>
+        </div>
+      </div>
+
+    </form>
+
+    <!-- Success Screen -->
+    <div class="success-screen card" id="successScreen">
+      <div class="success-icon">&#10003;</div>
+      <h2>Enviado!</h2>
+      <p>Obrigado por dedicar seu tempo. Suas respostas vão nos ajudar a criar o melhor plano de desenvolvimento para
+        você.</p>
+      <br>
+      <p style="font-size:0.85rem; color:var(--gray-400);">Você pode fechar esta página.</p>
+    </div>
+  </div>
+
+  <div class="footer">
+    &copy; 2026 FedCorp — Assessment de Desenvolvimento
+  </div>
+
+  <script>
+    // ===== GOOGLE SHEETS - Cole a URL do Apps Script aqui =====
+    const GOOGLE_SHEETS_URL = 'https://script.google.com/macros/s/AKfycbxWAOCKx2CdnVifPw0uDeje1Vgn8eyIDU-xbmi-BNv01j3N3fvKVNZQeIZMKcneQMHd/exec';
+
+    let currentStep = 1;
+    const totalSteps = 5;
+
+    // Rating buttons
+    document.querySelectorAll('.rating-group').forEach(group => {
+      group.querySelectorAll('.rating-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          group.querySelectorAll('.rating-btn').forEach(b => b.classList.remove('selected'));
+          btn.classList.add('selected');
+        });
+      });
+    });
+
+    function selectRadio(item) {
+      const group = item.closest('.radio-group');
+      group.querySelectorAll('.radio-item').forEach(r => r.classList.remove('selected'));
+      item.classList.add('selected');
+    }
+
+    function toggleCheck(item) {
+      setTimeout(() => {
+        const cb = item.querySelector('input[type="checkbox"]');
+        item.classList.toggle('checked', cb.checked);
+      }, 10);
+    }
+
+    function updateProgress() {
+      document.querySelectorAll('.progress-step').forEach(step => {
+        const num = parseInt(step.dataset.progress);
+        step.classList.remove('active', 'completed');
+        if (num === currentStep) step.classList.add('active');
+        else if (num < currentStep) step.classList.add('completed');
+      });
+    }
+
+    function showStep(step) {
+      document.querySelectorAll('.form-step').forEach(s => s.classList.remove('active'));
+      const target = document.querySelector(`.form-step[data-step="${step}"]`);
+      if (target) target.classList.add('active');
+      updateProgress();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function validateStep(step) {
+      const stepEl = document.querySelector(`.form-step[data-step="${step}"]`);
+      let valid = true;
+
+      // Reset errors
+      stepEl.querySelectorAll('.input-error').forEach(el => el.classList.remove('input-error'));
+      stepEl.querySelectorAll('.error-msg').forEach(el => el.style.display = 'none');
+
+      // Validate required inputs
+      stepEl.querySelectorAll('[required]').forEach(input => {
+        const group = input.closest('.form-group');
+        if (!group) return;
+        const errorMsg = group.querySelector('.error-msg');
+
+        if (input.type === 'radio') {
+          const name = input.name;
+          const checked = stepEl.querySelector(`input[name="${name}"]:checked`);
+          if (!checked) {
+            if (errorMsg) errorMsg.style.display = 'block';
+            valid = false;
+          }
+        } else if (!input.value.trim()) {
+          input.classList.add('input-error');
+          if (errorMsg) errorMsg.style.display = 'block';
+          valid = false;
+        } else if (input.type === 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input.value)) {
+          input.classList.add('input-error');
+          if (errorMsg) errorMsg.style.display = 'block';
+          valid = false;
+        }
+      });
+
+      // Validate checkboxes with required class (step 5 - interest areas)
+      if (step === 5) {
+        const interestChecked = stepEl.querySelectorAll('input[name="interesse_area"]:checked');
+        if (interestChecked.length === 0) {
+          const group = stepEl.querySelector('input[name="interesse_area"]').closest('.form-group');
+          const errorMsg = group.querySelector('.error-msg');
+          if (errorMsg) errorMsg.style.display = 'block';
+          valid = false;
+        }
+      }
+
+      return valid;
+    }
+
+    function nextStep() {
+      if (!validateStep(currentStep)) return;
+      if (currentStep < totalSteps) {
+        currentStep++;
+        showStep(currentStep);
+      }
+    }
+
+    function prevStep() {
+      if (currentStep > 1) {
+        currentStep--;
+        showStep(currentStep);
+      }
+    }
+
+    function collectFormData() {
+      const data = { _submittedAt: new Date().toISOString() };
+
+      // Text, email, select, textarea
+      document.querySelectorAll('#assessmentForm input[type="text"], #assessmentForm input[type="email"], #assessmentForm select, #assessmentForm textarea').forEach(el => {
+        if (el.name && el.value) data[el.name] = el.value;
+      });
+
+      // Radio buttons
+      document.querySelectorAll('#assessmentForm input[type="radio"]:checked').forEach(el => {
+        data[el.name] = el.value;
+      });
+
+      // Checkboxes (group by name)
+      const checkboxGroups = {};
+      document.querySelectorAll('#assessmentForm input[type="checkbox"]:checked').forEach(el => {
+        if (!checkboxGroups[el.name]) checkboxGroups[el.name] = [];
+        checkboxGroups[el.name].push(el.value);
+      });
+      Object.assign(data, checkboxGroups);
+
+      // Skill ratings
+      const skills = {};
+      document.querySelectorAll('.rating-group').forEach(group => {
+        const skill = group.dataset.skill;
+        const selected = group.querySelector('.rating-btn.selected');
+        if (selected) skills[skill] = parseInt(selected.dataset.value);
+      });
+      data.skills = skills;
+
+      return data;
+    }
+
+    async function submitForm() {
+      if (!validateStep(currentStep)) return;
+
+      const data = collectFormData();
+      const submitBtn = document.querySelector('.btn-success');
+      const originalText = submitBtn.textContent;
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Enviando...';
+
+      if (!GOOGLE_SHEETS_URL || GOOGLE_SHEETS_URL === 'COLE_SUA_URL_AQUI') {
+        showError(submitBtn, originalText, 'Endpoint do Google Sheets ainda nao foi configurado. Contate o Tech Lead.');
+        return;
+      }
+
+      try {
+        await fetch(GOOGLE_SHEETS_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'text/plain' },
+          body: JSON.stringify(data)
+        });
+        showSuccess();
+      } catch (error) {
+        showSuccess();
+      }
+    }
+
+    function showError(btn, originalText, message) {
+      btn.disabled = false;
+      btn.textContent = originalText;
+      const errorDiv = document.createElement('div');
+      errorDiv.style.cssText = 'background:#fef2f2;border:1px solid #fecaca;color:#dc2626;padding:0.75rem 1rem;border-radius:8px;margin-top:1rem;font-size:0.9rem;text-align:center;';
+      errorDiv.textContent = message;
+      btn.parentElement.appendChild(errorDiv);
+      setTimeout(() => errorDiv.remove(), 5000);
+    }
+
+    function showSuccess() {
+      document.getElementById('assessmentForm').style.display = 'none';
+      document.querySelector('.progress-container').style.display = 'none';
+      document.getElementById('successScreen').classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Save progress to localStorage
+    function saveProgress() {
+      const data = collectFormData();
+      data._currentStep = currentStep;
+      try { localStorage.setItem('fedcorp_assessment', JSON.stringify(data)); } catch (e) { }
+    }
+
+    // Auto-save every 30 seconds
+    setInterval(saveProgress, 30000);
+
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && e.target.tagName !== 'TEXTAREA') {
+        e.preventDefault();
+        if (currentStep < totalSteps) nextStep();
+      }
+    });
+  </script>
+
+</body>
+
+</html>

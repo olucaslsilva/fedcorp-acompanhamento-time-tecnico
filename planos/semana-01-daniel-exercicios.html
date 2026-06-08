@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Semana 1 - Daniel - Code Review</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap');
+    :root { --primary: #14532d; --green: #16a34a; --green-light: #dcfce7; --green-dark: #166534; --orange: #ea580c; --orange-light: #fff7ed; --gray-50: #f8fafc; --gray-100: #f1f5f9; --gray-200: #e2e8f0; --gray-500: #64748b; --gray-700: #334155; --gray-800: #1e293b; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Inter', sans-serif; color: var(--gray-700); line-height: 1.7; background: #fff; }
+    @media print { body { font-size: 10pt; } .page-break { page-break-before: always; } pre { font-size: 8.5pt; } }
+    @media screen { body { max-width: 850px; margin: 0 auto; padding: 20px; background: var(--gray-100); } .page { background: white; padding: 44px; margin-bottom: 20px; border-radius: 10px; box-shadow: 0 1px 3px rgba(0,0,0,.08); } }
+    h1 { font-size: 26px; font-weight: 800; color: var(--primary); margin-bottom: 4px; }
+    h2 { font-size: 20px; font-weight: 700; color: var(--primary); margin-bottom: 16px; padding-bottom: 8px; border-bottom: 2px solid var(--gray-200); }
+    h3 { font-size: 15px; font-weight: 700; color: var(--gray-800); margin: 18px 0 8px; }
+    p { margin-bottom: 10px; font-size: 14px; }
+    pre { background: var(--gray-800); color: #e2e8f0; padding: 16px; border-radius: 8px; overflow-x: auto; font-family: 'Fira Code', monospace; font-size: 12px; line-height: 1.5; margin: 10px 0; }
+    pre .cm { color: #718096; } pre .kw { color: #63b3ed; } pre .st { color: #68d391; } pre .fn { color: #fbd38d; } pre .bad { color: #fc8181; } pre .ok { color: #68d391; }
+    .card { background: var(--gray-50); border: 1px solid var(--gray-200); border-radius: 8px; padding: 18px; margin-bottom: 14px; }
+    .card-green { background: var(--green-light); border-left: 4px solid var(--green); }
+    .card-orange { background: var(--orange-light); border-left: 4px solid var(--orange); }
+    .badge { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 11px; font-weight: 700; }
+    .badge-easy { background: var(--green-light); color: #166534; }
+    .badge-mid { background: #fef3c7; color: #92400e; }
+    .badge-hard { background: #fee2e2; color: #991b1b; }
+    .sub { font-size: 14px; color: var(--gray-500); margin-bottom: 24px; }
+    table { width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 13px; }
+    th { background: var(--primary); color: white; padding: 8px 12px; text-align: left; font-size: 12px; }
+    td { padding: 8px 12px; border-bottom: 1px solid var(--gray-200); vertical-align: top; }
+    tr:nth-child(even) { background: var(--gray-50); }
+    ul { padding-left: 18px; font-size: 13px; margin: 8px 0; } li { margin-bottom: 4px; }
+    .exnum { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 50%; color: white; font-size: 13px; font-weight: 700; margin-right: 8px; }
+    .review-item { background: var(--gray-50); border-left: 3px solid #ef4444; padding: 10px 14px; margin: 8px 0; border-radius: 0 6px 6px 0; font-size: 13px; }
+    .review-item.ok { border-left-color: var(--green); }
+    .sev { display: inline-block; padding: 1px 8px; border-radius: 4px; font-size: 10px; font-weight: 700; }
+    .sev-crit { background: #fee2e2; color: #991b1b; }
+    .sev-imp { background: #fef3c7; color: #92400e; }
+    .sev-low { background: #dbeafe; color: #1e40af; }
+    .footer { text-align: center; font-size: 11px; color: var(--gray-500); margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--gray-200); }
+  </style>
+</head>
+<body>
+
+<div class="page">
+  <h1>Semana 1: Code Review</h1>
+  <p class="sub">Daniel Mello de Carvalho de Faria. Node.js / Fullstack. Tempo estimado: 5 a 7 horas.</p>
+
+  <div class="card card-green">
+    <p><strong>Code review é ler código que outra pessoa escreveu e dar feedback antes que ele entre no projeto.</strong> É assim que times profissionais garantem qualidade. E é uma das formas mais rápidas de evoluir, porque te obriga a pensar criticamente sobre cada decisão no código.</p>
+  </div>
+
+  <h2>Conceitos com exemplos</h2>
+
+  <h3>1. O que procurar em uma review</h3>
+  <p>Quando você lê código para fazer review, está procurando 5 coisas:</p>
+
+  <table>
+    <tr><th>Categoria</th><th>Pergunta que você faz</th><th>Exemplo de problema</th></tr>
+    <tr><td><strong>Funciona?</strong></td><td>O código faz o que deveria? Cobre os casos extremos?</td><td>Endpoint aceita quantidade negativa sem validar</td></tr>
+    <tr><td><strong>Seguro?</strong></td><td>Tem vulnerabilidade? Dados são validados?</td><td>Query SQL montada com template string (SQL injection)</td></tr>
+    <tr><td><strong>Claro?</strong></td><td>Outro dev entende sem perguntar pra quem escreveu?</td><td>Variáveis chamadas <code>d</code>, <code>x</code>, <code>tmp</code></td></tr>
+    <tr><td><strong>Eficiente?</strong></td><td>Tem algo que vai ficar lento com muitos dados?</td><td>Buscar TODOS os registros do banco pra retornar só um</td></tr>
+    <tr><td><strong>Testável?</strong></td><td>Feature nova tem teste? Bugfix impede que o bug volte?</td><td>Endpoint novo sem nenhum teste</td></tr>
+  </table>
+
+  <h3>2. Como classificar problemas por severidade</h3>
+  <table>
+    <tr><th>Severidade</th><th>Significa</th><th>Exemplo</th></tr>
+    <tr><td><span class="sev sev-crit">CRÍTICO</span></td><td>Vulnerabilidade de segurança ou bug que causa perda de dados</td><td>SQL injection, credencial exposta, dados sendo apagados sem confirmação</td></tr>
+    <tr><td><span class="sev sev-imp">IMPORTANTE</span></td><td>Vai causar problema em produção mas não é de segurança</td><td>Sem tratamento de erro (app crasha), query que busca tudo sem paginação</td></tr>
+    <tr><td><span class="sev sev-low">MENOR</span></td><td>Qualidade de código, manutenibilidade, padrões</td><td>Nomes genéricos, falta de tipagem, código repetido</td></tr>
+  </table>
+
+  <h3>3. Exemplo completo de review</h3>
+  <p>Código enviado para review:</p>
+
+<pre><span class="cm">// Endpoint de cadastro de clientes</span>
+app.post(<span class="st">"/clients"</span>, <span class="kw">async</span> (req, res) =&gt; {
+    <span class="kw">const</span> q = <span class="st">`INSERT INTO clients (name, email, phone)
+               VALUES ('${req.body.name}', '${req.body.email}', '${req.body.phone}')`</span>;
+    <span class="kw">const</span> r = <span class="kw">await</span> db.query(q);
+    <span class="kw">const</span> all = <span class="kw">await</span> db.query(<span class="st">"SELECT * FROM clients"</span>);
+    res.json(all.rows);
+});</pre>
+
+  <p>Review feita:</p>
+  <div class="review-item"><span class="sev sev-crit">CRÍTICO</span> <strong>SQL Injection.</strong> A query usa template string direto com dados do req.body. Se alguém enviar <code>name: "'; DROP TABLE clients; --"</code>, apaga a tabela inteira. Correção: usar parameterized queries com <code>$1, $2, $3</code>.</div>
+  <div class="review-item"><span class="sev sev-crit">CRÍTICO</span> <strong>Sem validação de entrada.</strong> O endpoint aceita qualquer coisa no body. Se name vier vazio ou email sem @, vai pro banco sem filtro. Correção: validar campos obrigatórios antes de inserir.</div>
+  <div class="review-item"><span class="sev sev-imp">IMPORTANTE</span> <strong>Sem tratamento de erro.</strong> Se o banco estiver fora, a aplicação crasha sem mensagem útil. Correção: envolver em try/catch e retornar status 500.</div>
+  <div class="review-item"><span class="sev sev-imp">IMPORTANTE</span> <strong>Query desnecessária.</strong> Após inserir um cliente, busca TODOS os clientes do banco. Se tem 100.000 registros, trava a resposta. Correção: retornar apenas o cliente criado com RETURNING *.</div>
+  <div class="review-item"><span class="sev sev-low">MENOR</span> <strong>Nomes genéricos.</strong> <code>q</code>, <code>r</code>, <code>all</code> não dizem nada. Correção: <code>insertQuery</code>, <code>result</code>, <code>clienteCriado</code>.</div>
+  <div class="review-item"><span class="sev sev-low">MENOR</span> <strong>Sem status code.</strong> Retorna 200 por padrão, mas deveria ser 201 (Created). Correção: <code>res.status(201).json(...)</code>.</div>
+
+  <p>Código corrigido:</p>
+<pre>app.post(<span class="st">"/clients"</span>, <span class="kw">async</span> (req, res) =&gt; {
+    <span class="kw">try</span> {
+        <span class="kw">const</span> { name, email, phone } = req.body;
+
+        <span class="kw">if</span> (!name || name.trim().length < 2) {
+            <span class="kw">return</span> res.status(400).json({ erro: <span class="st">"Nome é obrigatório (mínimo 2 caracteres)"</span> });
+        }
+        <span class="kw">if</span> (!email || !email.includes(<span class="st">"@"</span>)) {
+            <span class="kw">return</span> res.status(400).json({ erro: <span class="st">"Email inválido"</span> });
+        }
+
+        <span class="kw">const</span> resultado = <span class="kw">await</span> db.query(
+            <span class="st">"INSERT INTO clients (name, email, phone) VALUES ($1, $2, $3) RETURNING *"</span>,
+            [name.trim(), email.trim(), phone || <span class="kw">null</span>]  <span class="ok">// parameterized, sem injection</span>
+        );
+
+        res.status(201).json(resultado.rows[0]);  <span class="ok">// 201 Created, só o novo</span>
+    } <span class="kw">catch</span> (error) {
+        res.status(500).json({ erro: <span class="st">"Erro interno ao cadastrar cliente"</span> });
+    }
+});</pre>
+</div>
+
+<!-- ==================== EXERCÍCIOS ==================== -->
+<div class="page page-break">
+  <h2>Exercícios da Semana</h2>
+  <p>Três exercícios, do mais simples ao mais completo. Cada um é um endpoint com problemas que você precisa identificar, classificar e corrigir.</p>
+
+  <!-- EXERCÍCIO 1 -->
+  <div class="card" style="margin-top: 16px;">
+    <h3 style="margin-top: 0;"><span class="exnum" style="background: var(--green);">1</span> Exercício Fácil: Review de endpoint de busca <span class="badge badge-easy">Fácil</span></h3>
+    <p>Faça a review do código abaixo. Identifique todos os problemas, classifique por severidade, e escreva a versão corrigida.</p>
+
+<pre><span class="cm">// Arquivo: exercicio1_review.ts</span>
+<span class="cm">// Endpoint de busca de produtos por nome</span>
+
+app.get(<span class="st">"/search"</span>, <span class="kw">async</span> (req, res) =&gt; {
+    <span class="kw">const</span> x = req.query.q;
+    <span class="kw">const</span> r = <span class="kw">await</span> db.query(<span class="st">`SELECT * FROM products WHERE name LIKE '%${x}%'`</span>);
+    res.json(r.rows);
+});</pre>
+
+    <p><strong>O que entregar:</strong></p>
+    <ul>
+      <li><code>exercicio1_review.md</code>: liste cada problema com severidade (CRÍTICO / IMPORTANTE / MENOR), explique o risco, e sugira a correção</li>
+      <li><code>exercicio1_corrigido.ts</code>: o código reescrito com todos os problemas resolvidos</li>
+    </ul>
+    <p><strong>Dica:</strong> esse código tem pelo menos 4 problemas. Se encontrou menos, olhe de novo.</p>
+  </div>
+
+  <!-- EXERCÍCIO 2 -->
+  <div class="card" style="margin-top: 16px;">
+    <h3 style="margin-top: 0;"><span class="exnum" style="background: var(--orange);">2</span> Exercício Intermediário: Review de endpoint de autenticação <span class="badge badge-mid">Intermediário</span></h3>
+    <p>Este endpoint é mais perigoso porque lida com dados de login. Faça a review completa.</p>
+
+<pre><span class="cm">// Arquivo: exercicio2_review.ts</span>
+<span class="cm">// Endpoint de login</span>
+
+<span class="kw">const</span> SECRET = <span class="st">"minha-chave-secreta-123"</span>;   <span class="cm">// chave JWT</span>
+
+app.post(<span class="st">"/login"</span>, <span class="kw">async</span> (req: <span class="kw">any</span>, res: <span class="kw">any</span>) =&gt; {
+    <span class="kw">const</span> user = <span class="kw">await</span> db.query(
+        <span class="st">`SELECT * FROM users WHERE email = '${req.body.email}'
+         AND password = '${req.body.password}'`</span>
+    );
+
+    <span class="kw">if</span> (user.rows.length > 0) {
+        <span class="kw">const</span> token = jwt.sign(user.rows[0], SECRET);
+        res.json({ token: token, user: user.rows[0] });
+    } <span class="kw">else</span> {
+        res.json({ error: <span class="st">"login failed"</span> });
+    }
+});</pre>
+
+    <p><strong>O que entregar:</strong></p>
+    <ul>
+      <li><code>exercicio2_review.md</code>: a review completa (esse código tem pelo menos 7 problemas, incluindo problemas graves de segurança)</li>
+      <li><code>exercicio2_corrigido.ts</code>: o código reescrito</li>
+    </ul>
+    <p><strong>Dica:</strong> pense em segurança de senhas, o que acontece se o JWT incluir a senha, e o que a resposta de erro revela.</p>
+  </div>
+
+  <!-- EXERCÍCIO 3 -->
+  <div class="card" style="margin-top: 16px;">
+    <h3 style="margin-top: 0;"><span class="exnum" style="background: #dc2626;">3</span> Exercício Avançado: Review completa de módulo de pedidos <span class="badge badge-hard">Avançado</span></h3>
+    <p>Agora o desafio completo. Um módulo inteiro com 3 endpoints. Faça a review de cada um, classifique, corrija, e reorganize.</p>
+
+<pre><span class="cm">// Arquivo: exercicio3_review.ts</span>
+<span class="cm">// Módulo de pedidos (orders)</span>
+
+<span class="kw">var</span> pedidos: <span class="kw">any</span>[] = [];
+<span class="kw">var</span> id = 1;
+
+app.post(<span class="st">"/order"</span>, (req: <span class="kw">any</span>, res: <span class="kw">any</span>) =&gt; {
+    <span class="kw">var</span> o: <span class="kw">any</span> = {};
+    o.id = id;
+    id = id + 1;
+    o.client = req.body.client;
+    o.items = req.body.items;
+    o.total = 0;
+    <span class="kw">for</span> (<span class="kw">var</span> i = 0; i &lt; o.items.length; i++) {
+        o.total = o.total + o.items[i].price * o.items[i].qty;
+    }
+    o.status = <span class="st">"pending"</span>;
+    o.date = new Date();
+    pedidos.push(o);
+    console.log(<span class="st">"Pedido criado: "</span> + JSON.stringify(o));
+    res.send(o);
+});
+
+app.get(<span class="st">"/orders"</span>, (req: <span class="kw">any</span>, res: <span class="kw">any</span>) =&gt; {
+    res.send(pedidos);
+});
+
+app.put(<span class="st">"/order"</span>, (req: <span class="kw">any</span>, res: <span class="kw">any</span>) =&gt; {
+    <span class="kw">for</span> (<span class="kw">var</span> i = 0; i &lt; pedidos.length; i++) {
+        <span class="kw">if</span> (pedidos[i].id == req.body.id) {
+            pedidos[i].status = req.body.status;
+            res.send(pedidos[i]);
+            <span class="kw">return</span>;
+        }
+    }
+    res.send({ error: <span class="st">"not found"</span> });
+});</pre>
+
+    <p><strong>O que entregar:</strong></p>
+    <ul>
+      <li><code>exercicio3_review.md</code>: review dos 3 endpoints com pelo menos 10 problemas no total, cada um com severidade e sugestão de correção</li>
+      <li>Pasta <code>exercicio3_corrigido/</code> com a versão reescrita, organizada em:
+        <ul>
+          <li><code>types/pedido.ts</code> (interfaces tipadas)</li>
+          <li><code>routes/pedidos.ts</code> (rotas com nomes corretos e tipagem)</li>
+          <li><code>services/pedido.service.ts</code> (lógica de negócio separada)</li>
+        </ul>
+      </li>
+    </ul>
+    <p><strong>Dica:</strong> procure problemas de tipagem (<code>any</code> em tudo), variáveis com <code>var</code> em vez de <code>const/let</code>, comparação com <code>==</code> em vez de <code>===</code>, falta de validação, falta de status codes corretos, console.log em produção, e rota PUT sem o id na URL.</p>
+  </div>
+
+  <h2 style="margin-top: 28px;">O que entregar no final</h2>
+  <div class="card card-green">
+    <p>No seu repositório <code>fedcorp-exercicios</code>, pasta <code>semana-01-code-review/</code>:</p>
+    <ul>
+      <li><code>exercicio1_review.md</code> + <code>exercicio1_corrigido.ts</code></li>
+      <li><code>exercicio2_review.md</code> + <code>exercicio2_corrigido.ts</code></li>
+      <li><code>exercicio3_review.md</code> + pasta <code>exercicio3_corrigido/</code></li>
+      <li><code>decisoes.md</code> com duas coisas:
+        <ul>
+          <li>Qual problema foi mais difícil de identificar e por quê</li>
+          <li>Sua nova definição de "pronto": o que <strong>você</strong> verifica antes de considerar algo pronto? (não depender de alguém de fora, mas sim dos seus critérios internos)</li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+
+  <div class="footer">FedCorp. Programa de Evolução Técnica. Semana 1, Daniel.</div>
+</div>
+
+</body>
+</html>

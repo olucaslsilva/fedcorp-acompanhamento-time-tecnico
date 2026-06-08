@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Roteiro — Reunião de Kickoff com o Time</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+    :root {
+      --primary: #1e293b;
+      --blue: #3b82f6;
+      --blue-light: #dbeafe;
+      --green: #22c55e;
+      --green-light: #dcfce7;
+      --orange: #f59e0b;
+      --orange-light: #fef3c7;
+      --red: #ef4444;
+      --gray-50: #f8fafc;
+      --gray-100: #f1f5f9;
+      --gray-200: #e2e8f0;
+      --gray-300: #cbd5e0;
+      --gray-500: #64748b;
+      --gray-700: #334155;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Inter', sans-serif; background: var(--gray-100); color: var(--gray-700); line-height: 1.7; max-width: 800px; margin: 0 auto; padding: 20px; }
+
+    .header-bar {
+      background: var(--primary); color: white; padding: 20px 28px; border-radius: 12px;
+      margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center;
+    }
+    .header-bar h1 { font-size: 18px; font-weight: 700; }
+    .header-bar .time { font-size: 13px; opacity: 0.7; }
+
+    .block {
+      background: white; border-radius: 12px; padding: 28px; margin-bottom: 16px;
+      box-shadow: 0 1px 3px rgba(0,0,0,.06); border-left: 4px solid var(--gray-200);
+    }
+    .block-blue { border-left-color: var(--blue); }
+    .block-green { border-left-color: var(--green); }
+    .block-orange { border-left-color: var(--orange); }
+
+    .block-header {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--gray-200);
+    }
+    .block-title { font-size: 17px; font-weight: 700; color: var(--primary); }
+    .block-time {
+      font-size: 11px; font-weight: 700; padding: 4px 12px; border-radius: 20px;
+      background: var(--gray-100); color: var(--gray-500);
+    }
+
+    .fala {
+      background: var(--blue-light); border-radius: 10px; padding: 16px 20px;
+      margin: 12px 0; font-size: 14px; line-height: 1.8; position: relative;
+    }
+    .fala::before {
+      content: '🎤'; position: absolute; left: -8px; top: -8px; font-size: 16px;
+      background: white; border-radius: 50%; width: 28px; height: 28px;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 1px 3px rgba(0,0,0,.1);
+    }
+    .fala strong { color: #1e40af; }
+
+    .nota {
+      background: var(--orange-light); border-radius: 8px; padding: 12px 16px;
+      margin: 10px 0; font-size: 12px; color: #92400e;
+    }
+    .nota::before { content: '⚠️ '; }
+
+    .dica {
+      background: var(--green-light); border-radius: 8px; padding: 12px 16px;
+      margin: 10px 0; font-size: 12px; color: #166534;
+    }
+    .dica::before { content: '💡 '; }
+
+    .acao {
+      background: var(--gray-50); border: 1px solid var(--gray-200); border-radius: 8px;
+      padding: 12px 16px; margin: 10px 0; font-size: 13px;
+    }
+    .acao-title { font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--blue); margin-bottom: 4px; }
+
+    .dev-table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 13px; }
+    .dev-table th { background: var(--primary); color: white; padding: 8px 12px; text-align: left; font-size: 11px; }
+    .dev-table td { padding: 8px 12px; border-bottom: 1px solid var(--gray-200); vertical-align: top; }
+    .dev-table tr:nth-child(even) { background: var(--gray-50); }
+
+    .resposta-table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 13px; }
+    .resposta-table td { padding: 10px 14px; border-bottom: 1px solid var(--gray-200); vertical-align: top; }
+    .resposta-table td:first-child { font-weight: 600; width: 40%; color: var(--primary); background: var(--gray-50); }
+
+    h3 { font-size: 14px; font-weight: 700; color: var(--primary); margin: 16px 0 8px; }
+
+    ul { padding-left: 18px; font-size: 13px; margin: 8px 0; }
+    ul li { margin-bottom: 4px; }
+
+    .progress-bar {
+      display: flex; gap: 4px; margin: 20px 0;
+    }
+    .progress-step {
+      flex: 1; height: 8px; border-radius: 4px; background: var(--gray-200);
+    }
+    .progress-step.active { background: var(--blue); }
+    .progress-step.done { background: var(--green); }
+
+    .footer {
+      text-align: center; padding: 20px; font-size: 12px; color: var(--gray-500);
+    }
+
+    @media print {
+      body { background: white; padding: 0; }
+      .block { box-shadow: none; page-break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="header-bar">
+  <div>
+    <h1>Reunião de Kickoff — Programa de Evolução Técnica</h1>
+    <div style="font-size: 12px; opacity: 0.7; margin-top: 4px;">Leonan + Ingryd + Daniel &bull; ~1 hora</div>
+  </div>
+  <div class="time">Seu roteiro pessoal<br>Só você vê isso</div>
+</div>
+
+<div class="progress-bar">
+  <div class="progress-step active"></div>
+  <div class="progress-step"></div>
+  <div class="progress-step"></div>
+  <div class="progress-step"></div>
+  <div class="progress-step"></div>
+  <div class="progress-step"></div>
+</div>
+
+<!-- ==================== BLOCO 1 ==================== -->
+<div class="block block-blue">
+  <div class="block-header">
+    <div class="block-title">1. Abertura — "O que é isso?"</div>
+    <div class="block-time">10 min</div>
+  </div>
+
+  <div class="fala">
+    Galera, valeu por terem respondido o assessment. Com base nas respostas de vocês, eu montei um <strong>plano de desenvolvimento individual</strong> pra cada um. Não é avaliação de desempenho. Ninguém vai ser cobrado, ninguém vai ser punido. É um programa de evolução técnica &mdash; um mapa pra cada um evoluir nos pontos que fazem mais sentido pro momento de vocês.
+  </div>
+
+  <div class="fala">
+    Eu tô aqui como <strong>consultor técnico</strong>. Meu papel é mostrar o caminho, tirar dúvida, dar feedback. Mas quem caminha é vocês. O plano é de vocês. A responsabilidade de seguir é de vocês. Eu não vou ficar cobrando &mdash; vou ficar <strong>disponível</strong>.
+  </div>
+
+  <div class="fala">
+    Cada plano é <strong>diferente</strong> porque cada um de vocês tem forças e gaps diferentes. O Leonan tem um foco, a Ingryd outro, o Daniel outro. Isso é proposital. Não é que um é melhor ou pior &mdash; é que cada um precisa de coisas diferentes nesse momento.
+  </div>
+
+  <div class="nota">Se alguém perguntar "isso é obrigatório?": "Não é obrigatório no sentido de alguém te punir se não fizer. Mas se você quer evoluir tecnicamente, esse é o caminho estruturado pra isso. A alternativa é continuar como está."</div>
+</div>
+
+<!-- ==================== BLOCO 2 ==================== -->
+<div class="block block-blue">
+  <div class="block-header">
+    <div class="block-title">2. Os Planos — Visão rápida de cada um</div>
+    <div class="block-time">15 min</div>
+  </div>
+
+  <div class="fala">
+    Vou dar um overview do que tem no plano de cada um. Vocês vão receber o documento completo por email depois dessa reunião. O documento tem tudo: explicação do tema, exemplos de código, exercício prático, e recursos complementares.
+  </div>
+
+  <h3>Compartilhar tela e mostrar cada plano (não ler tudo — só o overview)</h3>
+
+  <div class="dev-table">
+    <table style="width:100%; border-collapse: collapse;">
+      <tr style="background: #1e293b; color: white;">
+        <th style="padding: 8px 12px; text-align: left;">Dev</th>
+        <th style="padding: 8px 12px; text-align: left;">Foco das 4 semanas</th>
+        <th style="padding: 8px 12px; text-align: left;">O que falar</th>
+      </tr>
+      <tr style="background: #dbeafe;">
+        <td style="padding: 10px 12px; font-weight: 700;">Leonan</td>
+        <td style="padding: 10px 12px; font-size: 12px;">Refatoração → Testes com pytest → TypeScript → Arquitetura em camadas</td>
+        <td style="padding: 10px 12px; font-size: 12px;">"Seu forte é Python e APIs. As 4 semanas focam em ir do 'funciona' pro 'bem feito'. Tem exemplos de código FastAPI em cada semana."</td>
+      </tr>
+      <tr style="background: #ede9fe;">
+        <td style="padding: 10px 12px; font-weight: 700;">Ingryd</td>
+        <td style="padding: 10px 12px; font-size: 12px;">TypeScript avançado → Testes React → APIs com Express → Code Review</td>
+        <td style="padding: 10px 12px; font-size: 12px;">"Seu frontend é nota máxima. O plano expande pro backend e processos — é o caminho direto pra fullstack, que é o que você quer."</td>
+      </tr>
+      <tr style="background: #dcfce7;">
+        <td style="padding: 10px 12px; font-weight: 700;">Daniel</td>
+        <td style="padding: 10px 12px; font-size: 12px;">Code Review → Testes sistemáticos → CI/CD (GitHub Actions) → Padrões de Projeto</td>
+        <td style="padding: 10px 12px; font-size: 12px;">"Tecnicamente você é forte. O plano foca em processo: code review, CI/CD, padrões. É o que formaliza o que você já faz e torna seu trabalho visível."</td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="fala">
+    Cada semana do plano tem <strong>3 fases</strong>: primeiro o <strong>Fundamento</strong>, que é a explicação do conceito, bem acessível. Depois o <strong>Exemplo Guiado</strong>, que é um código real sendo analisado passo a passo. E por último o <strong>Exercício Solo</strong>, que é uma tarefa pra vocês fazerem por conta própria. O critério de sucesso não é só o código funcionar &mdash; é vocês <strong>conseguirem explicar por que</strong> fizeram cada escolha.
+  </div>
+
+  <div class="dica">Se alguém disser "meu plano parece mais fácil/difícil que o do outro": "Cada plano foi montado com base nos scores e nas dificuldades que vocês mesmos declararam. Não faz sentido comparar — cada um tá num ponto diferente."</div>
+</div>
+
+<!-- ==================== BLOCO 3 ==================== -->
+<div class="block block-blue">
+  <div class="block-header">
+    <div class="block-title">3. A Cadência — Como funciona semana a semana</div>
+    <div class="block-time">10 min</div>
+  </div>
+
+  <div class="fala">
+    Toda semana funciona assim: na <strong>segunda</strong>, vocês abrem o plano e leem o tema da semana. De <strong>terça a quinta</strong>, trabalham nas atividades no ritmo de vocês &mdash; não precisa ser 4 horas seguidas, pode dividir em pedaços. Se travarem, trazem pro <strong>check-in comigo</strong>, que vai ser 30 minutos, individual, uma vez por semana. Na <strong>sexta</strong>, a gente faz uma retrospectiva juntos: cada um apresenta o que aprendeu, <strong>com as próprias palavras</strong>. E depois vocês preenchem um formulário rápido de check-in &mdash; 5 minutos.
+  </div>
+
+  <div class="acao">
+    <div class="acao-title">Ação agora — combinar horários</div>
+    <ul>
+      <li><strong>Check-in 1:1:</strong> Perguntar pra cada um qual horário funciona (terça ou quarta, 30 min)</li>
+      <li><strong>Retrospectiva de sexta:</strong> Combinar um horário fixo que funcione pros 3</li>
+    </ul>
+  </div>
+
+  <div class="fala">
+    Sobre <strong>entrega</strong>: vocês vão criar um repositório no GitHub chamado <code>fedcorp-exercicios</code>. Cada semana é uma pasta: <code>semana-01-refatoracao/</code>, <code>semana-02-testes/</code>, e assim por diante. Cada pasta tem o código do exercício <strong>e</strong> um arquivo <code>decisoes.md</code> onde vocês explicam por que fizeram cada escolha. Esse arquivo é tão importante quanto o código &mdash; é onde vocês provam que entenderam.
+  </div>
+
+  <div class="nota">Se alguém disser "não sei criar repositório no GitHub": "Sem problema. A gente resolve isso agora nos próximos 5 minutos." (Mostrar rapidamente se precisar)</div>
+</div>
+
+<!-- ==================== BLOCO 4 ==================== -->
+<div class="block block-orange">
+  <div class="block-header">
+    <div class="block-title">4. Sobre IA — Ser transparente</div>
+    <div class="block-time">10 min</div>
+  </div>
+
+  <div class="fala">
+    Vocês sabem que a ideia é trazer inteligência artificial pro dia a dia do time. Claude Code, ChatGPT &mdash; essas ferramentas. Por enquanto, a gente não vai usar ainda no dia a dia de trabalho &mdash; tem uma questão de acesso que precisa ser resolvida. <strong>Mas isso na verdade é bom.</strong>
+  </div>
+
+  <div class="fala">
+    Porque o primeiro passo antes de usar IA é ter <strong>base técnica</strong>. Se vocês usam IA sem entender o que o código faz, vocês estão colocando em produção código que pode ter bugs, vulnerabilidades, ou problemas de performance &mdash; <strong>e vocês não vão perceber</strong>. O objetivo dessas primeiras semanas é construir essa base pra que, quando a IA entrar, vocês consigam olhar pro que ela sugere e dizer: <strong>"isso aqui tá bom"</strong> ou <strong>"isso aqui tem problema"</strong>.
+  </div>
+
+  <div class="fala">
+    Nos exercícios do plano, cada atividade tem uma <strong>"Dica com IA"</strong> no final &mdash; um prompt sugerido pra quando vocês travarem. Podem usar ChatGPT pra tirar dúvida quando travarem &mdash; isso é válido. O que <strong>não</strong> é válido é pedir pra IA fazer o exercício inteiro por vocês. Porque aí quem aprendeu foi a IA, não vocês.
+  </div>
+
+  <div class="dica">Se alguém perguntar "você usa IA, Lucas?": Seja honesto. "Sim, eu uso como ferramenta no meu trabalho. Mas eu sempre reviso o que ela sugere porque eu sei o que tô procurando. É isso que quero que vocês consigam fazer também."</div>
+
+  <div class="fala">
+    A <strong>regra de ouro</strong> é essa: se vocês não conseguem explicar <strong>por que</strong> o código funciona &mdash; seja código que vocês escreveram ou código que a IA gerou &mdash; vocês ainda não entenderam. Voltem pro fundamento e tentem de novo. O objetivo é vocês serem <strong>engenheiros que usam ferramentas</strong>, não operadores que apertam botão.
+  </div>
+</div>
+
+<!-- ==================== BLOCO 5 ==================== -->
+<div class="block block-green">
+  <div class="block-header">
+    <div class="block-title">5. Setup + Perguntas</div>
+    <div class="block-time">10 min</div>
+  </div>
+
+  <div class="acao">
+    <div class="acao-title">Resolver agora (se precisar)</div>
+    <ul>
+      <li>Todos conseguem criar o repositório <code>fedcorp-exercicios</code> no GitHub?</li>
+      <li>Todos têm ambiente de desenvolvimento funcional? (VS Code, Node, Python, Git)</li>
+      <li>Alguma dúvida sobre o plano antes de começar?</li>
+    </ul>
+  </div>
+
+  <h3>Perguntas que podem surgir</h3>
+
+  <table class="resposta-table">
+    <tr>
+      <td>"Quanto tempo por semana?"</td>
+      <td>4 a 6 horas, dividido como vocês quiserem ao longo da semana. Não precisa ser tudo de uma vez.</td>
+    </tr>
+    <tr>
+      <td>"E se eu não conseguir fazer tudo?"</td>
+      <td>Me avisa o porquê. A gente adapta — pode fazer só o Fundamento e o Exemplo essa semana, e o Exercício na próxima. O importante é não parar.</td>
+    </tr>
+    <tr>
+      <td>"Isso é avaliação de desempenho?"</td>
+      <td>Não. É plano de desenvolvimento. O assessment serviu pra saber onde focar, não pra julgar ninguém.</td>
+    </tr>
+    <tr>
+      <td>"Posso usar ChatGPT nos exercícios?"</td>
+      <td>Pra tirar dúvida quando travar, sim. Pra fazer o exercício inteiro, não. Cada exercício tem um prompt sugerido pra quando travar.</td>
+    </tr>
+    <tr>
+      <td>"Eu já sei isso, posso pular?"</td>
+      <td>Se já sabe, vai ser rápido de fazer. Faz e me mostra — se realmente domina, a gente ajusta pro próximo nível.</td>
+    </tr>
+    <tr>
+      <td>"Quando vamos usar IA no trabalho?"</td>
+      <td>Quando a base técnica tiver sólida e o acesso estiver liberado. As primeiras semanas constroem essa base.</td>
+    </tr>
+    <tr>
+      <td>"E se eu travar e não souber como continuar?"</td>
+      <td>Anota onde travou, o que tentou, e traz pro check-in. Travar faz parte. O problema é travar e ficar em silêncio.</td>
+    </tr>
+  </table>
+</div>
+
+<!-- ==================== BLOCO 6 ==================== -->
+<div class="block block-green">
+  <div class="block-header">
+    <div class="block-title">6. Fechamento</div>
+    <div class="block-time">5 min</div>
+  </div>
+
+  <div class="fala">
+    A partir de agora, cada um tem o plano na mão. A Semana 1 começa segunda. Vocês abrem o documento, leem o Fundamento, acompanham o Exemplo, e fazem o Exercício. Se travarem, anotam e trazem no check-in. Na sexta, cada um apresenta o que aprendeu.
+  </div>
+
+  <div class="fala">
+    Eu vou mandar por email agora o plano de cada um e o link do formulário de check-in semanal. O formulário é rápido &mdash; 5 minutos &mdash; e vocês preenchem toda sexta depois da retrospectiva.
+  </div>
+
+  <div class="fala">
+    O importante não é acertar tudo. É <strong>não parar</strong>. Se uma semana foi difícil, a gente ajusta. Se o ritmo tá rápido demais, a gente desacelera. Mas parar e ficar em silêncio não ajuda ninguém. <strong>Comunicação é parte do processo.</strong>
+  </div>
+
+  <div class="acao">
+    <div class="acao-title">Fazer logo após a reunião</div>
+    <ul>
+      <li>Enviar plano individual por email para cada dev (PDF ou link do HTML)</li>
+      <li>Enviar link do formulário de check-in semanal</li>
+      <li>Colocar na agenda: check-ins 1:1 + retro de sexta (horários combinados)</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ==================== COLA DE EMERGÊNCIA ==================== -->
+<div class="block" style="border-left-color: var(--red); background: #fef2f2;">
+  <div class="block-header">
+    <div class="block-title" style="color: var(--red);">Cola de Emergência — Se der branco</div>
+    <div class="block-time" style="background: #fee2e2; color: var(--red);">SOS</div>
+  </div>
+
+  <p style="font-size: 13px; margin-bottom: 12px;">Se em qualquer momento você não souber o que falar, use uma dessas frases:</p>
+
+  <table class="resposta-table">
+    <tr>
+      <td>Pra ganhar tempo</td>
+      <td>"Boa pergunta. Deixa eu pensar um segundo..."</td>
+    </tr>
+    <tr>
+      <td>Pra devolver pra eles</td>
+      <td>"O que vocês acham? Alguém tem opinião sobre isso?"</td>
+    </tr>
+    <tr>
+      <td>Se não souber a resposta</td>
+      <td>"Não sei de cabeça. Vou verificar e trago na próxima."</td>
+    </tr>
+    <tr>
+      <td>Pra sair de um assunto</td>
+      <td>"Boa, vamos anotar isso e voltar no próximo encontro. Agora quero falar sobre..."</td>
+    </tr>
+    <tr>
+      <td>Pra retomar o foco</td>
+      <td>"Entendo. Mas o ponto principal aqui é: vocês têm o plano, a primeira atividade começa segunda."</td>
+    </tr>
+    <tr>
+      <td>Se o clima ficar tenso</td>
+      <td>"Olha, eu tô aqui pra ajudar, não pra cobrar. Se algo não fizer sentido, me fala que a gente ajusta."</td>
+    </tr>
+    <tr>
+      <td>Pra fechar qualquer bloco</td>
+      <td>"Beleza? Alguma dúvida sobre isso antes de continuar?"</td>
+    </tr>
+  </table>
+</div>
+
+<div class="footer">
+  Documento interno — só Lucas vê isso &bull; Abra no celular ou segundo monitor durante a call
+</div>
+
+</body>
+</html>

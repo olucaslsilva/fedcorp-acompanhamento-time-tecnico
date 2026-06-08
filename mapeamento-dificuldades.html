@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mapeamento de Dificuldades - FedCorp</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+    :root {
+      --primary: #1a365d;
+      --primary-light: #2b6cb0;
+      --accent: #3b82f6;
+      --accent-light: #dbeafe;
+      --success: #38a169;
+      --success-light: #c6f6d5;
+      --warning: #d69e2e;
+      --warning-light: #fefcbf;
+      --danger: #e53e3e;
+      --gray-50: #f7fafc;
+      --gray-100: #edf2f7;
+      --gray-200: #e2e8f0;
+      --gray-300: #cbd5e0;
+      --gray-500: #718096;
+      --gray-700: #2d3748;
+      --gray-800: #1a202c;
+      --radius: 12px;
+      --radius-sm: 8px;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--gray-100);
+      color: var(--gray-700);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    .container { max-width: 680px; margin: 0 auto; padding: 20px; }
+
+    .header {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+      color: white;
+      padding: 32px;
+      border-radius: 12px 12px 0 0;
+      text-align: center;
+    }
+    .header-tag {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      opacity: 0.6;
+      margin-bottom: 8px;
+    }
+    .header h1 { font-size: 22px; font-weight: 700; margin-bottom: 8px; }
+    .header p { font-size: 14px; opacity: 0.85; max-width: 480px; margin: 0 auto; }
+
+    .form-card {
+      background: white;
+      border-radius: 0 0 12px 12px;
+      padding: 32px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+
+    .info-box {
+      background: var(--accent-light);
+      border-left: 3px solid var(--accent);
+      padding: 12px 16px;
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      margin-bottom: 24px;
+      font-size: 13px;
+      color: var(--gray-700);
+    }
+    .info-box strong { color: var(--primary); }
+
+    .section { margin-bottom: 28px; }
+    .section:last-of-type { margin-bottom: 0; }
+    .section-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 16px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid var(--gray-200);
+    }
+
+    .field { margin-bottom: 20px; }
+    .field:last-child { margin-bottom: 0; }
+
+    label {
+      display: block;
+      font-size: 14px;
+      font-weight: 500;
+      margin-bottom: 6px;
+      color: var(--gray-700);
+    }
+    .required::after { content: ' *'; color: var(--danger); }
+
+    .field-hint {
+      font-size: 12px;
+      color: var(--gray-500);
+      margin-bottom: 6px;
+      font-style: italic;
+    }
+
+    select, input, textarea {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1.5px solid var(--gray-300);
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      font-family: 'Inter', sans-serif;
+      color: var(--gray-700);
+      background: white;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    select:focus, input:focus, textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(59,130,246,0.15);
+    }
+    textarea { resize: vertical; min-height: 100px; }
+
+    .input-error { border-color: var(--danger) !important; box-shadow: 0 0 0 3px rgba(229,62,62,0.1) !important; }
+    .error-msg { font-size: 12px; color: var(--danger); margin-top: 4px; display: none; }
+
+    .radio-group { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 4px; }
+    .radio-option {
+      flex: 1;
+      min-width: 120px;
+      text-align: center;
+      padding: 12px 10px;
+      border: 2px solid var(--gray-200);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 500;
+      transition: all 0.2s;
+      color: var(--gray-700);
+    }
+    .radio-option:hover { border-color: var(--accent); background: var(--gray-50); }
+    .radio-option.selected { border-color: var(--accent); background: var(--accent-light); font-weight: 600; color: var(--primary); }
+    .radio-option input { display: none; }
+
+    .checkbox-group { display: flex; flex-direction: column; gap: 8px; margin-top: 4px; }
+    .checkbox-option {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      border: 1.5px solid var(--gray-200);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      font-size: 13px;
+      transition: all 0.2s;
+    }
+    .checkbox-option:hover { border-color: var(--accent); background: var(--gray-50); }
+    .checkbox-option.checked { border-color: var(--accent); background: var(--accent-light); }
+    .checkbox-option input { width: auto; margin: 0; accent-color: var(--accent); }
+
+    .divider { height: 1px; background: var(--gray-200); margin: 28px 0; }
+
+    .btn {
+      display: block;
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: var(--radius-sm);
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: 'Inter', sans-serif;
+      margin-top: 24px;
+    }
+    .btn-primary { background: var(--accent); color: white; }
+    .btn-primary:hover { background: var(--primary-light); }
+    .btn-primary:disabled { background: var(--gray-300); cursor: not-allowed; }
+
+    .success-screen {
+      display: none;
+      text-align: center;
+      padding: 48px 24px;
+      background: white;
+      border-radius: 0 0 12px 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+    .success-icon {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: var(--success-light);
+      color: var(--success);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      margin: 0 auto 20px;
+    }
+    .success-screen h2 { font-size: 20px; color: var(--primary); margin-bottom: 8px; }
+    .success-screen p { color: var(--gray-500); font-size: 14px; max-width: 400px; margin: 0 auto; }
+
+    .footer {
+      text-align: center;
+      padding: 20px;
+      color: var(--gray-500);
+      font-size: 12px;
+    }
+
+    .time-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255,255,255,0.15);
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 12px;
+      margin-top: 12px;
+    }
+
+    @media (max-width: 600px) {
+      .container { padding: 12px; }
+      .header { padding: 24px 20px; }
+      .form-card { padding: 20px; }
+      .radio-group { flex-direction: column; }
+      .radio-option { min-width: unset; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <div class="header">
+    <div class="header-tag">FedCorp</div>
+    <h1>Mapeamento de Dificuldades</h1>
+    <p>Me conta no que você está trabalhando e onde está travando. Vou usar isso pra te ajudar de forma prática, direto no seu projeto.</p>
+    <div class="time-badge">&#9201; ~3 minutos pra preencher</div>
+  </div>
+
+  <div class="form-card" id="formCard">
+    <div class="info-box">
+      <strong>Não existe resposta certa ou errada.</strong> Quanto mais honesto e detalhado, melhor consigo te ajudar. Descreva com suas próprias palavras, do jeito que você explicaria pra um colega.
+    </div>
+
+    <form id="diffForm" novalidate>
+
+      <div class="section">
+        <div class="section-title">Quem é você</div>
+        <div class="field">
+          <label class="required">Seu nome</label>
+          <select id="nome" name="nome" required>
+            <option value="">Selecione...</option>
+            <option value="Leonan">Leonan Thomaz de Oliveira</option>
+            <option value="Ingryd">Ingryd Aylana Silva dos Santos</option>
+            <option value="Daniel">Daniel Mello de Carvalho de Faria</option>
+          </select>
+          <div class="error-msg">Selecione seu nome.</div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="section">
+        <div class="section-title">Seu projeto atual</div>
+        <div class="field">
+          <label class="required">Em qual projeto você está trabalhando agora?</label>
+          <div class="field-hint">Nome do sistema, módulo ou funcionalidade que você está desenvolvendo.</div>
+          <input type="text" id="projeto" name="projeto" required placeholder="Ex: Sistema de cadastro de clientes, API de relatórios, Tela de login...">
+          <div class="error-msg">Descreva o projeto em que você está trabalhando.</div>
+        </div>
+
+        <div class="field">
+          <label class="required">Qual a sua responsabilidade nesse projeto?</label>
+          <div class="field-hint">O que especificamente você está fazendo nele?</div>
+          <textarea id="responsabilidade" name="responsabilidade" required placeholder="Ex: Estou fazendo o frontend das telas de cadastro. / Estou criando as rotas da API. / Estou mexendo no banco de dados."></textarea>
+          <div class="error-msg">Descreva o que você faz nesse projeto.</div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="section">
+        <div class="section-title">Sua dificuldade</div>
+
+        <div class="field">
+          <label class="required">Qual a dificuldade principal que você está enfrentando?</label>
+          <div class="field-hint">Descreva o problema com suas próprias palavras, como se estivesse explicando pra alguém.</div>
+          <textarea id="dificuldade" name="dificuldade" required placeholder="Ex: Não consigo fazer a autenticação funcionar. O token JWT expira e não sei como renovar. / A query no banco está muito lenta e não sei como otimizar."></textarea>
+          <div class="error-msg">Descreva sua dificuldade principal.</div>
+        </div>
+
+        <div class="field">
+          <label class="required">O que você já tentou fazer pra resolver?</label>
+          <div class="field-hint">Pode ser pesquisa no Google, Stack Overflow, ChatGPT, pedir ajuda pra alguém, testar alguma solução...</div>
+          <textarea id="tentativas" name="tentativas" required placeholder="Ex: Pesquisei no Google sobre refresh token, tentei seguir um tutorial do YouTube mas não funcionou no meu caso. / Ainda não tentei nada porque não sei por onde começar."></textarea>
+          <div class="error-msg">Conte o que você já tentou (ou se não tentou nada, tudo bem, diz isso).</div>
+        </div>
+
+        <div class="field">
+          <label class="required">Há quanto tempo está lidando com isso?</label>
+          <div class="radio-group" data-field="tempo_travado">
+            <label class="radio-option" onclick="selectRadio(this)">
+              <input type="radio" name="tempo_travado" value="1-2-dias" required>
+              1-2 dias
+            </label>
+            <label class="radio-option" onclick="selectRadio(this)">
+              <input type="radio" name="tempo_travado" value="1-semana">
+              ~1 semana
+            </label>
+            <label class="radio-option" onclick="selectRadio(this)">
+              <input type="radio" name="tempo_travado" value="2-semanas-mais">
+              2+ semanas
+            </label>
+            <label class="radio-option" onclick="selectRadio(this)">
+              <input type="radio" name="tempo_travado" value="sei-que-ta-errado">
+              Não travado, mas sei que tá errado
+            </label>
+          </div>
+          <div class="error-msg">Selecione há quanto tempo.</div>
+        </div>
+
+        <div class="field">
+          <label class="required">Que tipo de problema é esse?</label>
+          <div class="field-hint">Selecione todos que se aplicam. Se não souber, marque "Não sei classificar".</div>
+          <div class="checkbox-group">
+            <label class="checkbox-option" onclick="toggleCheck(this)">
+              <input type="checkbox" name="tipo_problema" value="logica"> Lógica / Algoritmo (não sei como resolver o problema)
+            </label>
+            <label class="checkbox-option" onclick="toggleCheck(this)">
+              <input type="checkbox" name="tipo_problema" value="banco-dados"> Banco de Dados (queries, modelagem, conexão)
+            </label>
+            <label class="checkbox-option" onclick="toggleCheck(this)">
+              <input type="checkbox" name="tipo_problema" value="frontend"> Frontend / Layout (HTML, CSS, componentes, responsividade)
+            </label>
+            <label class="checkbox-option" onclick="toggleCheck(this)">
+              <input type="checkbox" name="tipo_problema" value="integracao-api"> Integração / API (conectar front com back, consumir APIs)
+            </label>
+            <label class="checkbox-option" onclick="toggleCheck(this)">
+              <input type="checkbox" name="tipo_problema" value="ambiente"> Ambiente / Configuração (instalação, setup, erros de ambiente)
+            </label>
+            <label class="checkbox-option" onclick="toggleCheck(this)">
+              <input type="checkbox" name="tipo_problema" value="nao-sei"> Não sei classificar
+            </label>
+          </div>
+          <div class="error-msg">Selecione pelo menos uma opção.</div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="section">
+        <div class="section-title">Mais alguma coisa? (opcional)</div>
+        <div class="field">
+          <label>Tem mais alguma dificuldade ou algo que você gostaria de aprender?</label>
+          <textarea id="extra" name="extra" placeholder="Espaço livre pra qualquer coisa que queira mencionar. Pode ser outra dificuldade, algo que gostaria de aprender, ou feedback sobre o programa."></textarea>
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-primary" id="submitBtn">Enviar</button>
+    </form>
+  </div>
+
+  <div class="success-screen" id="successScreen">
+    <div class="success-icon">&#10003;</div>
+    <h2>Enviado!</h2>
+    <p>Valeu por compartilhar. Vou usar suas respostas pra montar um plano de ajuda focado no seu projeto real.</p>
+    <p style="margin-top: 16px; font-size: 13px; color: var(--gray-500);">Você pode fechar esta página.</p>
+  </div>
+
+  <div class="footer">
+    &copy; 2026 FedCorp - Programa de Evolução Técnica
+  </div>
+</div>
+
+<script>
+  const GOOGLE_SHEETS_URL = 'https://script.google.com/macros/s/AKfycbxD7Kr8dv2jBMjZI5It64DjkMsq2iQltL02mxk5fa7Y873dhHjAfAP--5yY91vbRxcK/exec';
+
+  function selectRadio(el) {
+    const group = el.parentElement;
+    group.querySelectorAll('.radio-option').forEach(o => o.classList.remove('selected'));
+    el.classList.add('selected');
+    el.querySelector('input').checked = true;
+  }
+
+  function toggleCheck(el) {
+    const cb = el.querySelector('input');
+    cb.checked = !cb.checked;
+    el.classList.toggle('checked', cb.checked);
+
+    if (cb.value === 'nao-sei' && cb.checked) {
+      el.parentElement.querySelectorAll('.checkbox-option').forEach(o => {
+        if (o !== el) { o.classList.remove('checked'); o.querySelector('input').checked = false; }
+      });
+    } else if (cb.value !== 'nao-sei' && cb.checked) {
+      el.parentElement.querySelectorAll('.checkbox-option').forEach(o => {
+        if (o.querySelector('input').value === 'nao-sei') { o.classList.remove('checked'); o.querySelector('input').checked = false; }
+      });
+    }
+  }
+
+  function validateForm() {
+    let valid = true;
+
+    document.querySelectorAll('.input-error').forEach(el => el.classList.remove('input-error'));
+    document.querySelectorAll('.error-msg').forEach(el => el.style.display = 'none');
+
+    const requiredFields = [
+      { el: document.getElementById('nome'), type: 'select' },
+      { el: document.getElementById('projeto'), type: 'input' },
+      { el: document.getElementById('responsabilidade'), type: 'textarea' },
+      { el: document.getElementById('dificuldade'), type: 'textarea' },
+      { el: document.getElementById('tentativas'), type: 'textarea' }
+    ];
+
+    requiredFields.forEach(({ el }) => {
+      if (!el.value.trim()) {
+        el.classList.add('input-error');
+        const err = el.parentElement.querySelector('.error-msg');
+        if (err) err.style.display = 'block';
+        valid = false;
+      }
+    });
+
+    const radioChecked = document.querySelector('input[name="tempo_travado"]:checked');
+    if (!radioChecked) {
+      const radioField = document.querySelector('.radio-group[data-field="tempo_travado"]');
+      const err = radioField.parentElement.querySelector('.error-msg');
+      if (err) err.style.display = 'block';
+      valid = false;
+    }
+
+    const checkboxChecked = document.querySelectorAll('input[name="tipo_problema"]:checked');
+    if (checkboxChecked.length === 0) {
+      const cbGroup = document.querySelector('input[name="tipo_problema"]').closest('.field');
+      const err = cbGroup.querySelector('.error-msg');
+      if (err) err.style.display = 'block';
+      valid = false;
+    }
+
+    return valid;
+  }
+
+  document.getElementById('diffForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+
+    if (!validateForm()) {
+      const firstError = document.querySelector('.input-error, .error-msg[style*="block"]');
+      if (firstError) firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+
+    const btn = document.getElementById('submitBtn');
+    btn.disabled = true;
+    btn.textContent = 'Enviando...';
+
+    const data = {
+      _tipo: 'mapeamento-dificuldades',
+      _submittedAt: new Date().toISOString(),
+      nome: document.getElementById('nome').value,
+      projeto: document.getElementById('projeto').value,
+      responsabilidade: document.getElementById('responsabilidade').value,
+      dificuldade: document.getElementById('dificuldade').value,
+      tentativas: document.getElementById('tentativas').value,
+      tempo_travado: document.querySelector('input[name="tempo_travado"]:checked')?.value || '',
+      tipo_problema: Array.from(document.querySelectorAll('input[name="tipo_problema"]:checked')).map(cb => cb.value),
+      extra: document.getElementById('extra').value
+    };
+
+    try {
+      await fetch(GOOGLE_SHEETS_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'text/plain' },
+        body: JSON.stringify(data)
+      });
+      showSuccess();
+    } catch (error) {
+      showSuccess();
+    }
+  });
+
+  function showSuccess() {
+    document.getElementById('formCard').style.display = 'none';
+    document.querySelector('.header').style.borderRadius = '12px 12px 0 0';
+    document.getElementById('successScreen').style.display = 'block';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+</script>
+
+</body>
+</html>
