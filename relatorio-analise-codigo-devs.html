@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relatório de Análise de Código — Time Técnico FedCorp</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: #f5f7fa; color: #1a1a2e; line-height: 1.7; }
+
+        .header { background: linear-gradient(135deg, #0a1628 0%, #16213e 100%); color: white; padding: 48px 0; }
+        .header-inner { max-width: 900px; margin: 0 auto; padding: 0 24px; }
+        .header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+        .header p { font-size: 15px; opacity: 0.8; }
+        .header .meta { margin-top: 16px; font-size: 13px; opacity: 0.6; }
+
+        .container { max-width: 900px; margin: 0 auto; padding: 32px 24px; }
+
+        .section { background: white; border-radius: 12px; padding: 32px; margin-bottom: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+        .section h2 { font-size: 22px; font-weight: 700; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 2px solid #eef1f6; }
+        .section h3 { font-size: 17px; font-weight: 600; margin: 20px 0 12px; color: #16213e; }
+        .section h4 { font-size: 14px; font-weight: 600; margin: 16px 0 8px; color: #555; text-transform: uppercase; letter-spacing: 0.5px; }
+
+        .dev-header { display: flex; align-items: center; gap: 16px; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 2px solid #eef1f6; }
+        .dev-avatar { width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 700; color: white; }
+        .dev-name { font-size: 22px; font-weight: 700; }
+        .dev-role { font-size: 13px; color: #888; }
+
+        .tag { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 12px; font-weight: 500; margin: 2px 4px 2px 0; }
+        .tag-green { background: #e6f9ef; color: #0d7a3e; }
+        .tag-red { background: #fde8e8; color: #c53030; }
+        .tag-yellow { background: #fef3cd; color: #856404; }
+        .tag-blue { background: #e8f0fe; color: #1a56db; }
+        .tag-gray { background: #f0f0f0; color: #555; }
+
+        .score-bar { display: flex; align-items: center; gap: 12px; margin: 8px 0; }
+        .score-label { width: 160px; font-size: 13px; color: #555; }
+        .score-track { flex: 1; height: 8px; background: #eef1f6; border-radius: 4px; overflow: hidden; }
+        .score-fill { height: 100%; border-radius: 4px; }
+        .score-value { width: 32px; font-size: 13px; font-weight: 600; text-align: right; }
+
+        .finding { padding: 12px 16px; margin: 8px 0; border-radius: 8px; font-size: 14px; }
+        .finding-critical { background: #fde8e8; border-left: 4px solid #c53030; }
+        .finding-warning { background: #fef3cd; border-left: 4px solid #d69e2e; }
+        .finding-info { background: #e8f0fe; border-left: 4px solid #3182ce; }
+        .finding-good { background: #e6f9ef; border-left: 4px solid #38a169; }
+
+        code { background: #f0f0f0; padding: 2px 6px; border-radius: 4px; font-size: 13px; font-family: 'Cascadia Code', 'Fira Code', monospace; }
+        pre { background: #1a1a2e; color: #e0e0e0; padding: 16px; border-radius: 8px; overflow-x: auto; font-size: 13px; margin: 12px 0; font-family: 'Cascadia Code', 'Fira Code', monospace; line-height: 1.5; }
+        pre .comment { color: #6a737d; }
+        pre .highlight { color: #f97583; }
+        pre .string { color: #9ecbff; }
+
+        table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 14px; }
+        th { background: #f5f7fa; text-align: left; padding: 10px 12px; font-weight: 600; font-size: 13px; color: #555; }
+        td { padding: 10px 12px; border-bottom: 1px solid #eef1f6; }
+
+        .summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin: 16px 0; }
+        .summary-card { background: #f5f7fa; padding: 16px; border-radius: 8px; text-align: center; }
+        .summary-card .number { font-size: 28px; font-weight: 700; }
+        .summary-card .label { font-size: 12px; color: #888; margin-top: 4px; }
+
+        ul { padding-left: 20px; }
+        li { margin: 6px 0; font-size: 14px; }
+
+        .priority-high { color: #c53030; font-weight: 600; }
+        .priority-medium { color: #d69e2e; font-weight: 600; }
+        .priority-low { color: #3182ce; font-weight: 600; }
+
+        @media print { body { background: white; } .section { box-shadow: none; border: 1px solid #ddd; } }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <div class="header-inner">
+        <h1>Relatório de Análise de Código</h1>
+        <p>Time Técnico — Fedcorp Desenvolvimentos</p>
+        <div class="meta">Gerado em 09/06/2026 | Baseado em 21 repositórios | Análise de commits, estrutura e qualidade de código</div>
+    </div>
+</div>
+
+<div class="container">
+
+<!-- RESUMO EXECUTIVO -->
+<div class="section">
+    <h2>Resumo Executivo</h2>
+    <p>Análise baseada em <strong>630+ commits</strong> distribuídos em <strong>21 repositórios</strong> da organização Fedcorp-Desenvolvimentos no GitHub. Foram analisados padrões de código, práticas de segurança, estrutura de projetos e workflow de desenvolvimento de 3 desenvolvedores: Leonan, Ingryd e Daniel.</p>
+
+    <div class="summary-grid">
+        <div class="summary-card">
+            <div class="number">0</div>
+            <div class="label">Testes automatizados</div>
+        </div>
+        <div class="summary-card">
+            <div class="number">3</div>
+            <div class="label">Credenciais expostas em código</div>
+        </div>
+        <div class="summary-card">
+            <div class="number">18</div>
+            <div class="label">Arquivos _old/backup no repo</div>
+        </div>
+        <div class="summary-card">
+            <div class="number">~70%</div>
+            <div class="label">Commits direto na main</div>
+        </div>
+    </div>
+
+    <div class="finding finding-critical">
+        <strong>Alerta Crítico:</strong> Nenhum dos repositórios possui testes automatizados. Todos os arquivos <code>tests.py</code> no backend estão vazios (apenas o boilerplate do Django). No frontend, não existe sequer o diretório de testes.
+    </div>
+</div>
+
+<!-- ACHADOS GLOBAIS DE SEGURANÇA -->
+<div class="section">
+    <h2>Achados de Segurança — Todo o Time</h2>
+
+    <div class="finding finding-critical">
+        <strong>CRÍTICO — SECRET_KEY hardcoded no settings.py:</strong> A SECRET_KEY do Django tem um valor default hardcoded no código-fonte. Este valor está público no GitHub (repo público). Qualquer pessoa pode forjar tokens JWT.
+        <pre>SECRET_KEY = config(
+    "DJANGO_SECRET_KEY",
+    <span class="highlight">default="59189659c050c968f50c01d04d3634bced76415cce6738402d9e101478129efa"</span>,
+)</pre>
+        <strong>Arquivo:</strong> <code>FedConnect-Back-End/bigcorp/settings.py:42</code>
+    </div>
+
+    <div class="finding finding-critical">
+        <strong>CRÍTICO — Google Maps API Key hardcoded:</strong> Chave de API do Google Maps exposta no código.
+        <pre>GOOGLE_MAPS_API_KEY = os.environ.get("GOOGLE_MAPS_API_KEY", <span class="highlight">"AIzaSyCmVm2yu5jo-9793-4CSs78e4L9c-U6kNQ"</span>)</pre>
+        <strong>Arquivo:</strong> <code>FedConnect-Back-End/bigcorp/settings.py:234</code>
+    </div>
+
+    <div class="finding finding-critical">
+        <strong>CRÍTICO — Firebase Config hardcoded (Ingryd):</strong> Todas as credenciais do Firebase estão hardcoded no frontend, incluindo API Key, App ID, e Messaging Sender ID.
+        <pre>const firebaseConfig = {
+  apiKey: <span class="highlight">"AIzaSyCV6F7hiyegTZ5iG4Ejn3rWqKQVAex_1UY"</span>,
+  authDomain: "portal-comissao-produtor.firebaseapp.com",
+  projectId: "portal-comissao-produtor",
+  ...
+};</pre>
+        <strong>Arquivo:</strong> <code>comissao-portal-front/src/config/firebase.js:7</code>
+        <br><em>Nota: Chaves Firebase no frontend são menos críticas se as Security Rules estiverem configuradas, mas a API Key exposta pode gerar custos indesejados.</em>
+    </div>
+
+    <div class="finding finding-critical">
+        <strong>CRÍTICO — URL de produção hardcoded no frontend:</strong> O endpoint de produção está fixo no código-fonte em vez de usar variável de ambiente.
+        <pre>const api = axios.create({
+  baseURL: <span class="highlight">"https://fedconnect-backend-d6kgr.ondigitalocean.app/"</span>,
+});</pre>
+        <strong>Arquivo:</strong> <code>FedConnect-FrontEnd/src/services/api.js:5</code>
+    </div>
+
+    <div class="finding finding-warning">
+        <strong>ATENÇÃO — Webhook sem autenticação:</strong> O endpoint do Santander Webhook usa <code>permission_classes = [AllowAny]</code> sem nenhuma validação de origem (ex: assinatura HMAC, IP whitelist).
+        <br><strong>Arquivo:</strong> <code>FedConnect-Back-End/bank/views.py:14</code>
+    </div>
+
+    <div class="finding finding-warning">
+        <strong>ATENÇÃO — Token duplicado em headers:</strong> O código tem um interceptor que adiciona o token automaticamente, mas vários services ainda fazem <code>localStorage.getItem("accessToken")</code> manualmente e passam no header. Isso cria redundância e risco de inconsistência.
+        <br><strong>Arquivo:</strong> <code>FedConnect-FrontEnd/src/services/consultaFatura.js</code> (e outros)
+    </div>
+</div>
+
+<!-- LEONAN -->
+<div class="section">
+    <div class="dev-header">
+        <div class="dev-avatar" style="background: #3182ce;">L</div>
+        <div>
+            <div class="dev-name">Leonan Thomaz</div>
+            <div class="dev-role">Full-Stack Developer | ~299 commits | 10+ repositórios</div>
+        </div>
+    </div>
+
+    <h4>Métricas de Qualidade</h4>
+    <div class="score-bar">
+        <span class="score-label">Organização de código</span>
+        <div class="score-track"><div class="score-fill" style="width:65%; background:#d69e2e;"></div></div>
+        <span class="score-value">6.5</span>
+    </div>
+    <div class="score-bar">
+        <span class="score-label">Segurança</span>
+        <div class="score-track"><div class="score-fill" style="width:35%; background:#c53030;"></div></div>
+        <span class="score-value">3.5</span>
+    </div>
+    <div class="score-bar">
+        <span class="score-label">Boas práticas</span>
+        <div class="score-track"><div class="score-fill" style="width:50%; background:#d69e2e;"></div></div>
+        <span class="score-value">5.0</span>
+    </div>
+    <div class="score-bar">
+        <span class="score-label">Testes</span>
+        <div class="score-track"><div class="score-fill" style="width:5%; background:#c53030;"></div></div>
+        <span class="score-value">0.5</span>
+    </div>
+    <div class="score-bar">
+        <span class="score-label">Git workflow</span>
+        <div class="score-track"><div class="score-fill" style="width:30%; background:#c53030;"></div></div>
+        <span class="score-value">3.0</span>
+    </div>
+
+    <h3>Pontos Fortes</h3>
+    <div class="finding finding-good">
+        <strong>Refatoração em andamento:</strong> Leonan está migrando CSS puro para styled-components, demonstrando consciência de melhoria técnica. O componente <code>ConsultaFaturamento</code> já está bem estruturado com custom hooks (<code>useFaturamento</code>, <code>useFiltros</code>, <code>usePaginacao</code>).
+    </div>
+    <div class="finding finding-good">
+        <strong>Separação de responsabilidades no melhor código:</strong> No módulo de faturamento, existe boa separação: hooks para lógica, utils para formatação, componentes para UI. Custom hooks com <code>useCallback</code> correto.
+    </div>
+    <div class="finding finding-good">
+        <strong>Produtividade alta:</strong> É o dev mais produtivo do time, toca front e back, e consegue entregar features completas (login Google, recuperação de senha, sistema de consultas, webhook bancário).
+    </div>
+
+    <h3>Pontos Fracos</h3>
+    <div class="finding finding-critical">
+        <strong>Credenciais e URLs hardcoded:</strong> SECRET_KEY com default no settings.py, Google Maps API Key exposta, URL de produção fixa no código do frontend. Qualquer destes pode ser explorado.
+    </div>
+    <div class="finding finding-warning">
+        <strong>Arquivos mortos no repositório:</strong> Existem 18+ arquivos com sufixos <code>_old</code>, <code>copy</code>, <code>backup</code> no FedConnect-FrontEnd. Arquivos como <code>Login_old.jsx</code>, <code>CotacaoConteudo_old.jsx</code>, <code>ComercialRegiao_old.jsx</code> e um diretório inteiro <code>backup/</code>. Isso polui o repositório e confunde outros devs.
+    </div>
+    <div class="finding finding-warning">
+        <strong>Commits vagos e direto na main:</strong> Mensagens como "upgrade", "ajustes", "teste", "correção" não dizem nada sobre o que mudou. Commita direto na branch main sem Pull Request, impedindo code review.
+    </div>
+    <div class="finding finding-warning">
+        <strong>Inconsistência de padrões:</strong> Parte do código usa CSS puro, parte styled-components. Parte dos services adiciona token manualmente, parte usa interceptor. Mistura de português e inglês nas variáveis. Refatoração incompleta deixa o codebase num estado híbrido.
+    </div>
+    <div class="finding finding-warning">
+        <strong>console.log em produção:</strong> Diversos <code>console.error</code> e <code>console.log</code> espalhados pelos services sem controle. No backend, logs com emojis (bom para debug local, ruim para produção).
+    </div>
+
+    <h3>Recomendações Prioritárias</h3>
+    <ol>
+        <li><span class="priority-high">[URGENTE]</span> Remover todas as credenciais hardcoded do código. Usar exclusivamente variáveis de ambiente sem defaults sensíveis.</li>
+        <li><span class="priority-high">[URGENTE]</span> Adicionar autenticação no webhook Santander (HMAC signature ou IP whitelist).</li>
+        <li><span class="priority-medium">[MÉDIO]</span> Adotar workflow de branches: criar branches por feature, abrir PRs, solicitar review.</li>
+        <li><span class="priority-medium">[MÉDIO]</span> Limpar arquivos _old/backup do repositório. Usar Git para histórico, não sufixos.</li>
+        <li><span class="priority-medium">[MÉDIO]</span> Padronizar: escolher styled-components OU CSS modules e migrar tudo.</li>
+        <li><span class="priority-low">[LONGO PRAZO]</span> Começar a escrever testes para as funções críticas (autenticação, consultas, webhook).</li>
+        <li><span class="priority-low">[LONGO PRAZO]</span> Adotar conventional commits (feat:, fix:, refactor:) para mensagens claras.</li>
+    </ol>
+</div>
+
+<!-- INGRYD -->
+<div class="section">
+    <div class="dev-header">
+        <div class="dev-avatar" style="background: #805ad5;">I</div>
+        <div>
+            <div class="dev-name">Ingryd Aylana</div>
+            <div class="dev-role">Frontend Developer | ~146 commits | 5 repositórios</div>
+        </div>
+    </div>
+
+    <h4>Métricas de Qualidade</h4>
+    <div class="score-bar">
+        <span class="score-label">Organização de código</span>
+        <div class="score-track"><div class="score-fill" style="width:70%; background:#38a169;"></div></div>
+        <span class="score-value">7.0</span>
+    </div>
+    <div class="score-bar">
+        <span class="score-label">Segurança</span>
+        <div class="score-track"><div class="score-fill" style="width:45%; background:#d69e2e;"></div></div>
+        <span class="score-value">4.5</span>
+    </div>
+    <div class="score-bar">
+        <span class="score-label">Boas práticas</span>
+        <div class="score-track"><div class="score-fill" style="width:60%; background:#d69e2e;"></div></div>
+        <span class="score-value">6.0</span>
+    </div>
+    <div class="score-bar">
+        <span class="score-label">Testes</span>
+        <div class="score-track"><div class="score-fill" style="width:5%; background:#c53030;"></div></div>
+        <span class="score-value">0.5</span>
+    </div>
+    <div class="score-bar">
+        <span class="score-label">Git workflow</span>
+        <div class="score-track"><div class="score-fill" style="width:75%; background:#38a169;"></div></div>
+        <span class="score-value">7.5</span>
+    </div>
+
+    <h3>Pontos Fortes</h3>
+    <div class="finding finding-good">
+        <strong>Melhor workflow Git do time:</strong> Usa branches consistentemente (branch <code>front</code> para desenvolvimento), abre Pull Requests, e faz merge via GitHub. Único dev que segue um fluxo minimamente estruturado.
+    </div>
+    <div class="finding finding-good">
+        <strong>Mensagens de commit com prefixos:</strong> Usa <code>Fix:</code>, <code>Feature:</code>, <code>Chore:</code> de forma consistente, facilitando a leitura do histórico.
+    </div>
+    <div class="finding finding-good">
+        <strong>Boa estrutura no comissao-portal-front:</strong> Projeto bem organizado com separação clara: <code>components/ui/</code> (Button, Card, Input, etc.), <code>components/layout/</code> (Sidebar, Topbar), <code>pages/</code>, <code>services/</code>, <code>hooks/</code>, <code>contexts/</code>. Demonstra entendimento de arquitetura React.
+    </div>
+    <div class="finding finding-good">
+        <strong>Uso de Firebase com batched writes:</strong> No <code>comissaoService.js</code>, usa <code>writeBatch</code> corretamente para operações atômicas no Firestore. Demonstra preocupação com consistência de dados.
+    </div>
+
+    <h3>Pontos Fracos</h3>
+    <div class="finding finding-warning">
+        <strong>Escopo limitado a frontend/UI:</strong> Não tem exposição a backend, banco de dados, APIs. Isso limita seu crescimento como desenvolvedora e a capacidade de debugar problemas end-to-end.
+    </div>
+    <div class="finding finding-warning">
+        <strong>Verificação de admin no frontend:</strong> A verificação de tipo de usuário (<code>userData.tipoUsuario !== "admin"</code>) é feita no frontend via Firestore, sem enforcement no backend. Um usuário mal-intencionado pode burlar a verificação.
+        <pre><span class="comment">// DashboardMaster.jsx</span>
+if (userData.tipoUsuario !== "admin") {
+  navigate("/app/dashboard"); <span class="comment">// Só redireciona, não bloqueia</span>
+}</pre>
+    </div>
+    <div class="finding finding-warning">
+        <strong>console.log em produção:</strong> 43 ocorrências de <code>console.log/error/warn</code> espalhadas pelo comissao-portal-front, incluindo logs de permissão e dados de usuário.
+    </div>
+    <div class="finding finding-info">
+        <strong>N+1 queries no Firestore:</strong> Em <code>getMilhagensDeTodosUsuarios()</code>, para cada milhagem faz um <code>getDoc</code> separado para buscar o nome do produtor. Com 100 milhagens, são 100 queries extras. Deveria usar batched reads ou desnormalizar o dado.
+    </div>
+
+    <h3>Recomendações Prioritárias</h3>
+    <ol>
+        <li><span class="priority-high">[URGENTE]</span> Implementar Firestore Security Rules para enforcement de permissões server-side, não confiar em verificações do frontend.</li>
+        <li><span class="priority-medium">[MÉDIO]</span> Revisar Firebase config — garantir que Security Rules estão restritivas e que a API Key tem restrictions no Google Cloud Console.</li>
+        <li><span class="priority-medium">[MÉDIO]</span> Otimizar queries Firestore — evitar N+1, considerar desnormalização ou batch reads.</li>
+        <li><span class="priority-medium">[MÉDIO]</span> Expandir para backend — começar a contribuir com endpoints simples para ganhar visão full-stack.</li>
+        <li><span class="priority-low">[LONGO PRAZO]</span> Adicionar TypeScript ao comissao-portal-front para maior segurança de tipos.</li>
+        <li><span class="priority-low">[LONGO PRAZO]</span> Implementar testes de componentes com React Testing Library.</li>
+    </ol>
+</div>
+
+<!-- DANIEL -->
+<div class="section">
+    <div class="dev-header">
+        <div class="dev-avatar" style="background: #dd6b20;">D</div>
+        <div>
+            <div class="dev-name">Daniel Mello</div>
+            <div class="dev-role">Backend Developer | ~84 commits | 4 repositórios</div>
+        </div>
+    </div>
+
+    <h4>Métricas de Qualidade</h4>
+    <div class="score-bar">
+        <span class="score-label">Organização de código</span>
+        <div class="score-track"><div class="score-fill" style="width:40%; background:#c53030;"></div></div>
+        <span class="score-value">4.0</span>
+    </div>
+    <div class="score-bar">
+        <span class="score-label">Segurança</span>
+        <div class="score-track"><div class="score-fill" style="width:30%; background:#c53030;"></div></div>
+        <span class="score-value">3.0</span>
+    </div>
+    <div class="score-bar">
+        <span class="score-label">Boas práticas</span>
+        <div class="score-track"><div class="score-fill" style="width:35%; background:#c53030;"></div></div>
+        <span class="score-value">3.5</span>
+    </div>
+    <div class="score-bar">
+        <span class="score-label">Testes</span>
+        <div class="score-track"><div class="score-fill" style="width:5%; background:#c53030;"></div></div>
+        <span class="score-value">0.5</span>
+    </div>
+    <div class="score-bar">
+        <span class="score-label">Git workflow</span>
+        <div class="score-track"><div class="score-fill" style="width:20%; background:#c53030;"></div></div>
+        <span class="score-value">2.0</span>
+    </div>
+
+    <h3>Pontos Fortes</h3>
+    <div class="finding finding-good">
+        <strong>Trabalha com infraestrutura:</strong> Configurou Docker, Dockerfile, variáveis de ambiente. Demonstra interesse em DevOps e deploy, área que poucos juniores exploram.
+    </div>
+    <div class="finding finding-good">
+        <strong>Evolução recente visível:</strong> Commits mais recentes no FedHub-Backend usam prefixos <code>feat:</code> e <code>fix:</code>, e demonstram trabalho mais estruturado (PdfGeneratorController com Pydantic models).
+    </div>
+    <div class="finding finding-good">
+        <strong>Experiência com integrações bancárias:</strong> Trabalhou com API do Santander, geração de boletos, cancelamento de faturas — domínio complexo de negócio.
+    </div>
+
+    <h3>Pontos Fracos</h3>
+    <div class="finding finding-critical">
+        <strong>Padrão de trial-and-error extremo:</strong> Sequências de commits consecutivos como "ajuste", "ajuste url", "AJUSTES", "cors", "ajuste Dockerfile" (7+ seguidos no mesmo dia). Indica que está commitando e pushando para ver se funciona em produção em vez de testar localmente.
+        <pre><span class="comment">// Exemplo real — 7 commits em 12/fev/2026:</span>
+"ajustes variaveis de ambiente"
+"AJUSTES"
+"ajustes"
+"ajustes requirements + settings"
+"ajuste requirements"
+"placeholder db"
+"ajuste Dockerfile"</pre>
+    </div>
+    <div class="finding finding-critical">
+        <strong>Uso provável de IA sem revisão:</strong> Commits recentes no FedHub-Backend alternam entre mensagens em português mal formatado ("ajsute", "santader request") e mensagens perfeitas em inglês técnico ("feat: implement PdfGeneratorController with Playwright-based PDF rendering"). O código gerado funciona mas não foi revisado para entendimento.
+    </div>
+    <div class="finding finding-warning">
+        <strong>Mensagens de commit sem significado:</strong> A grande maioria das mensagens são "ajuste", "ajustes", "AJUSTES" (em caixa alta), "att", "url". Impossível entender o histórico do projeto pelos commits.
+    </div>
+    <div class="finding finding-warning">
+        <strong>Commit direto na main, sem PR:</strong> Nenhum uso de branches ou Pull Requests nos repos que contribui. Push direto em main/master.
+    </div>
+
+    <h3>Recomendações Prioritárias</h3>
+    <ol>
+        <li><span class="priority-high">[URGENTE]</span> Parar de usar produção como ambiente de teste. Configurar ambiente local com Docker Compose para testar antes de commitar.</li>
+        <li><span class="priority-high">[URGENTE]</span> Adotar a regra: "Se o commit não funcionar sozinho, não commita." Agrupar mudanças em commits atômicos e funcionais.</li>
+        <li><span class="priority-medium">[MÉDIO]</span> Se usar IA para gerar código, obrigatoriamente entender o que foi gerado antes de commitar. Reescrever mensagens de commit no próprio estilo.</li>
+        <li><span class="priority-medium">[MÉDIO]</span> Aprender Git workflow: criar branch por feature, commitar com mensagens descritivas, abrir PR.</li>
+        <li><span class="priority-medium">[MÉDIO]</span> Estudar fundamentos de Python/Django — muitos "ajustes" seguidos indicam falta de entendimento de como settings, CORS e variáveis de ambiente funcionam.</li>
+        <li><span class="priority-low">[LONGO PRAZO]</span> Começar a escrever testes para as rotas que cria, pelo menos smoke tests básicos.</li>
+    </ol>
+</div>
+
+<!-- COMPARATIVO -->
+<div class="section">
+    <h2>Comparativo Geral</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Critério</th>
+                <th>Leonan</th>
+                <th>Ingryd</th>
+                <th>Daniel</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Volume de commits</td>
+                <td><span class="tag tag-green">~299</span></td>
+                <td><span class="tag tag-blue">~146</span></td>
+                <td><span class="tag tag-gray">~84</span></td>
+            </tr>
+            <tr>
+                <td>Stack</td>
+                <td>Full-stack (JS + Python)</td>
+                <td>Frontend (JS/React)</td>
+                <td>Backend (Python) + Docker</td>
+            </tr>
+            <tr>
+                <td>Usa Pull Requests</td>
+                <td><span class="tag tag-red">Raramente</span></td>
+                <td><span class="tag tag-green">Sempre</span></td>
+                <td><span class="tag tag-red">Nunca</span></td>
+            </tr>
+            <tr>
+                <td>Qualidade dos commits</td>
+                <td><span class="tag tag-yellow">Regular</span></td>
+                <td><span class="tag tag-green">Boa</span></td>
+                <td><span class="tag tag-red">Fraca</span></td>
+            </tr>
+            <tr>
+                <td>Testes automatizados</td>
+                <td><span class="tag tag-red">Zero</span></td>
+                <td><span class="tag tag-red">Zero</span></td>
+                <td><span class="tag tag-red">Zero</span></td>
+            </tr>
+            <tr>
+                <td>Segurança</td>
+                <td><span class="tag tag-red">Credenciais expostas</span></td>
+                <td><span class="tag tag-yellow">Auth frontend-only</span></td>
+                <td><span class="tag tag-red">Trial-and-error em prod</span></td>
+            </tr>
+            <tr>
+                <td>Organização de código</td>
+                <td><span class="tag tag-yellow">Melhorando</span></td>
+                <td><span class="tag tag-green">Boa</span></td>
+                <td><span class="tag tag-red">Fraca</span></td>
+            </tr>
+            <tr>
+                <td>Potencial de crescimento</td>
+                <td><span class="tag tag-green">Alto</span></td>
+                <td><span class="tag tag-green">Alto</span></td>
+                <td><span class="tag tag-yellow">Médio</span></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- PLANO DE AÇÃO IMEDIATO -->
+<div class="section">
+    <h2>Plano de Ação Imediato (Próximas 2 Semanas)</h2>
+
+    <h3>Para Todo o Time</h3>
+    <ol>
+        <li><span class="priority-high">[SEMANA 1]</span> <strong>Rotação de credenciais:</strong> Trocar SECRET_KEY, Google Maps API Key, e revisar Firebase Security Rules. Remover todos os defaults sensíveis do código.</li>
+        <li><span class="priority-high">[SEMANA 1]</span> <strong>Branch protection:</strong> Ativar branch protection na main de todos os repos. Exigir PR com pelo menos 1 review.</li>
+        <li><span class="priority-medium">[SEMANA 2]</span> <strong>Template de PR:</strong> Criar template de Pull Request padrão com checklist (testou localmente? tem credencial exposta? commit message descritiva?).</li>
+        <li><span class="priority-medium">[SEMANA 2]</span> <strong>Limpeza:</strong> Remover arquivos _old, backup, copy de todos os repos.</li>
+    </ol>
+
+    <h3>Individual</h3>
+    <table>
+        <thead>
+            <tr><th>Dev</th><th>Foco Semana 1</th><th>Foco Semana 2</th></tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Leonan</strong></td>
+                <td>Remover credenciais hardcoded, adicionar webhook auth</td>
+                <td>Padronizar CSS approach, limpar arquivos mortos</td>
+            </tr>
+            <tr>
+                <td><strong>Ingryd</strong></td>
+                <td>Revisar Firebase Security Rules</td>
+                <td>Otimizar queries Firestore, começar 1 endpoint backend</td>
+            </tr>
+            <tr>
+                <td><strong>Daniel</strong></td>
+                <td>Configurar ambiente local de teste (Docker Compose)</td>
+                <td>Praticar Git workflow: branch + PR para cada tarefa</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- NOTA DO CONSULTOR -->
+<div class="section">
+    <h2>Nota sobre Davidson Simões</h2>
+    <p>Foi identificado um 4o desenvolvedor, <strong>Davidson Simões</strong>, com 100 commits exclusivamente no repositório <code>portal-do-seguro</code> (TypeScript/Next.js). Seu padrão de código é significativamente superior: usa conventional commits corretamente, escreve testes, documenta, faz refactoring estruturado, e trabalha via PRs. Pode servir como referência de boas práticas para o time, ou como par para code review.</p>
+</div>
+
+<div class="section" style="text-align: center; padding: 24px; color: #888; font-size: 13px;">
+    Relatório gerado por Lucas L. Silva — Consultoria Técnica via Coninfe para FedCorp<br>
+    Baseado em análise automatizada de repositórios GitHub | Junho 2026
+</div>
+
+</div>
+</body>
+</html>
