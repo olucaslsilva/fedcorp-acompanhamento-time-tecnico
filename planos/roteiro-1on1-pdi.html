@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Roteiro — 1:1s de PDI | FedCorp</title>
+  <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700;800&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Roboto', -apple-system, BlinkMacSystemFont, sans-serif;
+      color: #374151; line-height: 1.65; background: #F0F2F5;
+      -webkit-font-smoothing: antialiased;
+    }
+    @media screen { body { max-width: 880px; margin: 0 auto; padding: 24px 16px 80px; } }
+    @media print {
+      body { background: #fff; padding: 0; max-width: none; font-size: 10pt; }
+      .page { box-shadow: none !important; margin: 0 !important; border-radius: 0 !important; padding: 24px 32px !important; border: none !important; }
+      .page-break { page-break-before: always; }
+      .no-print { display: none !important; }
+      .nav-tabs { display: none !important; }
+    }
+
+    h1, h2, h3, h4 { font-family: 'Public Sans', sans-serif; color: #1F2937; }
+    .material-symbols-rounded { vertical-align: middle; }
+
+    .page {
+      background: #fff; padding: 40px 44px; margin-bottom: 20px;
+      border-radius: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.04);
+      border: 1px solid rgba(0,0,0,0.04);
+    }
+
+    /* COVER */
+    .cover {
+      background: linear-gradient(135deg, #1A365D 0%, #2B5EA7 50%, #3B82F6 100%);
+      color: #fff; text-align: center; padding: 56px 48px !important;
+      position: relative; overflow: hidden;
+    }
+    .cover::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 20% 50%, rgba(255,255,255,0.06) 0%, transparent 60%),
+                  radial-gradient(ellipse at 80% 20%, rgba(96,165,250,0.12) 0%, transparent 50%);
+    }
+    .cover > * { position: relative; }
+    .cover-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.15);
+      backdrop-filter: blur(8px); padding: 6px 18px; border-radius: 100px;
+      font-family: 'Public Sans'; font-size: 11px; font-weight: 600;
+      letter-spacing: 1.5px; text-transform: uppercase;
+      color: rgba(255,255,255,0.85); margin-bottom: 24px;
+    }
+    .cover h1 { font-size: 28px; font-weight: 800; color: #fff; letter-spacing: -0.02em; margin-bottom: 8px; }
+    .cover .subtitle { font-size: 15px; color: rgba(255,255,255,0.6); margin-bottom: 28px; }
+    .cover-info { display: flex; gap: 32px; justify-content: center; flex-wrap: wrap; }
+    .cover-info-item { text-align: center; }
+    .cover-info-item .label { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: rgba(255,255,255,0.4); margin-bottom: 4px; }
+    .cover-info-item .value { font-family: 'Public Sans'; font-size: 15px; font-weight: 600; color: rgba(255,255,255,0.9); }
+
+    /* SECTION TITLE */
+    .section-title {
+      font-size: 20px; font-weight: 700; margin-bottom: 20px;
+      display: flex; align-items: center; gap: 14px;
+    }
+    .section-title::after { content: ''; flex: 1; height: 1px; background: linear-gradient(to right, #E5E7EB, transparent); }
+    .s-icon {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 36px; height: 36px; border-radius: 10px; flex-shrink: 0;
+    }
+    .s-icon .material-symbols-rounded { font-size: 20px; color: #fff; }
+
+    /* CHECKLIST */
+    .checklist { list-style: none; padding: 0; }
+    .checklist li {
+      display: flex; align-items: flex-start; gap: 10px;
+      padding: 8px 0; border-bottom: 1px solid #F3F4F6; font-size: 14px;
+    }
+    .checklist li:last-child { border-bottom: none; }
+    .checklist .material-symbols-rounded { font-size: 20px; color: #D1D5DB; flex-shrink: 0; margin-top: 1px; cursor: pointer; }
+    .checklist li.done .material-symbols-rounded { color: #059669; }
+    .checklist li.done span { text-decoration: line-through; color: #9CA3AF; }
+    .check-note { font-size: 12px; color: #6B7280; margin-left: 30px; margin-top: 2px; }
+
+    /* GROW PHASE */
+    .grow-phase {
+      border: 1px solid #E5E7EB; border-radius: 14px;
+      margin-bottom: 16px; overflow: hidden;
+    }
+    .grow-header {
+      display: flex; align-items: center; gap: 12px;
+      padding: 14px 20px; cursor: pointer;
+      background: #F9FAFB;
+    }
+    .grow-header:hover { background: #F3F4F6; }
+    .grow-letter {
+      font-family: 'Public Sans'; font-size: 18px; font-weight: 800;
+      width: 36px; height: 36px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      color: #fff; flex-shrink: 0;
+    }
+    .grow-title { font-family: 'Public Sans'; font-size: 15px; font-weight: 700; color: #1F2937; }
+    .grow-time { font-size: 12px; color: #9CA3AF; margin-left: auto; font-weight: 500; }
+    .grow-body { padding: 16px 20px; font-size: 14px; }
+    .grow-body p { margin-bottom: 10px; }
+
+    /* QUOTE */
+    .quote {
+      background: #EFF6FF; border-left: 3px solid #3B82F6; border-radius: 0 8px 8px 0;
+      padding: 12px 16px; margin: 12px 0; font-size: 13px; color: #1E40AF;
+      font-style: italic; line-height: 1.6;
+    }
+
+    /* INFO BOX */
+    .info-box {
+      display: flex; gap: 10px; align-items: flex-start;
+      padding: 12px 16px; border-radius: 10px; margin-bottom: 14px; font-size: 13px;
+    }
+    .info-box .material-symbols-rounded { font-size: 20px; flex-shrink: 0; margin-top: 1px; }
+    .info-warn { background: #FEF3C7; color: #92400E; border: 1px solid #FDE68A; }
+    .info-blue { background: #EFF6FF; color: #1E40AF; border: 1px solid #BFDBFE; }
+    .info-red { background: #FEF2F2; color: #991B1B; border: 1px solid #FECACA; }
+    .info-green { background: #ECFDF5; color: #065F46; border: 1px solid #A7F3D0; }
+
+    /* DEV TABS */
+    .nav-tabs {
+      display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap;
+    }
+    .nav-tab {
+      padding: 8px 20px; border-radius: 100px;
+      font-family: 'Public Sans'; font-size: 13px; font-weight: 600;
+      border: 2px solid #E5E7EB; background: #fff; color: #6B7280;
+      cursor: pointer; transition: all 0.2s;
+    }
+    .nav-tab:hover { border-color: #3B82F6; color: #3B82F6; }
+    .nav-tab.active { background: linear-gradient(135deg, #1A365D, #2B5EA7); border-color: transparent; color: #fff; }
+
+    .dev-panel { display: none; }
+    .dev-panel.active { display: block; }
+
+    /* SCORE TABLE */
+    .score-table { width: 100%; border-collapse: collapse; font-size: 13px; margin: 12px 0; }
+    .score-table th { background: #F9FAFB; text-align: left; padding: 8px 12px; font-weight: 600; color: #6B7280; font-size: 11px; text-transform: uppercase; letter-spacing: 0.04em; }
+    .score-table td { padding: 8px 12px; border-bottom: 1px solid #F3F4F6; }
+    .score-table .score-cell { font-family: 'Public Sans'; font-weight: 700; text-align: center; width: 70px; }
+    .sc-red { color: #DC2626; background: #FEF2F2; }
+    .sc-yellow { color: #D97706; background: #FFFBEB; }
+    .sc-blue { color: #2563EB; background: #EFF6FF; }
+    .sc-green { color: #059669; background: #ECFDF5; }
+
+    /* GAP CARD */
+    .gap-card {
+      display: flex; gap: 12px; align-items: flex-start;
+      padding: 14px 16px; border: 1px solid #E5E7EB; border-radius: 10px;
+      margin-bottom: 8px;
+    }
+    .gap-num {
+      font-family: 'Public Sans'; font-size: 12px; font-weight: 800;
+      width: 28px; height: 28px; border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      color: #fff; flex-shrink: 0;
+    }
+    .gap-body { flex: 1; }
+    .gap-title { font-family: 'Public Sans'; font-size: 14px; font-weight: 700; color: #1F2937; }
+    .gap-desc { font-size: 12px; color: #6B7280; margin-top: 2px; }
+
+    /* QUICK WIN */
+    .quick-win {
+      display: flex; gap: 10px; align-items: flex-start;
+      background: #ECFDF5; border: 1px solid #A7F3D0; border-radius: 10px;
+      padding: 12px 16px; margin: 12px 0; font-size: 13px; color: #065F46;
+    }
+
+    /* PHRASE TABLE */
+    .phrase-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .phrase-table td { padding: 10px 14px; border-bottom: 1px solid #F3F4F6; vertical-align: top; }
+    .phrase-table td:first-child { width: 180px; font-weight: 600; color: #4B5563; font-family: 'Public Sans'; font-size: 12px; }
+    .phrase-table td:last-child { color: #1E40AF; font-style: italic; }
+
+    /* TAGS */
+    .tag { display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px; border-radius: 100px; font-family: 'Public Sans'; font-size: 11px; font-weight: 600; }
+    .tag-red { background: #FEE2E2; color: #991B1B; }
+    .tag-yellow { background: #FEF3C7; color: #92400E; }
+    .tag-blue { background: #DBEAFE; color: #1E40AF; }
+    .tag-green { background: #D1FAE5; color: #065F46; }
+
+    h3 { font-size: 14px; font-weight: 600; color: #374151; margin: 20px 0 8px; }
+    .small { font-size: 12px; color: #9CA3AF; }
+    .bold { font-weight: 700; }
+    .mt-16 { margin-top: 16px; }
+    .mb-8 { margin-bottom: 8px; }
+
+    /* PRINT BAR */
+    .print-bar {
+      position: fixed; bottom: 0; left: 0; right: 0;
+      background: rgba(255,255,255,0.92); backdrop-filter: blur(12px);
+      border-top: 1px solid #E5E7EB; padding: 12px 24px;
+      display: flex; align-items: center; justify-content: center; gap: 16px;
+      z-index: 1000; box-shadow: 0 -4px 20px rgba(0,0,0,0.04);
+    }
+    .btn-print {
+      background: #F3F4F6; color: #4B5563; border: 1px solid #E5E7EB;
+      padding: 10px 20px; border-radius: 100px;
+      font-family: 'Public Sans'; font-size: 13px; font-weight: 500;
+      cursor: pointer; display: inline-flex; align-items: center; gap: 6px;
+    }
+    .btn-print:hover { background: #E5E7EB; }
+  </style>
+</head>
+<body>
+
+<!-- CAPA -->
+<div class="page cover">
+  <div class="cover-badge">
+    <span class="material-symbols-rounded" style="font-size:14px;">assignment</span>
+    Roteiro do Mentor
+  </div>
+  <h1>1:1s de PDI</h1>
+  <p class="subtitle">Plano de Desenvolvimento Individual — Ciclo 1</p>
+  <div class="cover-info">
+    <div class="cover-info-item">
+      <div class="label">Data</div>
+      <div class="value">18 de Junho de 2026</div>
+    </div>
+    <div class="cover-info-item">
+      <div class="label">Horário</div>
+      <div class="value">A partir das 15h</div>
+    </div>
+    <div class="cover-info-item">
+      <div class="label">Duração</div>
+      <div class="value">30–40 min cada</div>
+    </div>
+    <div class="cover-info-item">
+      <div class="label">Formato</div>
+      <div class="value">1:1 individual</div>
+    </div>
+  </div>
+</div>
+
+<!-- PREPARAÇÃO -->
+<div class="page">
+  <div class="section-title">
+    <span class="s-icon" style="background:linear-gradient(135deg,#E85D04,#FB923C);">
+      <span class="material-symbols-rounded">checklist_rtl</span>
+    </span>
+    Preparação
+  </div>
+
+  <div class="info-warn info-box">
+    <span class="material-symbols-rounded">warning</span>
+    <span>Confirmar se os devs já preencheram o formulário de autoavaliação (<code>pdi.html</code>). Se não, pedir que preencham no início do 1:1 (5 min).</span>
+  </div>
+
+  <ul class="checklist" id="prep-checklist">
+    <li onclick="toggleCheck(this)"><span class="material-symbols-rounded">radio_button_unchecked</span><span>Abrir o PDI do dev no browser (<code>pdi-daniel.html</code>, etc.)</span></li>
+    <li onclick="toggleCheck(this)"><span class="material-symbols-rounded">radio_button_unchecked</span><span>Ter o relatório de análise de código aberto para referência</span></li>
+    <li onclick="toggleCheck(this)"><span class="material-symbols-rounded">radio_button_unchecked</span><span>Verificar se o dev preencheu a autoavaliação</span></li>
+    <li onclick="toggleCheck(this)"><span class="material-symbols-rounded">radio_button_unchecked</span><span>Ler os dados do dev na aba abaixo antes de iniciar</span></li>
+  </ul>
+
+  <div class="info-red info-box mt-16">
+    <span class="material-symbols-rounded">do_not_disturb</span>
+    <div>
+      <strong>Postura — Radical Candor:</strong> Cuidar genuinamente + ser direto.<br>
+      Nada de "vocês são melhores que sêniors" (feedback do Thiago). Ser honesto com respeito.<br>
+      NÃO usar o relatório de código como arma — é insumo silencioso.
+    </div>
+  </div>
+</div>
+
+<!-- ESTRUTURA GROW -->
+<div class="page">
+  <div class="section-title">
+    <span class="s-icon" style="background:linear-gradient(135deg,#059669,#34D399);">
+      <span class="material-symbols-rounded">route</span>
+    </span>
+    Estrutura do 1:1 — Modelo GROW
+  </div>
+
+  <p style="font-size:13px;color:#6B7280;margin-bottom:20px;">Tempo total: ~35 min. Os blocos são flexíveis — o importante é cobrir todos.</p>
+
+  <!-- ABERTURA -->
+  <div class="grow-phase">
+    <div class="grow-header" onclick="toggleGrow(this)">
+      <div class="grow-letter" style="background:linear-gradient(135deg,#6B7280,#9CA3AF);">0</div>
+      <div class="grow-title">Abertura</div>
+      <div class="grow-time">3 min</div>
+      <span class="material-symbols-rounded" style="color:#9CA3AF;">expand_more</span>
+    </div>
+    <div class="grow-body">
+      <div class="quote">"Essa conversa é sobre o SEU desenvolvimento. Não é avaliação de desempenho — é para montar um plano juntos. Quero ouvir como VOCÊ se enxerga tecnicamente e onde quer chegar. A partir daí, a gente define 3 metas práticas para os próximos 2 meses."</div>
+    </div>
+  </div>
+
+  <!-- GOAL -->
+  <div class="grow-phase">
+    <div class="grow-header" onclick="toggleGrow(this)">
+      <div class="grow-letter" style="background:linear-gradient(135deg,#2563EB,#60A5FA);">G</div>
+      <div class="grow-title">GOAL — Alinhamento de expectativa</div>
+      <div class="grow-time">5 min</div>
+      <span class="material-symbols-rounded" style="color:#9CA3AF;">expand_more</span>
+    </div>
+    <div class="grow-body">
+      <p><strong>Perguntas:</strong></p>
+      <ul style="padding-left:20px;margin-bottom:10px;">
+        <li>"O que você espera dessa conversa?"</li>
+        <li>"Onde você quer estar como dev daqui a 2 meses?"</li>
+        <li>"Tem alguma área que você sente que precisa melhorar?"</li>
+      </ul>
+      <p class="small"><strong>Anotar</strong> as respostas no campo "Observações do Mentor" do PDI.</p>
+    </div>
+  </div>
+
+  <!-- REALITY -->
+  <div class="grow-phase">
+    <div class="grow-header" onclick="toggleGrow(this)">
+      <div class="grow-letter" style="background:linear-gradient(135deg,#059669,#34D399);">R</div>
+      <div class="grow-title">REALITY — Diagnóstico colaborativo</div>
+      <div class="grow-time">10 min</div>
+      <span class="material-symbols-rounded" style="color:#9CA3AF;">expand_more</span>
+    </div>
+    <div class="grow-body">
+      <div class="quote">"Eu fiz uma análise do código dos projetos e tenho algumas observações. Mas primeiro quero ouvir: como você avalia seu próprio nível técnico hoje? Onde se sente seguro e onde acha que precisa evoluir?"</div>
+      <p><strong>Conduzir a conversa:</strong></p>
+      <ul style="padding-left:20px;margin-bottom:10px;">
+        <li>Deixar o dev falar primeiro sobre sua percepção</li>
+        <li>Mencionar os dados do projeto mais complexo da autoavaliação como gancho positivo</li>
+        <li>Usar os scores do relatório (nesta página) como referência interna — <strong>não expor scores diretamente</strong></li>
+        <li>Direcionar para os gaps com exemplos concretos do código</li>
+      </ul>
+      <div class="info-blue info-box">
+        <span class="material-symbols-rounded">tips_and_updates</span>
+        <div><strong>Feedback SBI:</strong> <em>Situação</em> ("No commit X do projeto Y...") → <em>Comportamento</em> ("vi que a SECRET_KEY estava hardcoded...") → <em>Impacto</em> ("qualquer pessoa pode forjar tokens.")</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- OPTIONS -->
+  <div class="grow-phase">
+    <div class="grow-header" onclick="toggleGrow(this)">
+      <div class="grow-letter" style="background:linear-gradient(135deg,#D97706,#FBBF24);">O</div>
+      <div class="grow-title">OPTIONS — Definir 3 metas</div>
+      <div class="grow-time">10 min</div>
+      <span class="material-symbols-rounded" style="color:#9CA3AF;">expand_more</span>
+    </div>
+    <div class="grow-body">
+      <div class="quote">"Baseado no que conversamos, eu sugiro focar nessas 3 áreas. Me diz se faz sentido para você."</div>
+      <p>Para cada meta, preencher <strong>juntos</strong> no PDI:</p>
+      <ul style="padding-left:20px;margin-bottom:10px;">
+        <li><strong>Título</strong> (uma frase)</li>
+        <li><strong>Estado atual</strong> → <strong>Estado desejado</strong></li>
+        <li><strong>Critério de sucesso</strong> (mensurável — SMART)</li>
+        <li><strong>Prazo</strong> (dentro das 8 semanas)</li>
+        <li><strong>Ações 70-20-10:</strong>
+          <ul>
+            <li><span class="tag tag-green">70%</span> Prática no trabalho</li>
+            <li><span class="tag tag-blue">20%</span> Mentoria/feedback</li>
+            <li><span class="tag tag-yellow">10%</span> Estudo formal</li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- WILL -->
+  <div class="grow-phase">
+    <div class="grow-header" onclick="toggleGrow(this)">
+      <div class="grow-letter" style="background:linear-gradient(135deg,#7C3AED,#A78BFA);">W</div>
+      <div class="grow-title">WILL — Compromisso mútuo</div>
+      <div class="grow-time">5 min</div>
+      <span class="material-symbols-rounded" style="color:#9CA3AF;">expand_more</span>
+    </div>
+    <div class="grow-body">
+      <div class="quote">"Eu me comprometo com: 1:1 quinzenal de 30 min, disponibilidade para dúvidas, curadoria de material de estudo e suporte proativo. E você, o que se compromete a fazer até o próximo 1:1?"</div>
+      <ul style="padding-left:20px;">
+        <li>Dev diz o que vai fazer — <strong>anotar</strong></li>
+        <li>Definir dia/horário fixo do 1:1 quinzenal</li>
+        <li>Revisar seção "Compromissos do Mentor" no PDI</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- FECHAMENTO -->
+  <div class="grow-phase">
+    <div class="grow-header" onclick="toggleGrow(this)">
+      <div class="grow-letter" style="background:linear-gradient(135deg,#6B7280,#9CA3AF);">&#10003;</div>
+      <div class="grow-title">Fechamento</div>
+      <div class="grow-time">2 min</div>
+      <span class="material-symbols-rounded" style="color:#9CA3AF;">expand_more</span>
+    </div>
+    <div class="grow-body">
+      <div class="quote">"Vou finalizar o documento, salvar na planilha, e te mandar uma cópia. Se precisar ajustar alguma coisa depois, me fala."</div>
+      <ul style="padding-left:20px;">
+        <li>Clicar "Salvar na Planilha" no PDI</li>
+        <li>Gerar PDF (botão Imprimir no documento)</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- DADOS POR DEV -->
+<div class="page page-break">
+  <div class="section-title">
+    <span class="s-icon" style="background:linear-gradient(135deg,#2563EB,#60A5FA);">
+      <span class="material-symbols-rounded">group</span>
+    </span>
+    Dados por Desenvolvedor
+  </div>
+
+  <div class="nav-tabs" id="dev-tabs">
+    <div class="nav-tab active" onclick="showDev('daniel')">Daniel Mello</div>
+    <div class="nav-tab" onclick="showDev('ingryd')">Ingryd Aylana</div>
+    <div class="nav-tab" onclick="showDev('leonan')">Leonan Thomaz</div>
+  </div>
+
+  <!-- DANIEL -->
+  <div class="dev-panel active" id="panel-daniel">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+      <div style="width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#DC2626,#F87171);display:flex;align-items:center;justify-content:center;color:#fff;font-family:'Public Sans';font-weight:800;font-size:16px;">D</div>
+      <div>
+        <div style="font-family:'Public Sans';font-size:17px;font-weight:700;">Daniel Mello de Carvalho de Faria</div>
+        <div style="font-size:12px;color:#9CA3AF;">Backend · Python/Django · ~84 commits · 4 repos · <span class="tag tag-red">Média 1.8</span></div>
+        <div style="font-size:11px;color:#6B7280;margin-top:2px;"><strong>Formação:</strong> Bootcamp · <strong>Experiência:</strong> 6m–1 ano · <strong>Email:</strong> danielmello0110@gmail.com</div>
+      </div>
+    </div>
+
+    <div class="info-box" style="background:#F5F3FF;color:#5B21B6;border:1px solid #DDD6FE;margin-bottom:16px;">
+      <span class="material-symbols-rounded">school</span>
+      <div>
+        <strong>Autoavaliação — Projeto mais complexo:</strong><br>
+        "Acredito que seja o projeto de Notas Fiscais. Eu tive que criar uma solução para emissão massiva de notas fiscais. Precisei implementar semáforo e uma fila e eram coisas que eu nunca tinha feito antes, em pouquíssimo tempo."
+        <br><span style="font-size:11px;opacity:0.7;">→ Mostra que já lidou com concorrência (semáforos/filas) — mais avançado do que o código sugere. Usar como gancho positivo.</span>
+      </div>
+    </div>
+
+    <table class="score-table">
+      <tr><th>Dimensão</th><th>Relatório (0-10)</th><th>Dreyfus (1-5)</th></tr>
+      <tr><td>Organização de código</td><td class="score-cell sc-yellow">4.0</td><td class="score-cell sc-yellow">2.0</td></tr>
+      <tr><td>Segurança</td><td class="score-cell sc-red">3.0</td><td class="score-cell sc-yellow">2.0</td></tr>
+      <tr><td>Boas práticas</td><td class="score-cell sc-red">3.5</td><td class="score-cell sc-yellow">2.0</td></tr>
+      <tr><td>Testes</td><td class="score-cell sc-red">0.5</td><td class="score-cell sc-red">1.0</td></tr>
+      <tr><td>Git workflow</td><td class="score-cell sc-red">2.0</td><td class="score-cell sc-red">1.0</td></tr>
+    </table>
+
+    <h3>Gaps prioritários sugeridos</h3>
+    <div class="gap-card">
+      <div class="gap-num" style="background:linear-gradient(135deg,#DC2626,#F87171);">1</div>
+      <div class="gap-body">
+        <div class="gap-title">Git workflow <span class="tag tag-red">1.0</span></div>
+        <div class="gap-desc">Não usa branches, commits direto na main, mensagens genéricas</div>
+      </div>
+    </div>
+    <div class="gap-card">
+      <div class="gap-num" style="background:linear-gradient(135deg,#D97706,#FBBF24);">2</div>
+      <div class="gap-body">
+        <div class="gap-title">Segurança <span class="tag tag-yellow">2.0</span></div>
+        <div class="gap-desc">Credenciais hardcoded, sem validação de input</div>
+      </div>
+    </div>
+    <div class="gap-card">
+      <div class="gap-num" style="background:linear-gradient(135deg,#D97706,#FBBF24);">3</div>
+      <div class="gap-body">
+        <div class="gap-title">Qualidade de código <span class="tag tag-yellow">2.0</span></div>
+        <div class="gap-desc">Funções longas, naming genérico, sem separação de responsabilidades</div>
+      </div>
+    </div>
+
+    <div class="quick-win">
+      <span class="material-symbols-rounded">bolt</span>
+      <div><strong>Quick win (Meta 1):</strong> Pair programming para criar .gitignore, mover para branches + PRs no próximo projeto.</div>
+    </div>
+
+    <div class="info-blue info-box">
+      <span class="material-symbols-rounded">info</span>
+      <span><strong>Contexto:</strong> Daniel sugeriu nivelamento via code review na reunião de 09/06 — validar e usar como gancho. Provável primeiro emprego em dev.</span>
+    </div>
+  </div>
+
+  <!-- INGRYD -->
+  <div class="dev-panel" id="panel-ingryd">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+      <div style="width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#7C3AED,#A78BFA);display:flex;align-items:center;justify-content:center;color:#fff;font-family:'Public Sans';font-weight:800;font-size:16px;">I</div>
+      <div>
+        <div style="font-family:'Public Sans';font-size:17px;font-weight:700;">Ingryd Aylana Silva dos Santos</div>
+        <div style="font-size:12px;color:#9CA3AF;">Frontend · React/JavaScript · ~146 commits · 5 repos · <span class="tag tag-blue">Média 2.6</span></div>
+        <div style="font-size:11px;color:#6B7280;margin-top:2px;"><strong>Formação:</strong> Curso técnico · <strong>Experiência:</strong> 1–2 anos · <strong>Email:</strong> ingrydaylana@gmail.com</div>
+      </div>
+    </div>
+
+    <div class="info-box" style="background:#F5F3FF;color:#5B21B6;border:1px solid #DDD6FE;margin-bottom:16px;">
+      <span class="material-symbols-rounded">school</span>
+      <div>
+        <strong>Autoavaliação — Projeto mais complexo:</strong><br>
+        "Fedconnect — Sistema de centralização de dados da empresa e recursos internos."
+        <br><span style="font-size:11px;opacity:0.7;">→ Projeto integrador com escopo real. Explorar: quais desafios enfrentou? O que aprendeu de novo?</span>
+      </div>
+    </div>
+
+    <table class="score-table">
+      <tr><th>Dimensão</th><th>Relatório (0-10)</th><th>Dreyfus (1-5)</th></tr>
+      <tr><td>Organização de código</td><td class="score-cell sc-blue">7.0</td><td class="score-cell sc-blue">3.0</td></tr>
+      <tr><td>Segurança</td><td class="score-cell sc-yellow">4.5</td><td class="score-cell sc-yellow">2.0</td></tr>
+      <tr><td>Boas práticas</td><td class="score-cell sc-blue">6.0</td><td class="score-cell sc-blue">3.0</td></tr>
+      <tr><td>Testes</td><td class="score-cell sc-red">0.5</td><td class="score-cell sc-red">1.0</td></tr>
+      <tr><td>Git workflow</td><td class="score-cell sc-green">7.5</td><td class="score-cell sc-green">4.0</td></tr>
+    </table>
+
+    <h3>Gaps prioritários sugeridos</h3>
+    <div class="gap-card">
+      <div class="gap-num" style="background:linear-gradient(135deg,#DC2626,#F87171);">1</div>
+      <div class="gap-body">
+        <div class="gap-title">Segurança <span class="tag tag-yellow">2.0</span></div>
+        <div class="gap-desc">Firebase keys hardcoded no frontend, sem .env</div>
+      </div>
+    </div>
+    <div class="gap-card">
+      <div class="gap-num" style="background:linear-gradient(135deg,#D97706,#FBBF24);">2</div>
+      <div class="gap-body">
+        <div class="gap-title">Comunicação técnica <span class="tag tag-yellow">2.0</span></div>
+        <div class="gap-desc">Pouca documentação, READMEs ausentes nos repos</div>
+      </div>
+    </div>
+    <div class="gap-card">
+      <div class="gap-num" style="background:linear-gradient(135deg,#D97706,#FBBF24);">3</div>
+      <div class="gap-body">
+        <div class="gap-title">Autonomia <span class="tag tag-yellow">2.0</span></div>
+        <div class="gap-desc">Potencial para crescer como referência frontend do time</div>
+      </div>
+    </div>
+
+    <div class="quick-win">
+      <span class="material-symbols-rounded">bolt</span>
+      <div><strong>Quick win (Meta 1):</strong> Mover Firebase config para variáveis de ambiente + criar .env.example no repo.</div>
+    </div>
+
+    <div class="info-green info-box">
+      <span class="material-symbols-rounded">star</span>
+      <span><strong>Ponto forte a reconhecer:</strong> Melhor workflow de Git do time (7.5/10). Usar como exemplo positivo.</span>
+    </div>
+  </div>
+
+  <!-- LEONAN -->
+  <div class="dev-panel" id="panel-leonan">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+      <div style="width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#2563EB,#60A5FA);display:flex;align-items:center;justify-content:center;color:#fff;font-family:'Public Sans';font-weight:800;font-size:16px;">L</div>
+      <div>
+        <div style="font-family:'Public Sans';font-size:17px;font-weight:700;">Leonan Thomaz de Oliveira</div>
+        <div style="font-size:12px;color:#9CA3AF;">Full-Stack · Django + React · ~299 commits · 10+ repos · <span class="tag tag-blue">Média 2.2</span></div>
+        <div style="font-size:11px;color:#6B7280;margin-top:2px;"><strong>Formação:</strong> Autodidata · <strong>Experiência:</strong> 6m–1 ano · <strong>Email:</strong> leonan.thomaz@gmail.com</div>
+      </div>
+    </div>
+
+    <div class="info-box" style="background:#F5F3FF;color:#5B21B6;border:1px solid #DDD6FE;margin-bottom:16px;">
+      <span class="material-symbols-rounded">school</span>
+      <div>
+        <strong>Autoavaliação — Projeto mais complexo:</strong><br>
+        "Desenvolvimento de um Gateway em FastAPI para integração com banco de dados legado Firebird e centralização de comunicação entre sistemas internos."
+        <br><span style="font-size:11px;opacity:0.7;">→ Já trabalhou com integração de sistemas legados e FastAPI — mostra visão de arquitetura. Usar como evidência de potencial full-stack.</span>
+      </div>
+    </div>
+
+    <table class="score-table">
+      <tr><th>Dimensão</th><th>Relatório (0-10)</th><th>Dreyfus (1-5)</th></tr>
+      <tr><td>Organização de código</td><td class="score-cell sc-blue">6.5</td><td class="score-cell sc-blue">3.0</td></tr>
+      <tr><td>Segurança</td><td class="score-cell sc-red">3.5</td><td class="score-cell sc-yellow">2.0</td></tr>
+      <tr><td>Boas práticas</td><td class="score-cell sc-yellow">5.0</td><td class="score-cell sc-blue">3.0</td></tr>
+      <tr><td>Testes</td><td class="score-cell sc-red">0.5</td><td class="score-cell sc-red">1.0</td></tr>
+      <tr><td>Git workflow</td><td class="score-cell sc-red">3.0</td><td class="score-cell sc-yellow">2.0</td></tr>
+    </table>
+
+    <h3>Gaps prioritários sugeridos</h3>
+    <div class="gap-card">
+      <div class="gap-num" style="background:linear-gradient(135deg,#DC2626,#F87171);">1</div>
+      <div class="gap-body">
+        <div class="gap-title">Git workflow <span class="tag tag-yellow">2.0</span></div>
+        <div class="gap-desc">Commits sem semântica, pouco uso de branches</div>
+      </div>
+    </div>
+    <div class="gap-card">
+      <div class="gap-num" style="background:linear-gradient(135deg,#D97706,#FBBF24);">2</div>
+      <div class="gap-body">
+        <div class="gap-title">Segurança <span class="tag tag-yellow">2.0</span></div>
+        <div class="gap-desc">SECRET_KEY hardcoded no Django settings</div>
+      </div>
+    </div>
+    <div class="gap-card">
+      <div class="gap-num" style="background:linear-gradient(135deg,#D97706,#FBBF24);">3</div>
+      <div class="gap-body">
+        <div class="gap-title">Qualidade de código <span class="tag tag-blue">3.0</span></div>
+        <div class="gap-desc">Arquivos _old/backup no repo, mistura de responsabilidades</div>
+      </div>
+    </div>
+
+    <div class="quick-win">
+      <span class="material-symbols-rounded">bolt</span>
+      <div><strong>Quick win (Meta 1):</strong> Configurar commit semântico (feat/fix/chore) + hook de pre-commit para impedir secrets.</div>
+    </div>
+
+    <div class="info-green info-box">
+      <span class="material-symbols-rounded">star</span>
+      <span><strong>Ponto forte a reconhecer:</strong> 299 commits — volume de contribuição impressionante. Foco agora é qualidade, não quantidade.</span>
+    </div>
+  </div>
+</div>
+
+<!-- FRASES ÚTEIS -->
+<div class="page page-break">
+  <div class="section-title">
+    <span class="s-icon" style="background:linear-gradient(135deg,#E85D04,#FB923C);">
+      <span class="material-symbols-rounded">chat_bubble</span>
+    </span>
+    Frases Úteis Durante o 1:1
+  </div>
+
+  <table class="phrase-table">
+    <tr>
+      <td><span class="material-symbols-rounded" style="font-size:16px;color:#059669;">sentiment_satisfied</span> Dev se subestima</td>
+      <td>"Eu vi no seu código que [evidência positiva]. Isso já é nível [X] — se dê crédito."</td>
+    </tr>
+    <tr>
+      <td><span class="material-symbols-rounded" style="font-size:16px;color:#D97706;">trending_up</span> Dev se superestima</td>
+      <td>"Entendo que você se sente confortável nisso. Me mostra um exemplo de quando usou [competência]?"</td>
+    </tr>
+    <tr>
+      <td><span class="material-symbols-rounded" style="font-size:16px;color:#DC2626;">shield</span> Dev fica na defensiva</td>
+      <td>"Não estou criticando o que foi feito — estou mapeando onde podemos crescer. Todo mundo está nesse nível no começo."</td>
+    </tr>
+    <tr>
+      <td><span class="material-symbols-rounded" style="font-size:16px;color:#2563EB;">help</span> Dev não sabe responder</td>
+      <td>"Tudo bem não saber agora. Vamos descobrir juntos."</td>
+    </tr>
+    <tr>
+      <td><span class="material-symbols-rounded" style="font-size:16px;color:#6B7280;">mood_bad</span> Dev desanimado</td>
+      <td>"O plano é para 2 meses, não para amanhã. Uma coisa de cada vez."</td>
+    </tr>
+    <tr>
+      <td><span class="material-symbols-rounded" style="font-size:16px;color:#DC2626;">priority_high</span> Feedback duro</td>
+      <td>"[Situação] eu observei que [Comportamento]. O impacto disso é [Impacto]. Como podemos resolver?"</td>
+    </tr>
+  </table>
+</div>
+
+<!-- PÓS-REUNIÃO -->
+<div class="page">
+  <div class="section-title">
+    <span class="s-icon" style="background:linear-gradient(135deg,#7C3AED,#A78BFA);">
+      <span class="material-symbols-rounded">task_alt</span>
+    </span>
+    Depois dos 1:1s
+  </div>
+
+  <ul class="checklist" id="post-checklist">
+    <li onclick="toggleCheck(this)"><span class="material-symbols-rounded">radio_button_unchecked</span><span>Salvar cada PDI na planilha (botão no documento)</span></li>
+    <li onclick="toggleCheck(this)"><span class="material-symbols-rounded">radio_button_unchecked</span><span>Gerar PDF de cada um (botão Imprimir no documento)</span></li>
+    <li onclick="toggleCheck(this)"><span class="material-symbols-rounded">radio_button_unchecked</span><span>Enviar cópia por e-mail/chat para cada dev</span></li>
+    <li onclick="toggleCheck(this)"><span class="material-symbols-rounded">radio_button_unchecked</span><span>Agendar 1:1s quinzenais no calendário (próximo: semana de 30/06)</span></li>
+    <li onclick="toggleCheck(this)"><span class="material-symbols-rounded">radio_button_unchecked</span><span>Atualizar log de horas com o tempo gasto</span></li>
+    <li onclick="toggleCheck(this)"><span class="material-symbols-rounded">radio_button_unchecked</span><span>Preparar resumo para Thiago/Alberto (próxima semana)</span></li>
+  </ul>
+</div>
+
+<!-- PRINT BAR -->
+<div class="print-bar no-print">
+  <button class="btn-print" onclick="window.print()">
+    <span class="material-symbols-rounded" style="font-size:16px;">print</span>
+    Imprimir / PDF
+  </button>
+</div>
+
+<script>
+function toggleCheck(li) {
+  li.classList.toggle('done');
+  var icon = li.querySelector('.material-symbols-rounded');
+  icon.textContent = li.classList.contains('done') ? 'check_circle' : 'radio_button_unchecked';
+}
+
+function showDev(name) {
+  document.querySelectorAll('.dev-panel').forEach(function(p) { p.classList.remove('active'); });
+  document.querySelectorAll('.nav-tab').forEach(function(t) { t.classList.remove('active'); });
+  document.getElementById('panel-' + name).classList.add('active');
+  var tabs = document.querySelectorAll('.nav-tab');
+  var names = ['daniel','ingryd','leonan'];
+  tabs[names.indexOf(name)].classList.add('active');
+}
+
+function toggleGrow(header) {
+  var body = header.nextElementSibling;
+  var icon = header.querySelector('.material-symbols-rounded:last-child');
+  if (body.style.display === 'none') {
+    body.style.display = 'block';
+    icon.textContent = 'expand_more';
+  } else {
+    body.style.display = 'none';
+    icon.textContent = 'chevron_right';
+  }
+}
+</script>
+
+</body>
+</html>

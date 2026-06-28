@@ -1,0 +1,23 @@
+Data,Atividade,Esforço em horas,OBS
+01/06,Multicálculo - Análise da arquitetura do sistema e mapeamento de módulos,3,Levantamento inicial
+01/06,Acompanhamento - Planejamento da estratégia de acompanhamento do time,1,Definição dos 3 pilares
+02/06,Multicálculo - Revisão de código: padrões e organização dos projetos,3,
+02/06,Acompanhamento - Desenvolvimento da ferramenta de assessment técnico,2,index.html + Apps Script
+03/06,Multicálculo - Análise de dependências e stack tecnológico,2,
+03/06,Acompanhamento - Finalização e deploy do assessment no Vercel,2,Deploy + testes
+04/06,Multicálculo - Testes exploratórios e análise de fluxos críticos,2,
+04/06,Acompanhamento - Preparação do questionário e guia de aplicação,2,
+05/06,Multicálculo - Levantamento de débitos técnicos e documentação,2,
+05/06,Acompanhamento - Elaboração do guia de acompanhamento técnico,1,guia-acompanhamento-tecnico.md
+08/06,Multicálculo - Revisão de módulo de cálculos e validações,3,
+08/06,Acompanhamento - Preparação para reunião com gestão,2,
+09/06,Multicálculo - Análise de pontos de melhoria pós-reunião,2,
+09/06,Acompanhamento - Reunião de alinhamento com Thiago e Jamerson,3,Ata registrada
+10/06,Multicálculo - Investigação de cenários de teste e edge cases,2,
+10/06,Acompanhamento - Aplicação do assessment com os 3 desenvolvedores,2,Daniel/Leonan/Ingryd
+11/06,Multicálculo - Documentação de findings técnicos,3,
+11/06,Acompanhamento - Análise dos resultados do assessment e perfis individuais,2,
+12/06,Multicálculo - Revisão de estrutura de dados e integrações,2,
+12/06,Acompanhamento - Criação dos planos de desenvolvimento individuais,1,3 PDIs
+15/06,Multicálculo - Continuação da análise técnica,1,
+15/06,Acompanhamento - Pesquisa de frameworks de PDI e criação de ferramentas,2,Template PDI + Apps Script

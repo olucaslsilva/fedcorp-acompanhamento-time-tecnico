@@ -1,0 +1,1084 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PDI — Plano de Desenvolvimento Individual | FedCorp</title>
+  <style>
+    :root {
+      --primary: #0f172a;
+      --primary-light: #1e293b;
+      --accent: #6366f1;
+      --accent-hover: #4f46e5;
+      --accent-light: #e0e7ff;
+      --success: #22c55e;
+      --success-light: #dcfce7;
+      --warn: #f59e0b;
+      --warn-light: #fef3c7;
+      --danger: #ef4444;
+      --gray-50: #f8fafc;
+      --gray-100: #f1f5f9;
+      --gray-200: #e2e8f0;
+      --gray-300: #cbd5e1;
+      --gray-400: #94a3b8;
+      --gray-500: #64748b;
+      --gray-600: #475569;
+      --gray-700: #334155;
+      --gray-800: #1e293b;
+      --radius: 12px;
+      --radius-sm: 8px;
+      --shadow: 0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.06);
+      --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -2px rgba(0,0,0,0.1);
+      --transition: 0.2s ease;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: var(--gray-50);
+      color: var(--gray-700);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    .header {
+      background: linear-gradient(135deg, #312e81 0%, #4338ca 50%, #6366f1 100%);
+      color: white;
+      padding: 2rem 1.5rem;
+      text-align: center;
+    }
+
+    .header-logo {
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      opacity: 0.7;
+      margin-bottom: 0.75rem;
+    }
+
+    .header h1 { font-size: 1.75rem; font-weight: 700; margin-bottom: 0.5rem; }
+
+    .header p {
+      font-size: 0.95rem;
+      opacity: 0.85;
+      max-width: 560px;
+      margin: 0 auto;
+    }
+
+    .progress-container {
+      background: white;
+      border-bottom: 1px solid var(--gray-200);
+      padding: 1.25rem 1.5rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: var(--shadow);
+    }
+
+    .progress-steps {
+      display: flex;
+      justify-content: center;
+      gap: 0.5rem;
+      max-width: 700px;
+      margin: 0 auto;
+      flex-wrap: wrap;
+    }
+
+    .progress-step {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.8rem;
+      color: var(--gray-400);
+      font-weight: 500;
+      transition: var(--transition);
+    }
+
+    .progress-step .step-num {
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.75rem; font-weight: 700;
+      border: 2px solid var(--gray-300);
+      background: white;
+      transition: var(--transition);
+      flex-shrink: 0;
+    }
+
+    .progress-step.active { color: var(--accent); }
+    .progress-step.active .step-num { border-color: var(--accent); background: var(--accent); color: white; }
+    .progress-step.completed { color: var(--success); }
+    .progress-step.completed .step-num { border-color: var(--success); background: var(--success); color: white; }
+    .progress-step .step-connector { width: 24px; height: 2px; background: var(--gray-300); margin: 0 0.25rem; transition: var(--transition); }
+    .progress-step.completed .step-connector { background: var(--success); }
+
+    @media (max-width: 600px) {
+      .progress-step .step-label { display: none; }
+      .progress-step .step-connector { width: 16px; }
+    }
+
+    .container { max-width: 720px; margin: 2rem auto; padding: 0 1rem; }
+
+    .form-step { display: none; animation: fadeIn 0.3s ease; }
+    .form-step.active { display: block; }
+
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+
+    .card {
+      background: white;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 2rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .card-title { font-size: 1.25rem; font-weight: 700; color: var(--primary); margin-bottom: 0.35rem; }
+    .card-subtitle { font-size: 0.9rem; color: var(--gray-500); margin-bottom: 1.5rem; }
+
+    .form-group { margin-bottom: 1.5rem; }
+    .form-group:last-child { margin-bottom: 0; }
+
+    label { display: block; font-size: 0.9rem; font-weight: 600; color: var(--gray-700); margin-bottom: 0.4rem; }
+    label .required { color: var(--danger); margin-left: 2px; }
+
+    .form-hint { font-size: 0.8rem; color: var(--gray-400); margin-bottom: 0.4rem; }
+
+    input[type="text"], input[type="email"], select, textarea {
+      width: 100%;
+      padding: 0.7rem 0.9rem;
+      border: 1.5px solid var(--gray-200);
+      border-radius: var(--radius-sm);
+      font-size: 0.95rem;
+      font-family: inherit;
+      color: var(--gray-700);
+      background: white;
+      transition: var(--transition);
+      outline: none;
+    }
+
+    input:focus, select:focus, textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-light); }
+    textarea { resize: vertical; min-height: 80px; }
+    .input-error { border-color: var(--danger) !important; }
+    .error-text { color: var(--danger); font-size: 0.8rem; margin-top: 0.3rem; display: none; }
+
+    .competency-section { margin-bottom: 2rem; }
+    .competency-section:last-child { margin-bottom: 0; }
+
+    .competency-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .competency-icon {
+      width: 36px; height: 36px;
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+
+    .competency-name { font-size: 1rem; font-weight: 600; color: var(--gray-800); }
+    .competency-desc { font-size: 0.82rem; color: var(--gray-500); margin-bottom: 0.75rem; padding-left: 0; }
+
+    .level-options {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .level-option {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.6rem;
+      padding: 0.65rem 0.85rem;
+      border: 1.5px solid var(--gray-200);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: var(--transition);
+      background: white;
+    }
+
+    .level-option:hover { border-color: var(--accent); background: var(--accent-light); }
+
+    .level-option.selected {
+      border-color: var(--accent);
+      background: var(--accent-light);
+      box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.15);
+    }
+
+    .level-option input[type="radio"] { display: none; }
+
+    .level-radio {
+      width: 18px; height: 18px;
+      border-radius: 50%;
+      border: 2px solid var(--gray-300);
+      flex-shrink: 0;
+      margin-top: 2px;
+      transition: var(--transition);
+      position: relative;
+    }
+
+    .level-option.selected .level-radio {
+      border-color: var(--accent);
+      background: var(--accent);
+    }
+
+    .level-option.selected .level-radio::after {
+      content: '';
+      width: 6px; height: 6px;
+      background: white;
+      border-radius: 50%;
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .level-content { flex: 1; }
+    .level-number { font-weight: 700; color: var(--accent); margin-right: 0.35rem; font-size: 0.85rem; }
+    .level-label { font-weight: 600; color: var(--gray-700); font-size: 0.85rem; }
+    .level-desc { font-size: 0.78rem; color: var(--gray-500); margin-top: 0.15rem; line-height: 1.4; }
+
+    .section-divider { height: 1px; background: var(--gray-200); margin: 1.5rem 0; }
+
+    .nav-buttons { display: flex; justify-content: space-between; margin-top: 2rem; gap: 1rem; }
+
+    .btn {
+      padding: 0.75rem 1.75rem;
+      border-radius: var(--radius-sm);
+      font-size: 0.95rem;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      transition: var(--transition);
+      font-family: inherit;
+    }
+
+    .btn-primary { background: var(--accent); color: white; }
+    .btn-primary:hover { background: var(--accent-hover); }
+    .btn-secondary { background: var(--gray-100); color: var(--gray-600); border: 1.5px solid var(--gray-200); }
+    .btn-secondary:hover { background: var(--gray-200); }
+    .btn-success { background: var(--success); color: white; }
+    .btn-success:hover { background: #16a34a; }
+
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .info-box {
+      background: var(--accent-light);
+      border: 1px solid #c7d2fe;
+      border-radius: var(--radius-sm);
+      padding: 1rem 1.25rem;
+      font-size: 0.88rem;
+      color: #3730a3;
+      margin-bottom: 1.5rem;
+      line-height: 1.5;
+    }
+
+    .warn-box {
+      background: var(--warn-light);
+      border: 1px solid #fde68a;
+      border-radius: var(--radius-sm);
+      padding: 1rem 1.25rem;
+      font-size: 0.88rem;
+      color: #92400e;
+      margin-bottom: 1.5rem;
+    }
+
+    .success-screen {
+      display: none;
+      text-align: center;
+      padding: 4rem 2rem;
+    }
+
+    .success-icon {
+      width: 80px; height: 80px;
+      background: var(--success-light);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2.5rem;
+      margin: 0 auto 1.5rem;
+    }
+
+    .success-screen h2 { font-size: 1.5rem; color: var(--primary); margin-bottom: 0.5rem; }
+    .success-screen p { color: var(--gray-500); font-size: 1rem; max-width: 440px; margin: 0 auto; }
+
+    .career-option {
+      display: flex; align-items: center; gap: 0.5rem;
+      padding: 0.6rem 0.85rem;
+      border: 1.5px solid var(--gray-200);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: var(--transition);
+      margin-bottom: 0.4rem;
+    }
+    .career-option:hover { border-color: var(--accent); background: var(--accent-light); }
+    .career-option.selected { border-color: var(--accent); background: var(--accent-light); }
+    .career-option input[type="checkbox"] { display: none; }
+    .career-check {
+      width: 18px; height: 18px;
+      border-radius: 4px;
+      border: 2px solid var(--gray-300);
+      flex-shrink: 0;
+      transition: var(--transition);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.7rem; color: white;
+    }
+    .career-option.selected .career-check { border-color: var(--accent); background: var(--accent); }
+    .career-option.selected .career-check::after { content: '\2713'; }
+  </style>
+</head>
+
+<body>
+  <div class="header">
+    <div class="header-logo">FedCorp Desenvolvimento</div>
+    <h1>Plano de Desenvolvimento Individual</h1>
+    <p>Autoavaliação e definição de metas para o seu crescimento profissional. Leva cerca de 15 minutos.</p>
+  </div>
+
+  <div class="progress-container">
+    <div class="progress-steps">
+      <div class="progress-step active" data-step="1">
+        <span class="step-num">1</span>
+        <span class="step-label">Identificação</span>
+        <span class="step-connector"></span>
+      </div>
+      <div class="progress-step" data-step="2">
+        <span class="step-num">2</span>
+        <span class="step-label">Competências</span>
+        <span class="step-connector"></span>
+      </div>
+      <div class="progress-step" data-step="3">
+        <span class="step-num">3</span>
+        <span class="step-label">Carreira</span>
+        <span class="step-connector"></span>
+      </div>
+      <div class="progress-step" data-step="4">
+        <span class="step-num">4</span>
+        <span class="step-label">Enviar</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <!-- STEP 1: Identificação -->
+    <div class="form-step active" data-step="1">
+      <div class="card">
+        <div class="card-title">Seus dados</div>
+        <div class="card-subtitle">Informações básicas para identificação</div>
+
+        <div class="form-group">
+          <label>Nome completo <span class="required">*</span></label>
+          <input type="text" id="nome" placeholder="Seu nome completo" required>
+          <div class="error-text">Preencha seu nome</div>
+        </div>
+
+        <div class="form-group">
+          <label>E-mail</label>
+          <input type="email" id="email" placeholder="seu@email.com">
+        </div>
+
+        <div class="form-group">
+          <label>Cargo atual <span class="required">*</span></label>
+          <input type="text" id="cargo" placeholder="Ex: Desenvolvedor Full Stack">
+          <div class="error-text">Preencha seu cargo</div>
+        </div>
+
+        <div class="form-group">
+          <label>Tempo na FedCorp <span class="required">*</span></label>
+          <select id="tempo_empresa">
+            <option value="">Selecione</option>
+            <option value="menos-6m">Menos de 6 meses</option>
+            <option value="6m-1a">6 meses a 1 ano</option>
+            <option value="1a-2a">1 a 2 anos</option>
+            <option value="2a-3a">2 a 3 anos</option>
+            <option value="mais-3a">Mais de 3 anos</option>
+          </select>
+          <div class="error-text">Selecione o tempo de empresa</div>
+        </div>
+
+        <div class="form-group">
+          <label>Experiência total em desenvolvimento</label>
+          <select id="experiencia_total">
+            <option value="">Selecione</option>
+            <option value="menos-1a">Menos de 1 ano</option>
+            <option value="1a-2a">1 a 2 anos</option>
+            <option value="2a-4a">2 a 4 anos</option>
+            <option value="mais-4a">Mais de 4 anos</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="nav-buttons">
+        <div></div>
+        <button type="button" class="btn btn-primary" onclick="nextStep()">Próximo &rarr;</button>
+      </div>
+    </div>
+
+    <!-- STEP 2: Autoavaliação de Competências -->
+    <div class="form-step" data-step="2">
+      <div class="card">
+        <div class="card-title">Autoavaliação de Competências</div>
+        <div class="card-subtitle">Como você se enxerga hoje em cada área</div>
+
+        <div class="info-box">
+          Não existe resposta certa ou errada. Seja honesto consigo mesmo — isso é para montar o
+          SEU plano de desenvolvimento. Quanto mais fiel a realidade, melhor o plano vai funcionar para você.
+        </div>
+
+        <!-- 1. Fundamentos de Programação -->
+        <div class="competency-section">
+          <div class="competency-header">
+            <div class="competency-icon" style="background:#dbeafe;color:#2563eb;">{ }</div>
+            <span class="competency-name">1. Fundamentos de Programação</span>
+          </div>
+          <div class="competency-desc">Lógica, estruturas de dados, algoritmos, tipagem</div>
+          <div class="level-options" data-competency="fundamentos">
+            <label class="level-option" onclick="selectLevel(this)">
+              <input type="radio" name="fundamentos" value="1">
+              <div class="level-radio"></div>
+              <div class="level-content">
+                <span class="level-number">1</span><span class="level-label">Novato</span>
+                <div class="level-desc">Copio exemplos sem adaptar. Não entendo bem por que o código funciona.</div>
+              </div>
+            </label>
+            <label class="level-option" onclick="selectLevel(this)">
+              <input type="radio" name="fundamentos" value="2">
+              <div class="level-radio"></div>
+              <div class="level-content">
+                <span class="level-number">2</span><span class="level-label">Iniciante Avançado</span>
+                <div class="level-desc">Escrevo código funcional para casos simples. Entendo if/else, loops, funções.</div>
+              </div>
+            </label>
+            <label class="level-option" onclick="selectLevel(this)">
+              <input type="radio" name="fundamentos" value="3">
+              <div class="level-radio"></div>
+              <div class="level-content">
+                <span class="level-number">3</span><span class="level-label">Competente</span>
+                <div class="level-desc">Escolho estruturas de dados adequadas. Trato edge cases. Penso em performance.</div>
+              </div>
+            </label>
+            <label class="level-option" onclick="selectLevel(this)">
+              <input type="radio" name="fundamentos" value="4">
+              <div class="level-radio"></div>
+              <div class="level-content">
+                <span class="level-number">4</span><span class="level-label">Proficiente</span>
+                <div class="level-desc">Abstraio problemas em funções reutilizáveis. Aplico padrões como map/filter/reduce.</div>
+              </div>
+            </label>
+            <label class="level-option" onclick="selectLevel(this)">
+              <input type="radio" name="fundamentos" value="5">
+              <div class="level-radio"></div>
+              <div class="level-content">
+                <span class="level-number">5</span><span class="level-label">Expert</span>
+                <div class="level-desc">Projeto algoritmos para problemas novos. Avalio trade-offs e mentoro outros.</div>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <div class="section-divider"></div>
+
+        <!-- 2. Qualidade de Código -->
+        <div class="competency-section">
+          <div class="competency-header">
+            <div class="competency-icon" style="background:#fce7f3;color:#db2777;">&#9733;</div>
+            <span class="competency-name">2. Qualidade de Código</span>
+          </div>
+          <div class="competency-desc">Clean code, naming, organização, padrões, DRY/SOLID</div>
+          <div class="level-options" data-competency="qualidade">
+            <label class="level-option" onclick="selectLevel(this)">
+              <input type="radio" name="qualidade" value="1"><div class="level-radio"></div>
+              <div class="level-content"><span class="level-number">1</span><span class="level-label">Novato</span><div class="level-desc">Variáveis genéricas (x, data). Funções longas. Sem padrão de organização.</div></div>
+            </label>
+            <label class="level-option" onclick="selectLevel(this)">
+              <input type="radio" name="qualidade" value="2"><div class="level-radio"></div>
+              <div class="level-content"><span class="level-number">2</span><span class="level-label">Iniciante Avançado</span><div class="level-desc">Nomes razoáveis. Funções menores, mas ainda misturo responsabilidades.</div></div>
+            </label>
+            <label class="level-option" onclick="selectLevel(this)">
+              <input type="radio" name="qualidade" value="3"><div class="level-radio"></div>
+              <div class="level-content"><span class="level-number">3</span><span class="level-label">Competente</span><div class="level-desc">Naming consistente. Funções com responsabilidade única. Separo lógica de apresentação.</div></div>
+            </label>
+            <label class="level-option" onclick="selectLevel(this)">
+              <input type="radio" name="qualidade" value="4"><div class="level-radio"></div>
+              <div class="level-content"><span class="level-number">4</span><span class="level-label">Proficiente</span><div class="level-desc">Aplico SOLID. Código auto-documentado. Refatoro proativamente.</div></div>
+            </label>
+            <label class="level-option" onclick="selectLevel(this)">
+              <input type="radio" name="qualidade" value="5"><div class="level-radio"></div>
+              <div class="level-content"><span class="level-number">5</span><span class="level-label">Expert</span><div class="level-desc">Código é narrativa — qualquer dev lê e entende. Defino padrões para o time.</div></div>
+            </label>
+          </div>
+        </div>
+
+        <div class="section-divider"></div>
+
+        <!-- 3. Controle de Versão -->
+        <div class="competency-section">
+          <div class="competency-header">
+            <div class="competency-icon" style="background:#fef3c7;color:#d97706;">&#8644;</div>
+            <span class="competency-name">3. Controle de Versão (Git)</span>
+          </div>
+          <div class="competency-desc">Git workflow, commits, branches, PRs</div>
+          <div class="level-options" data-competency="git">
+            <label class="level-option" onclick="selectLevel(this)">
+              <input type="radio" name="git" value="1"><div class="level-radio"></div>
+              <div class="level-content"><span class="level-number">1</span><span class="level-label">Novato</span><div class="level-desc">Commit com "update" ou "fix". Trabalho direto na main. Não sei resolver conflitos.</div></div>
+            </label>
+            <label class="level-option" onclick="selectLevel(this)">
+              <input type="radio" name="git" value="2"><div class="level-radio"></div>
+              <div class="level-content"><span class="level-number">2</span><span class="level-label">Iniciante Avançado</span><div class="level-desc">Uso branches. Commits mais descritivos. Resolvo conflitos simples com ajuda.</div></div>
+            </label>
+            <label class="level-option" onclick="selectLevel(this)">
+              <input type="radio" name="git" value="3"><div class="level-radio"></div>
+              <div class="level-content"><span class="level-number">3</span><span class="level-label">Competente</span><div class="level-desc">Commits semânticos (feat/fix). Branches por feature. PRs com descrição. Resolvo conflitos sozinho.</div></div>
+            </label>
+            <label class="level-option" onclick="selectLevel(this)">
+              <input type="radio" name="git" value="4"><div class="level-radio"></div>
+              <div class="level-content"><span class="level-number">4</span><span class="level-label">Proficiente</span><div class="level-desc">Commits atômicos. Uso rebase/squash quando apropriado. Code review criterioso.</div></div>
+            </label>
+            <label class="level-option" onclick="selectLevel(this)">
+              <input type="radio" name="git" value="5"><div class="level-radio"></div>
+              <div class="level-content"><span class="level-number">5</span><span class="level-label">Expert</span><div class="level-desc">Defino workflow do time. Automatizo hooks. Release management.</div></div>
+            </label>
+          </div>
+        </div>
+
+        <div class="section-divider"></div>
+
+        <!-- 4. Segurança -->
+        <div class="competency-section">
+          <div class="competency-header">
+            <div class="competency-icon" style="background:#fee2e2;color:#dc2626;">&#128274;</div>
+            <span class="competency-name">4. Segurança</span>
+          </div>
+          <div class="competency-desc">Credenciais, validação de input, tratamento de dados sensíveis</div>
+          <div class="level-options" data-competency="seguranca">
+            <label class="level-option" onclick="selectLevel(this)">
+              <input type="radio" name="seguranca" value="1"><div class="level-radio"></div>
+              <div class="level-content"><span class="level-number">1</span><span class="level-label">Novato</span><div class="level-desc">Credenciais no código. Sem validação de input. Não conheço OWASP.</div></div>
+            </label>
+            <label class="level-option" onclick="selectLevel(this)">
+              <input type="radio" name="seguranca" value="2"><div class="level-radio"></div>
+              <div class="level-content"><span class="level-number">2</span><span class="level-label">Iniciante Avançado</span><div class="level-desc">Sei que .env existe mas não uso sempre. Validação parcial.</div></div>
+            </label>
+            <label class="level-option" onclick="selectLevel(this)">
+              <input type="radio" name="seguranca" value="3"><div class="level-radio"></div>
+              <div class="level-content"><span class="level-number">3</span><span class="level-label">Competente</span><div class="level-desc">.env para todos os secrets. Valido inputs nos endpoints. HTTPS everywhere.</div></div>
+            </label>
+            <label class="level-option" onclick="selectLevel(this)">
+              <input type="radio" name="seguranca" value="4"><div class="level-radio"></div>
+              <div class="level-content"><span class="level-number">4</span><span class="level-label">Proficiente</span><div class="level-desc">Auth/authz corretos. Rate limiting. CORS. Conheço OWASP Top 10.</div></div>
+            </label>
+            <label class="level-option" onclick="selectLevel(this)">
+              <input type="radio" name="seguranca" value="5"><div class="level-radio"></div>
+              <div class="level-content"><span class="level-number">5</span><span class="level-label">Expert</span><div class="level-desc">Threat modeling. Security review em PRs. Defino políticas de segurança.</div></div>
+            </label>
+          </div>
+        </div>
+
+        <div class="section-divider"></div>
+
+        <!-- 5. Debugging -->
+        <div class="competency-section">
+          <div class="competency-header">
+            <div class="competency-icon" style="background:#dcfce7;color:#16a34a;">&#128270;</div>
+            <span class="competency-name">5. Debugging e Resolução de Problemas</span>
+          </div>
+          <div class="competency-desc">Investigação de erros, leitura de stack trace, teste de hipóteses</div>
+          <div class="level-options" data-competency="debugging">
+            <label class="level-option" onclick="selectLevel(this)">
+              <input type="radio" name="debugging" value="1"><div class="level-radio"></div>
+              <div class="level-content"><span class="level-number">1</span><span class="level-label">Novato</span><div class="level-desc">Paro quando vejo erro. Não leio a mensagem de erro. Peço ajuda imediatamente.</div></div>
+            </label>
+            <label class="level-option" onclick="selectLevel(this)">
+              <input type="radio" name="debugging" value="2"><div class="level-radio"></div>
+              <div class="level-content"><span class="level-number">2</span><span class="level-label">Iniciante Avançado</span><div class="level-desc">Leio a mensagem de erro. Uso console.log. Busco no Google/Stack Overflow.</div></div>
+            </label>
+            <label class="level-option" onclick="selectLevel(this)">
+              <input type="radio" name="debugging" value="3"><div class="level-radio"></div>
+              <div class="level-content"><span class="level-number">3</span><span class="level-label">Competente</span><div class="level-desc">Isolo o problema. Uso debugger. Formulo hipóteses e testo. Reproduzo antes de fixar.</div></div>
+            </label>
+            <label class="level-option" onclick="selectLevel(this)">
+              <input type="radio" name="debugging" value="4"><div class="level-radio"></div>
+              <div class="level-content"><span class="level-number">4</span><span class="level-label">Proficiente</span><div class="level-desc">Leio stack traces de bibliotecas. Uso profiling. Debug em produção com logs.</div></div>
+            </label>
+            <label class="level-option" onclick="selectLevel(this)">
+              <input type="radio" name="debugging" value="5"><div class="level-radio"></div>
+              <div class="level-content"><span class="level-number">5</span><span class="level-label">Expert</span><div class="level-desc">Identifico root cause intuitivamente. Previno bugs via design. Post-mortem.</div></div>
+            </label>
+          </div>
+        </div>
+
+        <div class="section-divider"></div>
+
+        <!-- 6. Comunicação Técnica -->
+        <div class="competency-section">
+          <div class="competency-header">
+            <div class="competency-icon" style="background:#e0e7ff;color:#4f46e5;">&#128172;</div>
+            <span class="competency-name">6. Comunicação Técnica</span>
+          </div>
+          <div class="competency-desc">Documentação, explicação de decisões, articulação de problemas</div>
+          <div class="level-options" data-competency="comunicacao">
+            <label class="level-option" onclick="selectLevel(this)">
+              <input type="radio" name="comunicacao" value="1"><div class="level-radio"></div>
+              <div class="level-content"><span class="level-number">1</span><span class="level-label">Novato</span><div class="level-desc">Não documento. Não consigo explicar o que fiz. READMEs inexistentes.</div></div>
+            </label>
+            <label class="level-option" onclick="selectLevel(this)">
+              <input type="radio" name="comunicacao" value="2"><div class="level-radio"></div>
+              <div class="level-content"><span class="level-number">2</span><span class="level-label">Iniciante Avançado</span><div class="level-desc">README básico. Explico o "o quê" mas não o "por quê".</div></div>
+            </label>
+            <label class="level-option" onclick="selectLevel(this)">
+              <input type="radio" name="comunicacao" value="3"><div class="level-radio"></div>
+              <div class="level-content"><span class="level-number">3</span><span class="level-label">Competente</span><div class="level-desc">Documento decisões técnicas. Explico problemas com contexto. PR descriptions úteis.</div></div>
+            </label>
+            <label class="level-option" onclick="selectLevel(this)">
+              <input type="radio" name="comunicacao" value="4"><div class="level-radio"></div>
+              <div class="level-content"><span class="level-number">4</span><span class="level-label">Proficiente</span><div class="level-desc">Documentação que antecipa perguntas. Apresento conceitos técnicos para não-técnicos.</div></div>
+            </label>
+            <label class="level-option" onclick="selectLevel(this)">
+              <input type="radio" name="comunicacao" value="5"><div class="level-radio"></div>
+              <div class="level-content"><span class="level-number">5</span><span class="level-label">Expert</span><div class="level-desc">Escrevo specs que guiam o time. Traduzo complexidade em simplicidade.</div></div>
+            </label>
+          </div>
+        </div>
+
+        <div class="section-divider"></div>
+
+        <!-- 7. Autonomia -->
+        <div class="competency-section">
+          <div class="competency-header">
+            <div class="competency-icon" style="background:#fef9c3;color:#ca8a04;">&#127919;</div>
+            <span class="competency-name">7. Autonomia e Iniciativa</span>
+          </div>
+          <div class="competency-desc">Buscar soluções, propor melhorias, proatividade</div>
+          <div class="level-options" data-competency="autonomia">
+            <label class="level-option" onclick="selectLevel(this)">
+              <input type="radio" name="autonomia" value="1"><div class="level-radio"></div>
+              <div class="level-content"><span class="level-number">1</span><span class="level-label">Novato</span><div class="level-desc">Espero instrução para tudo. Não busco soluções sozinho.</div></div>
+            </label>
+            <label class="level-option" onclick="selectLevel(this)">
+              <input type="radio" name="autonomia" value="2"><div class="level-radio"></div>
+              <div class="level-content"><span class="level-number">2</span><span class="level-label">Iniciante Avançado</span><div class="level-desc">Tento resolver sozinho por ~30min antes de pedir ajuda. Busco no Google.</div></div>
+            </label>
+            <label class="level-option" onclick="selectLevel(this)">
+              <input type="radio" name="autonomia" value="3"><div class="level-radio"></div>
+              <div class="level-content"><span class="level-number">3</span><span class="level-label">Competente</span><div class="level-desc">Pesquiso antes de perguntar. Proponho soluções, não só problemas.</div></div>
+            </label>
+            <label class="level-option" onclick="selectLevel(this)">
+              <input type="radio" name="autonomia" value="4"><div class="level-radio"></div>
+              <div class="level-content"><span class="level-number">4</span><span class="level-label">Proficiente</span><div class="level-desc">Antecipo problemas. Tomo decisões técnicas no meu escopo. Lidero melhorias.</div></div>
+            </label>
+            <label class="level-option" onclick="selectLevel(this)">
+              <input type="radio" name="autonomia" value="5"><div class="level-radio"></div>
+              <div class="level-content"><span class="level-number">5</span><span class="level-label">Expert</span><div class="level-desc">Defino direção técnica. Resolvo problemas que ninguém pediu. Ownership total.</div></div>
+            </label>
+          </div>
+        </div>
+
+        <div class="section-divider"></div>
+
+        <!-- 8. Colaboração -->
+        <div class="competency-section">
+          <div class="competency-header">
+            <div class="competency-icon" style="background:#f0fdf4;color:#15803d;">&#129309;</div>
+            <span class="competency-name">8. Colaboração</span>
+          </div>
+          <div class="competency-desc">Code review, pair programming, feedback construtivo, trabalho em equipe</div>
+          <div class="level-options" data-competency="colaboracao">
+            <label class="level-option" onclick="selectLevel(this)">
+              <input type="radio" name="colaboracao" value="1"><div class="level-radio"></div>
+              <div class="level-content"><span class="level-number">1</span><span class="level-label">Novato</span><div class="level-desc">Trabalho isolado. Não peço nem dou feedback. Não compartilho o que aprendi.</div></div>
+            </label>
+            <label class="level-option" onclick="selectLevel(this)">
+              <input type="radio" name="colaboracao" value="2"><div class="level-radio"></div>
+              <div class="level-content"><span class="level-number">2</span><span class="level-label">Iniciante Avançado</span><div class="level-desc">Aceito feedback sem defensividade. Participo de code reviews quando pedem.</div></div>
+            </label>
+            <label class="level-option" onclick="selectLevel(this)">
+              <input type="radio" name="colaboracao" value="3"><div class="level-radio"></div>
+              <div class="level-content"><span class="level-number">3</span><span class="level-label">Competente</span><div class="level-desc">Dou feedback construtivo em PRs. Pair programming produtivo. Compartilho aprendizados.</div></div>
+            </label>
+            <label class="level-option" onclick="selectLevel(this)">
+              <input type="radio" name="colaboracao" value="4"><div class="level-radio"></div>
+              <div class="level-content"><span class="level-number">4</span><span class="level-label">Proficiente</span><div class="level-desc">Mentoro devs mais juniores. Facilito discussões técnicas. Medio conflitos.</div></div>
+            </label>
+            <label class="level-option" onclick="selectLevel(this)">
+              <input type="radio" name="colaboracao" value="5"><div class="level-radio"></div>
+              <div class="level-content"><span class="level-number">5</span><span class="level-label">Expert</span><div class="level-desc">Defino cultura técnica. Crio ambiente psicologicamente seguro. Multiplico conhecimento.</div></div>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="nav-buttons">
+        <button type="button" class="btn btn-secondary" onclick="prevStep()">&larr; Voltar</button>
+        <button type="button" class="btn btn-primary" onclick="nextStep()">Próximo &rarr;</button>
+      </div>
+    </div>
+
+    <!-- STEP 3: Carreira e Desenvolvimento -->
+    <div class="form-step" data-step="3">
+      <div class="card">
+        <div class="card-title">Visão de Carreira</div>
+        <div class="card-subtitle">Sobre seus interesses, objetivos e como você aprende melhor</div>
+
+        <div class="form-group">
+          <label>O que você mais gosta de fazer no trabalho? <span class="required">*</span></label>
+          <div class="form-hint">Selecione até 3 opções</div>
+          <div id="gosta-options">
+            <label class="career-option" onclick="toggleCareer(this, 'gosta', 3)">
+              <input type="checkbox" name="gosta" value="frontend"><div class="career-check"></div>
+              <span>Criar interfaces e telas (frontend)</span>
+            </label>
+            <label class="career-option" onclick="toggleCareer(this, 'gosta', 3)">
+              <input type="checkbox" name="gosta" value="backend"><div class="career-check"></div>
+              <span>Construir APIs e lógica de negócio (backend)</span>
+            </label>
+            <label class="career-option" onclick="toggleCareer(this, 'gosta', 3)">
+              <input type="checkbox" name="gosta" value="database"><div class="career-check"></div>
+              <span>Trabalhar com banco de dados e queries</span>
+            </label>
+            <label class="career-option" onclick="toggleCareer(this, 'gosta', 3)">
+              <input type="checkbox" name="gosta" value="debug"><div class="career-check"></div>
+              <span>Investigar e resolver bugs</span>
+            </label>
+            <label class="career-option" onclick="toggleCareer(this, 'gosta', 3)">
+              <input type="checkbox" name="gosta" value="arquitetura"><div class="career-check"></div>
+              <span>Pensar em arquitetura e organização do sistema</span>
+            </label>
+            <label class="career-option" onclick="toggleCareer(this, 'gosta', 3)">
+              <input type="checkbox" name="gosta" value="aprender"><div class="career-check"></div>
+              <span>Aprender tecnologias novas</span>
+            </label>
+            <label class="career-option" onclick="toggleCareer(this, 'gosta', 3)">
+              <input type="checkbox" name="gosta" value="ajudar"><div class="career-check"></div>
+              <span>Ajudar colegas e explicar conceitos</span>
+            </label>
+          </div>
+          <div class="error-text">Selecione pelo menos 1 opção</div>
+        </div>
+
+        <div class="section-divider"></div>
+
+        <div class="form-group">
+          <label>Onde você quer estar profissionalmente em 1 ano? <span class="required">*</span></label>
+          <textarea id="meta_1ano" placeholder="Ex: Quero me sentir seguro para pegar qualquer demanda de frontend sozinho, sem precisar de ajuda constante. Quero entender melhor a arquitetura dos nossos sistemas." rows="3"></textarea>
+          <div class="error-text">Descreva sua meta</div>
+        </div>
+
+        <div class="form-group">
+          <label>Qual sua maior dificuldade técnica hoje? <span class="required">*</span></label>
+          <textarea id="maior_dificuldade" placeholder="Ex: Organizar o código quando o projeto cresce. Não sei quando criar uma função nova vs. manter tudo junto. Tenho dificuldade com Git quando tem conflito." rows="3"></textarea>
+          <div class="error-text">Descreva sua maior dificuldade</div>
+        </div>
+
+        <div class="form-group">
+          <label>Como você aprende melhor?</label>
+          <div class="form-hint">Selecione até 2 opções</div>
+          <div id="aprendizado-options">
+            <label class="career-option" onclick="toggleCareer(this, 'aprendizado', 2)">
+              <input type="checkbox" name="aprendizado" value="video"><div class="career-check"></div>
+              <span>Vídeos e tutoriais</span>
+            </label>
+            <label class="career-option" onclick="toggleCareer(this, 'aprendizado', 2)">
+              <input type="checkbox" name="aprendizado" value="pratica"><div class="career-check"></div>
+              <span>Prática — mexendo no código</span>
+            </label>
+            <label class="career-option" onclick="toggleCareer(this, 'aprendizado', 2)">
+              <input type="checkbox" name="aprendizado" value="leitura"><div class="career-check"></div>
+              <span>Leitura de documentação e artigos</span>
+            </label>
+            <label class="career-option" onclick="toggleCareer(this, 'aprendizado', 2)">
+              <input type="checkbox" name="aprendizado" value="pair"><div class="career-check"></div>
+              <span>Pair programming — codando junto com alguém</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="section-divider"></div>
+
+        <div class="form-group">
+          <label>Tem algo que você gostaria de dizer sobre seu desenvolvimento que não foi coberto acima?</label>
+          <textarea id="mensagem_livre" placeholder="Opcional — fique à vontade para escrever qualquer coisa" rows="3"></textarea>
+        </div>
+      </div>
+
+      <div class="nav-buttons">
+        <button type="button" class="btn btn-secondary" onclick="prevStep()">&larr; Voltar</button>
+        <button type="button" class="btn btn-primary" onclick="nextStep()">Próximo &rarr;</button>
+      </div>
+    </div>
+
+    <!-- STEP 4: Revisão e Envio -->
+    <div class="form-step" data-step="4">
+      <div class="card">
+        <div class="card-title">Revisão e Envio</div>
+        <div class="card-subtitle">Confira suas respostas antes de enviar</div>
+
+        <div class="info-box">
+          Suas respostas serão usadas para montar o seu Plano de Desenvolvimento Individual junto com o Lucas no 1:1. Nada aqui é avaliação de desempenho — é insumo para o SEU crescimento.
+        </div>
+
+        <div id="review-summary"></div>
+      </div>
+
+      <div class="warn-box">
+        Após enviar, suas respostas não poderão ser alteradas por aqui. Se precisar corrigir algo, fale com o Lucas.
+      </div>
+
+      <div class="nav-buttons">
+        <button type="button" class="btn btn-secondary" onclick="prevStep()">&larr; Voltar</button>
+        <button type="button" class="btn btn-success" onclick="submitForm()">Enviar PDI</button>
+      </div>
+    </div>
+
+    <!-- Success Screen -->
+    <div class="success-screen" id="success-screen">
+      <div class="success-icon">&#10003;</div>
+      <h2>PDI enviado com sucesso!</h2>
+      <p>Suas respostas foram registradas. O Lucas vai usar essas informações para montar o seu plano de desenvolvimento no próximo 1:1.</p>
+    </div>
+  </div>
+
+  <script>
+    const GOOGLE_SHEETS_URL = 'https://script.google.com/a/macros/conninf.com.br/s/AKfycbxdhWLlBNh6XpmL-n4fZa0xJbQC4MFR2IhjyRW01Ededjb0NVM4NxjwoG3kiiu18RpM/exec';
+
+    let currentStep = 1;
+    const totalSteps = 4;
+
+    const COMPETENCIES = [
+      { key: 'fundamentos', name: 'Fundamentos de Programação' },
+      { key: 'qualidade', name: 'Qualidade de Código' },
+      { key: 'git', name: 'Controle de Versão (Git)' },
+      { key: 'seguranca', name: 'Segurança' },
+      { key: 'debugging', name: 'Debugging e Resolução' },
+      { key: 'comunicacao', name: 'Comunicação Técnica' },
+      { key: 'autonomia', name: 'Autonomia e Iniciativa' },
+      { key: 'colaboracao', name: 'Colaboração' }
+    ];
+
+    const LEVEL_NAMES = ['', 'Novato', 'Iniciante Avançado', 'Competente', 'Proficiente', 'Expert'];
+
+    function selectLevel(el) {
+      const parent = el.closest('.level-options');
+      parent.querySelectorAll('.level-option').forEach(o => o.classList.remove('selected'));
+      el.classList.add('selected');
+      el.querySelector('input[type="radio"]').checked = true;
+    }
+
+    function toggleCareer(el, group, max) {
+      const cb = el.querySelector('input[type="checkbox"]');
+      const allOptions = document.querySelectorAll(`input[name="${group}"]`);
+      const checkedCount = document.querySelectorAll(`input[name="${group}"]:checked`).length;
+
+      if (!cb.checked && checkedCount >= max) return;
+
+      cb.checked = !cb.checked;
+      el.classList.toggle('selected', cb.checked);
+    }
+
+    function updateProgress() {
+      document.querySelectorAll('.progress-step').forEach(step => {
+        const s = parseInt(step.dataset.step);
+        step.classList.remove('active', 'completed');
+        if (s === currentStep) step.classList.add('active');
+        else if (s < currentStep) step.classList.add('completed');
+      });
+    }
+
+    function showStep(step) {
+      document.querySelectorAll('.form-step').forEach(el => el.classList.remove('active'));
+      const target = document.querySelector(`.form-step[data-step="${step}"]`);
+      if (target) target.classList.add('active');
+      updateProgress();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+
+      if (step === 4) buildReviewSummary();
+    }
+
+    function validateStep(step) {
+      let valid = true;
+
+      if (step === 1) {
+        const fields = ['nome', 'cargo', 'tempo_empresa'];
+        fields.forEach(id => {
+          const el = document.getElementById(id);
+          const err = el.parentElement.querySelector('.error-text');
+          const val = el.value.trim();
+          if (!val) {
+            el.classList.add('input-error');
+            if (err) err.style.display = 'block';
+            valid = false;
+          } else {
+            el.classList.remove('input-error');
+            if (err) err.style.display = 'none';
+          }
+        });
+      }
+
+      if (step === 2) {
+        let allAnswered = true;
+        COMPETENCIES.forEach(c => {
+          const checked = document.querySelector(`input[name="${c.key}"]:checked`);
+          if (!checked) allAnswered = false;
+        });
+        if (!allAnswered) {
+          alert('Por favor, selecione um nível para todas as 8 competências antes de continuar.');
+          valid = false;
+        }
+      }
+
+      if (step === 3) {
+        const gostaChecked = document.querySelectorAll('input[name="gosta"]:checked').length;
+        const meta = document.getElementById('meta_1ano').value.trim();
+        const dif = document.getElementById('maior_dificuldade').value.trim();
+
+        if (gostaChecked === 0) {
+          document.querySelector('#gosta-options').closest('.form-group').querySelector('.error-text').style.display = 'block';
+          valid = false;
+        } else {
+          document.querySelector('#gosta-options').closest('.form-group').querySelector('.error-text').style.display = 'none';
+        }
+
+        ['meta_1ano', 'maior_dificuldade'].forEach(id => {
+          const el = document.getElementById(id);
+          const err = el.parentElement.querySelector('.error-text');
+          if (!el.value.trim()) {
+            el.classList.add('input-error');
+            if (err) err.style.display = 'block';
+            valid = false;
+          } else {
+            el.classList.remove('input-error');
+            if (err) err.style.display = 'none';
+          }
+        });
+      }
+
+      return valid;
+    }
+
+    function nextStep() {
+      if (!validateStep(currentStep)) return;
+      if (currentStep < totalSteps) {
+        currentStep++;
+        showStep(currentStep);
+      }
+    }
+
+    function prevStep() {
+      if (currentStep > 1) {
+        currentStep--;
+        showStep(currentStep);
+      }
+    }
+
+    function buildReviewSummary() {
+      const container = document.getElementById('review-summary');
+      let html = '';
+
+      html += '<h3 style="font-size:1rem;color:var(--gray-800);margin-bottom:0.75rem;">Identificação</h3>';
+      html += `<p><strong>Nome:</strong> ${document.getElementById('nome').value}</p>`;
+      html += `<p><strong>Cargo:</strong> ${document.getElementById('cargo').value}</p>`;
+      html += `<p><strong>Tempo na FedCorp:</strong> ${document.getElementById('tempo_empresa').selectedOptions[0]?.text || ''}</p>`;
+
+      html += '<div class="section-divider"></div>';
+      html += '<h3 style="font-size:1rem;color:var(--gray-800);margin-bottom:0.75rem;">Autoavaliação de Competências</h3>';
+      html += '<table style="width:100%;border-collapse:collapse;font-size:0.88rem;">';
+      html += '<tr style="border-bottom:1px solid var(--gray-200);"><th style="text-align:left;padding:0.5rem 0;">Competência</th><th style="text-align:center;padding:0.5rem 0;width:60px;">Nível</th><th style="text-align:left;padding:0.5rem 0;">Classificação</th></tr>';
+
+      COMPETENCIES.forEach(c => {
+        const checked = document.querySelector(`input[name="${c.key}"]:checked`);
+        const val = checked ? parseInt(checked.value) : 0;
+        const levelName = LEVEL_NAMES[val] || '—';
+        const color = val <= 1 ? 'var(--danger)' : val <= 2 ? 'var(--warn)' : val <= 3 ? 'var(--accent)' : 'var(--success)';
+        html += `<tr style="border-bottom:1px solid var(--gray-100);">`;
+        html += `<td style="padding:0.4rem 0;">${c.name}</td>`;
+        html += `<td style="text-align:center;font-weight:700;color:${color};">${val || '—'}</td>`;
+        html += `<td style="padding:0.4rem 0;color:${color};">${levelName}</td>`;
+        html += `</tr>`;
+      });
+      html += '</table>';
+
+      const avg = COMPETENCIES.reduce((sum, c) => {
+        const checked = document.querySelector(`input[name="${c.key}"]:checked`);
+        return sum + (checked ? parseInt(checked.value) : 0);
+      }, 0) / COMPETENCIES.length;
+      html += `<p style="margin-top:0.75rem;font-weight:600;color:var(--gray-800);">Média geral: ${avg.toFixed(1)} / 5.0</p>`;
+
+      html += '<div class="section-divider"></div>';
+      html += '<h3 style="font-size:1rem;color:var(--gray-800);margin-bottom:0.75rem;">Carreira</h3>';
+
+      const gostaVals = Array.from(document.querySelectorAll('input[name="gosta"]:checked')).map(cb => cb.parentElement.querySelector('span').textContent);
+      html += `<p><strong>O que mais gosta:</strong> ${gostaVals.join('; ') || '—'}</p>`;
+      html += `<p><strong>Meta em 1 ano:</strong> ${document.getElementById('meta_1ano').value || '—'}</p>`;
+      html += `<p><strong>Maior dificuldade:</strong> ${document.getElementById('maior_dificuldade').value || '—'}</p>`;
+
+      container.innerHTML = html;
+    }
+
+    function collectFormData() {
+      const competencies = {};
+      COMPETENCIES.forEach(c => {
+        const checked = document.querySelector(`input[name="${c.key}"]:checked`);
+        competencies[c.key] = checked ? parseInt(checked.value) : 0;
+      });
+
+      return {
+        nome: document.getElementById('nome').value.trim(),
+        email: document.getElementById('email').value.trim(),
+        cargo: document.getElementById('cargo').value.trim(),
+        tempo_empresa: document.getElementById('tempo_empresa').value,
+        experiencia_total: document.getElementById('experiencia_total').value,
+        competencias: competencies,
+        gosta: Array.from(document.querySelectorAll('input[name="gosta"]:checked')).map(cb => cb.value),
+        aprendizado: Array.from(document.querySelectorAll('input[name="aprendizado"]:checked')).map(cb => cb.value),
+        meta_1ano: document.getElementById('meta_1ano').value.trim(),
+        maior_dificuldade: document.getElementById('maior_dificuldade').value.trim(),
+        mensagem_livre: document.getElementById('mensagem_livre').value.trim()
+      };
+    }
+
+    function showError(btn, originalText, message) {
+      btn.textContent = message;
+      btn.style.background = 'var(--danger)';
+      setTimeout(() => {
+        btn.textContent = originalText;
+        btn.style.background = '';
+        btn.disabled = false;
+      }, 3000);
+    }
+
+    async function submitForm() {
+      if (!validateStep(currentStep)) return;
+
+      const data = collectFormData();
+      const submitBtn = document.querySelector('.btn-success');
+      const originalText = submitBtn.textContent;
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Enviando...';
+
+      if (!GOOGLE_SHEETS_URL || GOOGLE_SHEETS_URL === 'COLE_SUA_URL_AQUI') {
+        showError(submitBtn, originalText, 'Endpoint ainda não configurado. Fale com o Lucas.');
+        return;
+      }
+
+      try {
+        await fetch(GOOGLE_SHEETS_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'text/plain' },
+          body: JSON.stringify(data)
+        });
+
+        document.querySelector('.form-step.active').style.display = 'none';
+        document.querySelector('.progress-container').style.display = 'none';
+        document.getElementById('success-screen').style.display = 'block';
+      } catch (error) {
+        showError(submitBtn, originalText, 'Erro ao enviar. Tente novamente.');
+      }
+    }
+  </script>
+</body>
+</html>

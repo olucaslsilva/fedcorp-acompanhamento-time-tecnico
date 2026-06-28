@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PDI — Plano de Desenvolvimento Individual</title>
+  <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700;800&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Roboto', -apple-system, BlinkMacSystemFont, sans-serif;
+      color: #374151;
+      line-height: 1.65;
+      background: #F0F2F5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    @media print {
+      body { background: #fff; padding: 0; max-width: none; font-size: 10.5pt; }
+      .page { box-shadow: none !important; margin: 0 !important; border-radius: 0 !important; padding: 28px 36px !important; border: none !important; }
+      .page-break { page-break-before: always; }
+      .no-print { display: none !important; }
+      .editable { border-color: #D1D5DB !important; border-style: solid !important; }
+      .goal { break-inside: avoid; }
+    }
+
+    @media screen {
+      body { max-width: 860px; margin: 0 auto; padding: 24px 16px 100px; }
+    }
+
+    .page {
+      background: #fff;
+      padding: 48px 52px;
+      margin-bottom: 20px;
+      border-radius: 20px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.04);
+      border: 1px solid rgba(0,0,0,0.04);
+    }
+
+    /* ======================== TIPOGRAFIA ======================== */
+    h1, h2, h3, h4 { font-family: 'Public Sans', sans-serif; color: #1F2937; }
+
+    .section-title {
+      font-size: 20px; font-weight: 700;
+      margin-bottom: 24px;
+      display: flex; align-items: center; gap: 14px;
+    }
+    .section-title::after {
+      content: ''; flex: 1; height: 1px;
+      background: linear-gradient(to right, #E5E7EB, transparent);
+    }
+    .section-title .s-icon {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 36px; height: 36px; border-radius: 10px;
+      flex-shrink: 0;
+    }
+    .section-title .s-icon .material-symbols-rounded { font-size: 20px; color: #fff; }
+
+    h3 { font-size: 14px; font-weight: 600; color: #374151; margin: 20px 0 8px; }
+    p { margin-bottom: 10px; font-size: 14px; }
+    .small { font-size: 12px; color: #9CA3AF; }
+    .bold { font-weight: 700; }
+
+    .material-symbols-rounded { vertical-align: middle; }
+
+    /* ======================== CAPA ======================== */
+    .cover {
+      background: linear-gradient(135deg, #1A365D 0%, #2B5EA7 50%, #3B82F6 100%);
+      color: #fff;
+      text-align: center;
+      padding: 72px 48px !important;
+      position: relative;
+      overflow: hidden;
+    }
+    .cover::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 20% 50%, rgba(255,255,255,0.06) 0%, transparent 60%),
+                  radial-gradient(ellipse at 80% 20%, rgba(96,165,250,0.12) 0%, transparent 50%);
+    }
+    .cover > * { position: relative; }
+
+    .cover-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.15);
+      backdrop-filter: blur(8px);
+      padding: 6px 18px; border-radius: 100px;
+      font-family: 'Public Sans'; font-size: 11px; font-weight: 600;
+      letter-spacing: 1.5px; text-transform: uppercase;
+      color: rgba(255,255,255,0.85); margin-bottom: 28px;
+    }
+    .cover h1 {
+      font-size: 30px; font-weight: 800; color: #fff;
+      letter-spacing: -0.02em; margin-bottom: 6px;
+    }
+    .cover .subtitle {
+      font-size: 15px; color: rgba(255,255,255,0.6); margin-bottom: 36px;
+    }
+
+    .dev-card {
+      display: inline-block;
+      background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12);
+      backdrop-filter: blur(12px);
+      border-radius: 16px; padding: 24px 44px;
+    }
+    .dev-name { font-family: 'Public Sans'; font-size: 22px; font-weight: 700; margin-bottom: 4px; }
+    .dev-info { font-size: 13px; color: rgba(255,255,255,0.55); }
+    .dev-info + .dev-info { margin-top: 4px; }
+
+    .cover-meta { margin-top: 28px; font-size: 13px; }
+    .cover-meta span { display: block; margin: 3px 0; }
+    .cover-meta .label { color: rgba(255,255,255,0.45); }
+    .cover-meta .value { color: rgba(255,255,255,0.8); }
+
+    .cover-footer { margin-top: 44px; font-size: 11px; color: rgba(255,255,255,0.25); }
+
+    /* ======================== EDITÁVEL ======================== */
+    .editable {
+      border: 1.5px dashed #D1D5DB;
+      border-radius: 8px;
+      padding: 10px 14px;
+      min-height: 38px;
+      font-size: 14px;
+      font-family: 'Roboto', sans-serif;
+      color: #1F2937;
+      background: #fff;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      display: block;
+      width: 100%;
+    }
+    .editable:hover { border-color: #9CA3AF; }
+    .editable:focus {
+      outline: none; border-color: #2B5EA7; border-style: solid;
+      box-shadow: 0 0 0 3px rgba(43,94,167,0.1);
+    }
+    .editable:empty::before {
+      content: attr(data-placeholder);
+      color: #9CA3AF; font-style: italic; font-size: 13px;
+    }
+
+    /* ======================== INFO BOX ======================== */
+    .info-box {
+      display: flex; gap: 10px; align-items: flex-start;
+      padding: 14px 18px;
+      border-radius: 10px;
+      margin-bottom: 16px;
+      font-size: 13px;
+    }
+    .info-box .material-symbols-rounded { font-size: 20px; flex-shrink: 0; margin-top: 1px; }
+    .info-blue { background: #EFF6FF; color: #1E40AF; border: 1px solid #BFDBFE; }
+    .info-green { background: #ECFDF5; color: #065F46; border: 1px solid #A7F3D0; }
+    .info-muted { background: #F9FAFB; color: #6B7280; border: 1px solid #E5E7EB; }
+
+    /* ======================== SCORES ======================== */
+    .score-row {
+      display: flex; align-items: center; gap: 10px;
+      margin-bottom: 8px;
+    }
+    .score-label {
+      width: 200px; flex-shrink: 0;
+      font-size: 13px; font-weight: 500; color: #4B5563;
+    }
+    .score-bar {
+      flex: 1; height: 20px;
+      background: #F3F4F6; border: 1px solid #E5E7EB;
+      border-radius: 100px; overflow: hidden;
+    }
+    .score-fill { height: 100%; border-radius: 100px; }
+    .score-val {
+      width: 36px; text-align: center;
+      font-family: 'Public Sans'; font-size: 13px; font-weight: 700;
+      background: #F3F4F6; border-radius: 6px; padding: 2px 0;
+    }
+    .f1 { width: 20%; background: linear-gradient(90deg, #DC2626, #F87171); }
+    .f2 { width: 40%; background: linear-gradient(90deg, #D97706, #FBBF24); }
+    .f3 { width: 60%; background: linear-gradient(90deg, #7C3AED, #A78BFA); }
+    .f4 { width: 80%; background: linear-gradient(90deg, #059669, #34D399); }
+    .f5 { width: 100%; background: linear-gradient(90deg, #1A365D, #2B5EA7); }
+
+    .avg-pill {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 6px 16px; border-radius: 100px;
+      font-size: 13px; font-weight: 600; margin-top: 14px;
+      background: #FEF3C7; color: #92400E;
+    }
+
+    /* ======================== OBS CARDS ======================== */
+    .obs-card {
+      display: flex; gap: 14px; align-items: flex-start;
+      padding: 16px 18px;
+      background: #fff; border: 1px solid #E5E7EB;
+      border-radius: 10px; margin-bottom: 10px;
+    }
+    .obs-icon {
+      width: 32px; height: 32px; border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .obs-icon .material-symbols-rounded { font-size: 18px; }
+    .obs-body { flex: 1; min-width: 0; }
+    .obs-label {
+      font-family: 'Public Sans'; font-size: 11px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 6px;
+    }
+
+    /* ======================== GOAL CARD ======================== */
+    .goal {
+      background: #fff;
+      border: 1px solid #E5E7EB;
+      border-radius: 14px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+      padding: 28px;
+      margin-bottom: 24px;
+      position: relative;
+    }
+    .goal-badge {
+      position: absolute; top: -10px; left: 24px;
+      background: linear-gradient(135deg, #1A365D, #3B82F6);
+      color: #fff; padding: 4px 14px; border-radius: 100px;
+      font-family: 'Public Sans'; font-size: 11px; font-weight: 700;
+      letter-spacing: 0.5px;
+      box-shadow: 0 2px 8px rgba(26,54,93,0.3);
+    }
+    .goal-head {
+      display: flex; justify-content: space-between; align-items: flex-start;
+      margin-bottom: 16px; padding-top: 6px; gap: 12px;
+    }
+    .goal-title {
+      font-family: 'Public Sans'; font-size: 16px; font-weight: 700;
+      color: #1F2937; flex: 1; min-height: 24px;
+    }
+    .status-pill {
+      padding: 4px 12px; border-radius: 100px;
+      font-family: 'Public Sans'; font-size: 10px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.5px; white-space: nowrap;
+      background: #F3F4F6; color: #9CA3AF;
+    }
+
+    .goal-fields {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+      margin-bottom: 16px;
+    }
+    .gf-label {
+      display: flex; align-items: center; gap: 4px;
+      font-family: 'Public Sans'; font-size: 10px; font-weight: 700;
+      color: #9CA3AF; text-transform: uppercase; letter-spacing: 0.06em;
+      margin-bottom: 4px;
+    }
+    .gf-label .material-symbols-rounded { font-size: 14px; }
+
+    .actions-title {
+      display: flex; align-items: center; gap: 8px;
+      margin-bottom: 8px; font-size: 13px; font-weight: 600; color: #6B7280;
+    }
+    .actions-title .material-symbols-rounded { font-size: 18px; color: #9CA3AF; }
+
+    .action-row {
+      display: flex; gap: 8px; align-items: flex-start;
+      padding: 8px 0; border-bottom: 1px solid #F3F4F6;
+    }
+    .action-row:last-child { border-bottom: none; }
+
+    .action-type {
+      font-family: 'Public Sans'; font-size: 10px; font-weight: 700;
+      letter-spacing: 0.04em; padding: 4px 10px; border-radius: 6px;
+      white-space: nowrap; margin-top: 10px;
+    }
+    .t70 { background: #D1FAE5; color: #065F46; }
+    .t20 { background: #DBEAFE; color: #1E40AF; }
+    .t10 { background: #EDE9FE; color: #5B21B6; }
+
+    .action-content { flex: 1; min-width: 0; }
+    .action-deadline {
+      width: 90px; flex-shrink: 0;
+    }
+    .action-check {
+      width: 32px; flex-shrink: 0; text-align: center; padding-top: 10px;
+    }
+    .action-check .material-symbols-rounded { font-size: 20px; color: #D1D5DB; cursor: pointer; }
+
+    /* ======================== COMMITMENT ======================== */
+    .commit-grid { display: grid; gap: 10px; }
+    .commit-card {
+      display: flex; align-items: flex-start; gap: 14px;
+      padding: 16px 18px;
+      background: #fff; border: 1px solid #E5E7EB;
+      border-radius: 10px;
+    }
+    .commit-icon {
+      width: 38px; height: 38px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .commit-icon .material-symbols-rounded { font-size: 20px; color: #fff; }
+    .commit-body { flex: 1; }
+    .commit-title { font-family: 'Public Sans'; font-size: 14px; font-weight: 700; color: #1F2937; margin-bottom: 2px; }
+    .commit-desc { font-size: 13px; color: #6B7280; line-height: 1.5; }
+
+    /* ======================== TIMELINE ======================== */
+    .timeline { padding-left: 24px; position: relative; }
+    .timeline::before {
+      content: ''; position: absolute; left: 7px; top: 10px; bottom: 10px;
+      width: 2px;
+      background: linear-gradient(to bottom, #2B5EA7, #E5E7EB);
+      border-radius: 1px;
+    }
+    .tl-entry {
+      position: relative; margin-bottom: 20px;
+      background: #fff; border: 1px solid #E5E7EB;
+      border-radius: 10px; padding: 18px 20px;
+    }
+    .tl-entry::before {
+      content: ''; position: absolute;
+      left: -20px; top: 22px;
+      width: 10px; height: 10px;
+      background: #2B5EA7; border: 2px solid #fff;
+      border-radius: 50%;
+      box-shadow: 0 0 0 3px rgba(43,94,167,0.15);
+    }
+    .tl-date {
+      font-family: 'Public Sans'; font-size: 12px; font-weight: 700;
+      color: #2B5EA7; text-transform: uppercase; letter-spacing: 0.04em;
+      margin-bottom: 8px;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .tl-date .material-symbols-rounded { font-size: 16px; }
+
+    .tl-status-grid {
+      margin-top: 10px;
+    }
+    .tl-status-row {
+      display: flex; gap: 12px; align-items: center;
+      padding: 6px 0; border-bottom: 1px solid #F3F4F6;
+      font-size: 13px;
+    }
+    .tl-status-row:last-child { border-bottom: none; }
+    .tl-meta-label { width: 60px; font-weight: 600; color: #6B7280; flex-shrink: 0; }
+
+    /* ======================== TAGS ======================== */
+    .tag {
+      display: inline-flex; align-items: center; gap: 4px;
+      padding: 3px 10px; border-radius: 100px;
+      font-family: 'Public Sans'; font-size: 11px; font-weight: 600;
+    }
+    .tag-blue { background: #DBEAFE; color: #1E40AF; }
+    .tag-green { background: #D1FAE5; color: #065F46; }
+    .tag-yellow { background: #FEF3C7; color: #92400E; }
+    .tag-red { background: #FEE2E2; color: #991B1B; }
+    .tag-gray { background: #F3F4F6; color: #9CA3AF; }
+    .tag-emerald { background: #A7F3D0; color: #065F46; }
+
+    /* ======================== LEGEND ======================== */
+    .legend {
+      margin-top: 28px;
+    }
+    .legend-row {
+      display: flex; align-items: center; gap: 12px;
+      padding: 7px 0; border-bottom: 1px solid #F3F4F6;
+      font-size: 13px; color: #6B7280;
+    }
+    .legend-row:last-child { border-bottom: none; }
+    .legend-row .tag { flex-shrink: 0; width: 100px; justify-content: center; }
+
+    /* ======================== SIGNATURE ======================== */
+    .sig-block { text-align: center; width: 240px; }
+    .sig-line { border-bottom: 1.5px solid #D1D5DB; height: 48px; margin-bottom: 8px; }
+
+    /* ======================== SAVE BAR ======================== */
+    .save-bar {
+      position: fixed; bottom: 0; left: 0; right: 0;
+      background: rgba(255,255,255,0.92); backdrop-filter: blur(12px);
+      border-top: 1px solid #E5E7EB;
+      padding: 12px 24px;
+      display: flex; align-items: center; justify-content: center; gap: 16px;
+      z-index: 1000;
+      box-shadow: 0 -4px 20px rgba(0,0,0,0.04);
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, #1A365D, #2B5EA7);
+      color: #fff; border: none;
+      padding: 10px 28px; border-radius: 100px;
+      font-family: 'Public Sans'; font-size: 14px; font-weight: 600;
+      cursor: pointer; display: inline-flex; align-items: center; gap: 8px;
+      box-shadow: 0 2px 12px rgba(26,54,93,0.25);
+    }
+    .btn-primary:hover { filter: brightness(1.1); }
+    .btn-secondary {
+      background: #F3F4F6; color: #4B5563;
+      border: 1px solid #E5E7EB;
+      padding: 10px 20px; border-radius: 100px;
+      font-family: 'Public Sans'; font-size: 13px; font-weight: 500;
+      cursor: pointer; display: inline-flex; align-items: center; gap: 6px;
+    }
+    .btn-secondary:hover { background: #E5E7EB; }
+  </style>
+</head>
+<body>
+
+<!-- ==================== CAPA ==================== -->
+<div class="page cover">
+  <div class="cover-badge">
+    <span class="material-symbols-rounded" style="font-size:14px;">apartment</span>
+    FedCorp — Time de Tecnologia
+  </div>
+
+  <h1>Plano de Desenvolvimento<br>Individual</h1>
+  <p class="subtitle">Ciclo 1 — Junho a Agosto 2026</p>
+
+  <div class="dev-card">
+    <div class="dev-name">[Nome do Desenvolvedor]</div>
+    <div class="dev-info">[Cargo] · [Stack principal]</div>
+    <div class="dev-info">[Formação/contexto] · [Tempo de experiência]</div>
+  </div>
+
+  <div class="cover-meta">
+    <span><span class="label">Mentor:</span> <span class="value">Lucas (Consultor Técnico)</span></span>
+    <span><span class="label">Criado em:</span> <span class="value">[DD de Mês de AAAA]</span></span>
+    <span><span class="label">Próxima revisão:</span> <span class="value">[DD de Mês de AAAA]</span></span>
+    <span><span class="label">Cadência:</span> <span class="value">Check-in bi-semanal · Ciclo de 8 semanas</span></span>
+  </div>
+
+  <div class="cover-footer">Documento colaborativo — construído no 1:1 entre mentor e desenvolvedor</div>
+</div>
+
+<!-- ==================== SEÇÃO 1: FOCO DO CICLO ==================== -->
+<div class="page page-break">
+  <div class="section-title">
+    <span class="s-icon" style="background:linear-gradient(135deg,#059669,#34D399);">
+      <span class="material-symbols-rounded">target</span>
+    </span>
+    Foco do Ciclo
+  </div>
+
+  <div class="info-box info-blue">
+    <span class="material-symbols-rounded">lightbulb</span>
+    <div>
+      <strong>Regra:</strong> máximo 3 metas por ciclo. Cada meta alcançável em 2–4 semanas.
+      O mentor propõe as metas iniciais — o dev valida e se compromete no 1:1.
+      <br><span style="opacity:0.7;">Modelo 70-20-10: 70% prática no trabalho · 20% mentoria/feedback · 10% estudo formal</span>
+    </div>
+  </div>
+
+  <!-- ===== META 1 ===== -->
+  <div class="goal">
+    <div class="goal-badge">META 1</div>
+    <div class="goal-head">
+      <div class="goal-title" contenteditable="true" data-placeholder="Título da meta (ex: Dominar o fluxo de Git com branches e PRs)"></div>
+      <span class="status-pill">Não iniciado</span>
+    </div>
+
+    <div class="goal-fields">
+      <div>
+        <div class="gf-label"><span class="material-symbols-rounded">location_on</span> Estado Atual</div>
+        <div contenteditable="true" class="editable" data-placeholder="Onde o dev está hoje"></div>
+      </div>
+      <div>
+        <div class="gf-label"><span class="material-symbols-rounded">flag</span> Estado Desejado</div>
+        <div contenteditable="true" class="editable" data-placeholder="Onde queremos que chegue"></div>
+      </div>
+      <div>
+        <div class="gf-label"><span class="material-symbols-rounded">verified</span> Critério de Sucesso</div>
+        <div contenteditable="true" class="editable" data-placeholder="Como medir (mensurável)"></div>
+      </div>
+      <div>
+        <div class="gf-label"><span class="material-symbols-rounded">event</span> Prazo</div>
+        <div contenteditable="true" class="editable" data-placeholder="Data limite"></div>
+      </div>
+    </div>
+
+    <div class="actions-title">
+      <span class="material-symbols-rounded">checklist</span> Ações Concretas
+    </div>
+    <div class="action-row">
+      <span class="action-type t70">70%</span>
+      <div class="action-content"><div contenteditable="true" class="editable" data-placeholder="Ação prática no trabalho"></div></div>
+      <div class="action-deadline"><div contenteditable="true" class="editable" data-placeholder="Sem X"></div></div>
+      <div class="action-check"><span class="material-symbols-rounded">radio_button_unchecked</span></div>
+    </div>
+    <div class="action-row">
+      <span class="action-type t20">20%</span>
+      <div class="action-content"><div contenteditable="true" class="editable" data-placeholder="Ação com mentoria/feedback"></div></div>
+      <div class="action-deadline"><div contenteditable="true" class="editable" data-placeholder="Sem X"></div></div>
+      <div class="action-check"><span class="material-symbols-rounded">radio_button_unchecked</span></div>
+    </div>
+    <div class="action-row">
+      <span class="action-type t10">10%</span>
+      <div class="action-content"><div contenteditable="true" class="editable" data-placeholder="Estudo formal (curso, leitura)"></div></div>
+      <div class="action-deadline"><div contenteditable="true" class="editable" data-placeholder="Sem X"></div></div>
+      <div class="action-check"><span class="material-symbols-rounded">radio_button_unchecked</span></div>
+    </div>
+  </div>
+
+  <!-- ===== META 2 ===== -->
+  <div class="goal">
+    <div class="goal-badge">META 2</div>
+    <div class="goal-head">
+      <div class="goal-title" contenteditable="true" data-placeholder="Título da meta (ex: Escrever código legível com nomes significativos)"></div>
+      <span class="status-pill">Não iniciado</span>
+    </div>
+
+    <div class="goal-fields">
+      <div>
+        <div class="gf-label"><span class="material-symbols-rounded">location_on</span> Estado Atual</div>
+        <div contenteditable="true" class="editable" data-placeholder="Onde o dev está hoje"></div>
+      </div>
+      <div>
+        <div class="gf-label"><span class="material-symbols-rounded">flag</span> Estado Desejado</div>
+        <div contenteditable="true" class="editable" data-placeholder="Onde queremos que chegue"></div>
+      </div>
+      <div>
+        <div class="gf-label"><span class="material-symbols-rounded">verified</span> Critério de Sucesso</div>
+        <div contenteditable="true" class="editable" data-placeholder="Como medir (mensurável)"></div>
+      </div>
+      <div>
+        <div class="gf-label"><span class="material-symbols-rounded">event</span> Prazo</div>
+        <div contenteditable="true" class="editable" data-placeholder="Data limite"></div>
+      </div>
+    </div>
+
+    <div class="actions-title">
+      <span class="material-symbols-rounded">checklist</span> Ações Concretas
+    </div>
+    <div class="action-row">
+      <span class="action-type t70">70%</span>
+      <div class="action-content"><div contenteditable="true" class="editable" data-placeholder="Ação prática no trabalho"></div></div>
+      <div class="action-deadline"><div contenteditable="true" class="editable" data-placeholder="Sem X"></div></div>
+      <div class="action-check"><span class="material-symbols-rounded">radio_button_unchecked</span></div>
+    </div>
+    <div class="action-row">
+      <span class="action-type t20">20%</span>
+      <div class="action-content"><div contenteditable="true" class="editable" data-placeholder="Ação com mentoria/feedback"></div></div>
+      <div class="action-deadline"><div contenteditable="true" class="editable" data-placeholder="Sem X"></div></div>
+      <div class="action-check"><span class="material-symbols-rounded">radio_button_unchecked</span></div>
+    </div>
+    <div class="action-row">
+      <span class="action-type t10">10%</span>
+      <div class="action-content"><div contenteditable="true" class="editable" data-placeholder="Estudo formal (curso, leitura)"></div></div>
+      <div class="action-deadline"><div contenteditable="true" class="editable" data-placeholder="Sem X"></div></div>
+      <div class="action-check"><span class="material-symbols-rounded">radio_button_unchecked</span></div>
+    </div>
+  </div>
+
+  <!-- ===== META 3 ===== -->
+  <div class="goal">
+    <div class="goal-badge">META 3</div>
+    <div class="goal-head">
+      <div class="goal-title" contenteditable="true" data-placeholder="Título da meta (ex: Comunicar impedimentos proativamente)"></div>
+      <span class="status-pill">Não iniciado</span>
+    </div>
+
+    <div class="goal-fields">
+      <div>
+        <div class="gf-label"><span class="material-symbols-rounded">location_on</span> Estado Atual</div>
+        <div contenteditable="true" class="editable" data-placeholder="Onde o dev está hoje"></div>
+      </div>
+      <div>
+        <div class="gf-label"><span class="material-symbols-rounded">flag</span> Estado Desejado</div>
+        <div contenteditable="true" class="editable" data-placeholder="Onde queremos que chegue"></div>
+      </div>
+      <div>
+        <div class="gf-label"><span class="material-symbols-rounded">verified</span> Critério de Sucesso</div>
+        <div contenteditable="true" class="editable" data-placeholder="Como medir (mensurável)"></div>
+      </div>
+      <div>
+        <div class="gf-label"><span class="material-symbols-rounded">event</span> Prazo</div>
+        <div contenteditable="true" class="editable" data-placeholder="Data limite"></div>
+      </div>
+    </div>
+
+    <div class="actions-title">
+      <span class="material-symbols-rounded">checklist</span> Ações Concretas
+    </div>
+    <div class="action-row">
+      <span class="action-type t70">70%</span>
+      <div class="action-content"><div contenteditable="true" class="editable" data-placeholder="Ação prática no trabalho"></div></div>
+      <div class="action-deadline"><div contenteditable="true" class="editable" data-placeholder="Sem X"></div></div>
+      <div class="action-check"><span class="material-symbols-rounded">radio_button_unchecked</span></div>
+    </div>
+    <div class="action-row">
+      <span class="action-type t20">20%</span>
+      <div class="action-content"><div contenteditable="true" class="editable" data-placeholder="Ação com mentoria/feedback"></div></div>
+      <div class="action-deadline"><div contenteditable="true" class="editable" data-placeholder="Sem X"></div></div>
+      <div class="action-check"><span class="material-symbols-rounded">radio_button_unchecked</span></div>
+    </div>
+    <div class="action-row">
+      <span class="action-type t10">10%</span>
+      <div class="action-content"><div contenteditable="true" class="editable" data-placeholder="Estudo formal (curso, leitura)"></div></div>
+      <div class="action-deadline"><div contenteditable="true" class="editable" data-placeholder="Sem X"></div></div>
+      <div class="action-check"><span class="material-symbols-rounded">radio_button_unchecked</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== SEÇÃO 3: COMPROMISSOS ==================== -->
+<div class="page page-break">
+  <div class="section-title">
+    <span class="s-icon" style="background:linear-gradient(135deg,#E85D04,#FB923C);">
+      <span class="material-symbols-rounded">handshake</span>
+    </span>
+    Compromissos do Mentor
+  </div>
+
+  <div class="commit-grid">
+    <div class="commit-card">
+      <div class="commit-icon" style="background:linear-gradient(135deg,#1A365D,#2B5EA7);"><span class="material-symbols-rounded">calendar_month</span></div>
+      <div class="commit-body">
+        <div class="commit-title">Check-in bi-semanal (1:1 de 30 min)</div>
+        <div class="commit-desc">Revisar progresso das metas, remover impedimentos, ajustar ações se necessário.</div>
+      </div>
+    </div>
+    <div class="commit-card">
+      <div class="commit-icon" style="background:linear-gradient(135deg,#2563EB,#60A5FA);"><span class="material-symbols-rounded">chat</span></div>
+      <div class="commit-body">
+        <div class="commit-title">Disponibilidade para dúvidas</div>
+        <div class="commit-desc">Responder dúvidas técnicas em até 24h úteis. Guiar para a resposta, não dar pronta.</div>
+      </div>
+    </div>
+    <div class="commit-card">
+      <div class="commit-icon" style="background:linear-gradient(135deg,#7C3AED,#A78BFA);"><span class="material-symbols-rounded">menu_book</span></div>
+      <div class="commit-body">
+        <div class="commit-title">Curadoria de material</div>
+        <div class="commit-desc">Indicar recursos específicos (artigos, vídeos, docs) alinhados às metas do ciclo.</div>
+      </div>
+    </div>
+    <div class="commit-card">
+      <div class="commit-icon" style="background:linear-gradient(135deg,#E85D04,#FB923C);"><span class="material-symbols-rounded">support_agent</span></div>
+      <div class="commit-body">
+        <div class="commit-title">Suporte proativo</div>
+        <div class="commit-desc">Se perceber bloqueio ou desmotivação, me procure. Vamos resolver juntos antes que vire problema.</div>
+      </div>
+    </div>
+  </div>
+
+  <h3 style="margin-top:28px;">Compromissos adicionais</h3>
+  <div contenteditable="true" class="editable" style="min-height:64px;" data-placeholder="Outros compromissos específicos para este dev..."></div>
+</div>
+
+<!-- ==================== SEÇÃO 4: HISTÓRICO ==================== -->
+<div class="page page-break">
+  <div class="section-title">
+    <span class="s-icon" style="background:linear-gradient(135deg,#7C3AED,#A78BFA);">
+      <span class="material-symbols-rounded">history</span>
+    </span>
+    Histórico de Revisões
+  </div>
+
+  <div class="timeline">
+    <div class="tl-entry">
+      <div class="tl-date">
+        <span class="material-symbols-rounded">event</span>
+        18/06/2026 — Check-in #1 (Criação do PDI)
+      </div>
+      <div contenteditable="true" class="editable" style="min-height:80px;" data-placeholder="Anotações da conversa..."></div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ==================== SAVE BAR ==================== -->
+<div class="save-bar no-print" id="save-bar">
+  <span id="save-status" style="font-size:13px;color:#9CA3AF;"></span>
+  <button class="btn-primary" id="btn-save" onclick="salvarPDI()">
+    <span class="material-symbols-rounded" style="font-size:18px;">save</span>
+    Salvar na Planilha
+  </button>
+  <button class="btn-secondary" onclick="window.print()">
+    <span class="material-symbols-rounded" style="font-size:16px;">print</span>
+    Imprimir / PDF
+  </button>
+</div>
+
+<script>
+var SCRIPT_URL = 'https://script.google.com/a/macros/conninf.com.br/s/AKfycbyMt-wXBmy-ARBbc-TKe-Oe3C7G1jZtKulYtVw3Jogai-mAZ5x0Js-s4eOcWBg4nwzS/exec';
+
+function coletarDados() {
+  var devName = document.querySelector('.dev-name').textContent.trim();
+  var devInfos = document.querySelectorAll('.dev-info');
+
+  var metas = [];
+  document.querySelectorAll('.goal').forEach(function(g, idx) {
+    var titulo = g.querySelector('.goal-title');
+    var fields = g.querySelectorAll('.goal-fields .editable');
+    var actions = g.querySelectorAll('.action-content .editable');
+    var deadlines = g.querySelectorAll('.action-deadline .editable');
+    metas.push({
+      numero: idx + 1,
+      titulo: titulo ? titulo.textContent.trim() : '',
+      estado_atual: fields[0] ? fields[0].textContent.trim() : '',
+      estado_desejado: fields[1] ? fields[1].textContent.trim() : '',
+      criterio_sucesso: fields[2] ? fields[2].textContent.trim() : '',
+      prazo: fields[3] ? fields[3].textContent.trim() : '',
+      acao_70: actions[0] ? actions[0].textContent.trim() : '',
+      prazo_70: deadlines[0] ? deadlines[0].textContent.trim() : '',
+      acao_20: actions[1] ? actions[1].textContent.trim() : '',
+      prazo_20: deadlines[1] ? deadlines[1].textContent.trim() : '',
+      acao_10: actions[2] ? actions[2].textContent.trim() : '',
+      prazo_10: deadlines[2] ? deadlines[2].textContent.trim() : ''
+    });
+  });
+
+  return {
+    tipo: 'pdi-documento',
+    dev_nome: devName,
+    cargo: devInfos[0] ? devInfos[0].textContent.trim() : '',
+    contexto: devInfos[1] ? devInfos[1].textContent.trim() : '',
+    metas: metas,
+    compromissos_extra: (document.querySelector('.commit-grid ~ h3 + .editable') || {}).textContent?.trim() || '',
+    review_resumo: (document.querySelector('.tl-entry .editable') || {}).textContent?.trim() || '',
+    data_salvamento: new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' })
+  };
+}
+
+function salvarPDI() {
+  var btn = document.getElementById('btn-save');
+  var status = document.getElementById('save-status');
+  var dados = coletarDados();
+
+  if (!dados.dev_nome || dados.dev_nome.indexOf('[') === 0) {
+    status.style.color = '#DC2626';
+    status.textContent = 'Preencha o nome do desenvolvedor na capa.';
+    return;
+  }
+
+  btn.disabled = true; btn.style.opacity = '0.6';
+  status.style.color = '#2563EB'; status.textContent = 'Salvando...';
+
+  fetch(SCRIPT_URL, {
+    method: 'POST',
+    body: JSON.stringify(dados)
+  }).then(function(r) { return r.json(); })
+  .then(function(res) {
+    if (res.status === 'success') {
+      status.style.color = '#059669';
+      status.textContent = 'Salvo! (' + new Date().toLocaleTimeString('pt-BR') + ')';
+    } else {
+      status.style.color = '#DC2626';
+      status.textContent = 'Erro: ' + (res.message || 'resposta inesperada');
+    }
+    btn.disabled = false; btn.style.opacity = '1';
+  }).catch(function(err) {
+    status.style.color = '#DC2626';
+    status.textContent = 'Erro: ' + err.message;
+    btn.disabled = false; btn.style.opacity = '1';
+  });
+}
+</script>
+
+</body>
+</html>
